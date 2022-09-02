@@ -9,12 +9,13 @@ end
 
 
 function restrict(value::Number, bounds::Bounds)::Number
+    result = value
     if (value < bounds.lowerBound)
-        return bounds.lowerBound 
+        result = bounds.lowerBound 
+    elseif (value > bounds.upperBound)
+        result = bounds.upperBound
     end
-    if (value > bounds.upperBound)
-        return bounds.upperBound
-    end
+    return result 
 end
 
 function valueIsWithinBounds(value::Number, bounds::Bounds)::Bool
