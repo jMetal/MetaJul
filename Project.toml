@@ -1,0 +1,4 @@
+name = "metajul"
+uuid = "ca897826-12de-4e40-9dbf-1888d61ae1b2"
+authors = ["ajnebro <ajnebro@users.noreply.github.com>"]
+version = "0.1.0"
