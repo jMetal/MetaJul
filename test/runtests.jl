@@ -20,9 +20,25 @@ end
 
 @testset "ContinuousSolution tests" begin
     function getContinuousSolution() :: ContinuousSolution
-        return ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+        return ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [0.1], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
     end
 
     @test getContinuousSolution().variables == [1.0, 2.0, 3.0]
     @test getContinuousSolution().objectives == [1.5, 2.5]
+    @test getContinuousSolution().constraints == [0.1]
+    @test getContinuousSolution().attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
+
+    function copiedSolution(solution::ContinuousSolution) :: ContinuousSolution
+        newSolution = deepcopy(solution)
+        newSolution.variables = [2.5, 5.6, 1.5]
+
+        return newSolution
+    end
+
+    @test copiedSolution(getContinuousSolution()).variables == [2.5, 5.6, 1.5]
+    @test copiedSolution(getContinuousSolution()).objectives == [1.5, 2.5]
+    @test copiedSolution(getContinuousSolution()).constraints == [0.1]
+    @test copiedSolution(getContinuousSolution()).attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
+
+
 end
