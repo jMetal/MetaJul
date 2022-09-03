@@ -1,5 +1,6 @@
 include("../src/bounds.jl")
 include("../src/solution.jl")
+include("../src/problem.jl")
 
 using Test
 
@@ -39,4 +40,14 @@ end
     @test copiedSolution(getContinuousSolution()).objectives == [1.5, 2.5]
     @test copiedSolution(getContinuousSolution()).constraints == [0.1]
     @test copiedSolution(getContinuousSolution()).attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
+end
+
+@testset "ContinuousProblem tests" begin
+    function getContinuousProblem() :: ContinuousProblem
+        return ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2.0, 3.0), Bounds{Float64}(45.2, 97.5)], 3, 2)
+    end
+    
+    @test getContinuousProblem().numberOfVariables == numberOfVariables(getContinuousProblem)
+    @test getContinuousProblem().numberOfObjectives == 3
+    @test getContinuousProblem().numberOfConstraints == 2
 end
