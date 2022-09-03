@@ -3,26 +3,18 @@ include("src/solution.jl")
 include("src/bounds.jl")
 
 function main()
-    bounds1 = Bounds{Float64}(1.0, 2.0)
-    bounds2 = Bounds{Int}(2, 3)
-    println(bounds1)
-    println(bounds2)
+    floatSolution = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+    println("floatSolution: ", floatSolution)
 
+    floatSolution2 = deepcopy(floatSolution)
+    floatSolution2.variables = [2.5, 5.6, 1.5]
+    println("Solution2: ", floatSolution2)
+    println("floatSolution: ", floatSolution)
 
-    #solution1 = Solution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], Dict("s" => 5.0, "b" => "hola"))
-    solution1 = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], Dict("s" => 5.0, "b" => "hola"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-    println("Solution1: ", solution1)
+    println("floatSolution.variables.length: ", length(floatSolution.variables))
 
-    solution2 = deepcopy(solution1)
-    solution2.variables = [2.5, 5.6, 1.5]
-    println("Solution2: ", solution2)
-    println("Solution1: ", solution1)
-
-    println("Solution1.variables.length: ", length(solution1.variables))
-
-    println(restrict(4, Bounds{Int}(2, 7)))
-    println(restrict(4, Bounds{Int}(7, 9)))
-    println(restrict(4, Bounds{Int}(1, 3)))
+    intSolution = ContinuousSolution{Int32}([1, 2, 3], [1.5, 2.5], Dict("densityEstimator" => 4.25), [Bounds{Int32}(1, 2), Bounds{Int32}(2, 3)])
+    println("intSolution: ", intSolution)
     
 end
 

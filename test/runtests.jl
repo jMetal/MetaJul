@@ -1,4 +1,5 @@
 include("../src/bounds.jl")
+include("../src/solution.jl")
 
 using Test
 
@@ -18,5 +19,10 @@ using Test
 end
 
 @testset "ContinuousSolution tests" begin
+    function getContinuousSolution() :: ContinuousSolution
+        return ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+    end
 
+    @test getContinuousSolution().variables == [1.0, 2.0, 3.0]
+    @test getContinuousSolution().objectives == [1.5, 2.5]
 end
