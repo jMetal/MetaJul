@@ -19,35 +19,24 @@ using Test
     @test_throws "The lower bound 5.0 is higher than the upper bound 3.0" Bounds{Float64}(5.0, 3.0)
 end
 
+continuousSolution = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [0.1], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+copiedSolution = deepcopy(continuousSolution)
+copiedSolution.variables =  [2.5, 5.6, 1.5]
 @testset "ContinuousSolution tests" begin
-    function getContinuousSolution() :: ContinuousSolution
-        return ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [0.1], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-    end
+    @test continuousSolution.variables == [1.0, 2.0, 3.0]
+    @test continuousSolution.objectives == [1.5, 2.5]
+    @test continuousSolution.constraints == [0.1]
+    @test continuousSolution.attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
 
-    @test getContinuousSolution().variables == [1.0, 2.0, 3.0]
-    @test getContinuousSolution().objectives == [1.5, 2.5]
-    @test getContinuousSolution().constraints == [0.1]
-    @test getContinuousSolution().attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
-
-    function copiedSolution(solution::ContinuousSolution) :: ContinuousSolution
-        newSolution = deepcopy(solution)
-        newSolution.variables = [2.5, 5.6, 1.5]
-
-        return newSolution
-    end
-
-    @test copiedSolution(getContinuousSolution()).variables == [2.5, 5.6, 1.5]
-    @test copiedSolution(getContinuousSolution()).objectives == [1.5, 2.5]
-    @test copiedSolution(getContinuousSolution()).constraints == [0.1]
-    @test copiedSolution(getContinuousSolution()).attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
+    @test copiedSolution.variables == [2.5, 5.6, 1.5]
+    @test copiedSolution.objectives == [1.5, 2.5]
+    @test copiedSolution.constraints == [0.1]
+    @test copiedSolution.attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
 end
 
-@testset "ContinuousProblem tests" begin
-    function getContinuousProblem() :: ContinuousProblem
-        return ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2.0, 3.0), Bounds{Float64}(45.2, 97.5)], 3, 2)
-    end
-    
-    @test getContinuousProblem().numberOfVariables == numberOfVariables(getContinuousProblem)
-    @test getContinuousProblem().numberOfObjectives == 3
-    @test getContinuousProblem().numberOfConstraints == 2
+continuousProblem = ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2.0, 3.0), Bounds{Float64}(45.2, 97.5)], 3, 2)
+@testset "ContinuousProblem tests" begin    
+    @test numberOfVariables(continuousProblem) == 3
+    @test continuousProblem.numberOfObjectives == 3
+    @test continuousProblem.numberOfConstraints == 2
 end
