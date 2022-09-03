@@ -39,6 +39,4 @@ end
     @test copiedSolution(getContinuousSolution()).objectives == [1.5, 2.5]
     @test copiedSolution(getContinuousSolution()).constraints == [0.1]
     @test copiedSolution(getContinuousSolution()).attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
-
-
 end
