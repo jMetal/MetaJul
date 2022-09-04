@@ -10,3 +10,13 @@ mutable struct ContinuousSolution{T <: Number} <: Solution
     attributes::Dict
     bounds::Array{Bounds{T}}
 end
+
+function copySolution(solution::ContinuousSolution{})::ContinuousSolution{}
+    return ContinuousSolution{}(
+        deepcopy(solution.variables),
+        copy(solution.objectives),
+        copy(solution.constraints),
+        deepcopy(solution.attributes),
+        solution.bounds
+    )
+end

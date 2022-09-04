@@ -7,6 +7,14 @@ struct Bounds{T <: Number}
     Bounds{T}(lowerBound, upperBound) where {T} = lowerBound >= upperBound ? error("The lower bound ", lowerBound, " is higher than the upper bound ", upperBound) : new(lowerBound, upperBound)
 end
 
+function createBounds(lowerBounds::Array{Number}, upperBounds::Array{Number}) ::Bounds
+    if length(lowerBounds) != length(upperBounds)
+        error("The length of the lowerbound and upperbound arrays are different: ", length(lowerBounds), ", ", length(upperBounds))
+    end
+
+    return [Bounds(lowerBounds[i], upperBounds[i]) for i = 1:length(lowerBounds) ]
+
+end
 
 function restrict(value::Number, bounds::Bounds)::Number
     result = value
