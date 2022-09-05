@@ -4,6 +4,7 @@ include("../src/problem.jl")
 
 using Test
 
+
 @testset "Bounds tests" begin
     @test restrict(4, Bounds{Int64}(1, 5)) == 4
     @test restrict(1.0, Bounds{Float64}(1.2, 5.9)) == 1.2
@@ -17,6 +18,12 @@ using Test
     @test Bounds{Int}(4, 6).upperBound == 6
 
     @test_throws "The lower bound 5.0 is higher than the upper bound 3.0" Bounds{Float64}(5.0, 3.0)
+end
+
+
+@testset "createBounds() tests" begin
+    @test length(createBounds([1, 2, 3], [4, 5, 6])) == 3
+    @test_throws "The length of the lowerbound and upperbound arrays are different: 2, 4" createBounds([1, 2], [2, 3, 4, 5])
 end
 
 continuousSolution = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [0.1], Dict("ranking" => 5.0, "name" => "bestSolution"), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
