@@ -50,11 +50,11 @@ const continuousProblem = ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0),
 end
 
 
-const number_of_variables_for_sphere = 10
-const sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:number_of_variables_for_sphere],[5.12 for i in 1:number_of_variables_for_sphere]), 1, 0)
+number_of_variables_for_sphere = 10
+sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:number_of_variables_for_sphere],[5.12 for i in 1:number_of_variables_for_sphere]), 1, 0)
 
 @testset "Sphere problem tests" begin    
     @test numberOfVariables(sphereProblem) == number_of_variables_for_sphere
-    @test continuousProblem.numberOfObjectives == 1
-    @test continuousProblem.numberOfConstraints == 0
+    @test sphereProblem.numberOfObjectives == 1
+    @test sphereProblem.numberOfConstraints == 0
 end
