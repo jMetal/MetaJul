@@ -32,7 +32,6 @@ function sphere(x::Array{Float64}) :: Array{Float64}
   return [f]
 end
 
-
 number_of_variables_for_sphere = 10
 
 sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:number_of_variables_for_sphere],[5.12 for i in 1:number_of_variables_for_sphere]), 1, 0)

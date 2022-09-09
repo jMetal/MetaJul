@@ -42,9 +42,19 @@ copiedSolution.variables =  [2.5, 5.6, 1.5]
     @test copiedSolution.attributes == Dict("ranking" => 5.0, "name" => "bestSolution")
 end
 
-continuousProblem = ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2.0, 3.0), Bounds{Float64}(45.2, 97.5)], 3, 2)
+const continuousProblem = ContinuousProblem{Float64}([Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2.0, 3.0), Bounds{Float64}(45.2, 97.5)], 3, 2)
 @testset "ContinuousProblem tests" begin    
     @test numberOfVariables(continuousProblem) == 3
     @test continuousProblem.numberOfObjectives == 3
     @test continuousProblem.numberOfConstraints == 2
+end
+
+
+const number_of_variables_for_sphere = 10
+const sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:number_of_variables_for_sphere],[5.12 for i in 1:number_of_variables_for_sphere]), 1, 0)
+
+@testset "Sphere problem tests" begin    
+    @test numberOfVariables(sphereProblem) == number_of_variables_for_sphere
+    @test continuousProblem.numberOfObjectives == 1
+    @test continuousProblem.numberOfConstraints == 0
 end
