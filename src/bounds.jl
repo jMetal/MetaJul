@@ -26,6 +26,11 @@ function restrict(value::Number, bounds::Bounds)::Number
     return result 
 end
 
+function restrict(values::Array{Number}, bounds::Bounds{Number})::Array{Number}
+    
+end
+
+
 function valueIsWithinBounds(value::Number, bounds::Bounds)::Bool
     return value >= bounds.lowerBound && value <= bounds.upperBound 
 end
