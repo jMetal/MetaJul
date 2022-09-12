@@ -16,3 +16,12 @@ function uniformMutation(x::Array{T}, probability::T, perturbation::T)::Array{T}
   return x
 end
 
+function binaryTournament(x::Array)
+  index1 = rand(1:length(x))
+  index2 = rand(1:length(x))
+
+  println("index1 :" , index1, ". Index2: " , index2)
+  result = x[index1] < x[index2] ? x[index1] : x[index2]
+
+  return result
+end

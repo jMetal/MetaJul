@@ -26,10 +26,13 @@ function restrict(value::Number, bounds::Bounds)::Number
     return result 
 end
 
-function restrict(values::Array{Number}, bounds::Bounds{Number})::Array{Number}
-    
-end
+function restrict(values::Vector{T}, bounds::Array{Bounds{T}}) where {T <: Number}
+    for i in 1:length(values)
+        values[i] = restrict(values[i], bounds[i])
+    end
 
+    return values
+end
 
 function valueIsWithinBounds(value::Number, bounds::Bounds)::Bool
     return value >= bounds.lowerBound && value <= bounds.upperBound 
