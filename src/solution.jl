@@ -20,3 +20,4 @@ function copySolution(solution::ContinuousSolution{})::ContinuousSolution{}
         solution.bounds
     )
 end
+

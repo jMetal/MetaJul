@@ -16,7 +16,12 @@ function uniformMutation(x::Array{T}, probability::T, perturbation::T)::Array{T}
   return x
 end
 
-function binaryTournament(x::Array)
+
+function randomSelection(x::Array)
+  return x[rand(1:length(x))]
+end
+
+function binaryTournamentSelection(x::Array)
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
 
