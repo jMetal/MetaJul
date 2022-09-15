@@ -39,7 +39,7 @@ sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:number
 sphereSolution = createSolution(sphereProblem)
 #sphereSolution.variables = sphere(sphereSolution.variables)
 
-println("SPHERE: ", evaluate(sphereSolution, sphere))
+#println("SPHERE: ", evaluate(sphereSolution, sphere))
 
 ########
 function schaffer(x::Array{Float64}) :: Array{Float64} 
@@ -54,6 +54,6 @@ schafferProblem = ContinuousProblem{Float64}(createBounds([-10000.0],[10000.0]),
 schafferSolution = createSolution(schafferProblem)
 #schafferSolution.variables = schaffer(schafferSolution.variables)
 
-println("SCHAFFER: ", evaluate(schafferSolution, schaffer))
+#println("SCHAFFER: ", evaluate(schafferSolution, schaffer))
 
 ########
