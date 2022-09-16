@@ -1,5 +1,7 @@
 # Test cases for struct Bounds
 
+include("../src/bounds.jl")
+
 function createBoundsAssignTheRightLowerBoundValue() 
   return Bounds{Real}(4.0, 6.0).lowerBound == 4.0
 end
