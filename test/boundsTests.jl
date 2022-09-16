@@ -42,6 +42,10 @@ function valueIsInBoundsReturnsTrue()
     return valueIsWithinBounds(3.0, Bounds{Real}(1.2, 5.9)) == true
 end
 
+function createBoundsRaiseAnExceptionIfTheLengthOfTheLowerAndUpperBoundsArraysIsNotTheSame()
+    return createBounds([1, 2], [2, 3, 4, 5])
+end
+
 
 @testset "Bounds tests" begin
     @test createBoundsAssignTheRightLowerBoundValue()
@@ -58,4 +62,7 @@ end
 
     @test valueIsInBoundsReturnsFalse()
     @test valueIsInBoundsReturnsTrue()
+
+    @test length(createBounds([1, 2, 3], [4, 5, 6])) == 3
+    @test_throws "The length of the lowerbound and upperbound arrays are different: 2, 4" createBoundsRaiseAnExceptionIfTheLengthOfTheLowerAndUpperBoundsArraysIsNotTheSame()
 end
