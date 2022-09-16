@@ -9,35 +9,35 @@ function createBoundsAssignTheRightUpperBoundValue()
 end
 
 function createBoundsWithLowerBoundHigherThanTheLowerBoundRaisesAndException() 
-    return Bounds{Float64}(5.0, 3.0)
+    return Bounds{Real}(5.0, 3.0)
 end
 
 function restrictReturnTheValueIfTheValueIsWithinTheBounds()
-    return restrict(4, Bounds{Int64}(1, 5)) == 4
+    return restrict(4, Bounds{Int}(1, 5)) == 4
 end
 
 function restrictReturnTheLowerBoundIsTheValueIsTheLowerBound()
-    return restrict(1, Bounds{Int64}(1, 5)) == 1
+    return restrict(1, Bounds{Int}(1, 5)) == 1
 end
 
 function restrictReturnTheLowerBoundIsTheValueIsTheUpperBound()
-    return restrict(5.0, Bounds{Float32}(1.0, 5.0)) == 5.0
+    return restrict(5.0, Bounds{Real}(1.0, 5.0)) == 5.0
 end
 
 function restrictReturnTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
-    return restrict(1.0, Bounds{Float64}(1.2, 5.9)) == 1.2
+    return restrict(1.0, Bounds{Real}(1.2, 5.9)) == 1.2
 end
 
 function restrictReturnTheUpperBoundIsTheValueIsHigherThanTheUpperBound()
-    return restrict(10.0, Bounds{Float64}(1.2, 5.9)) == 5.9
+    return restrict(10.0, Bounds{Real}(1.2, 5.9)) == 5.9
 end
 
 function valueIsInBoundsReturnsFalse()
-    return valueIsWithinBounds(10.0, Bounds{Float64}(1.2, 5.9)) == false
+    return valueIsWithinBounds(10.0, Bounds{Real}(1.2, 5.9)) == false
 end
 
 function valueIsInBoundsReturnsTrue()
-    return valueIsWithinBounds(3.0, Bounds{Float64}(1.2, 5.9)) == true
+    return valueIsWithinBounds(3.0, Bounds{Real}(1.2, 5.9)) == true
 end
 
 
