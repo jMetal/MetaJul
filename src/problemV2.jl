@@ -5,10 +5,14 @@ include("solution.jl")
 abstract type Problem{T} end
 
 mutable struct ContinuousProblem{T <: Number} <: Problem{T}
-  bounds::Array{Bounds{T}}
-  objectives::Array{Function}
-  constraints::Array{Function}
+  bounds::Vector{Bounds{T}}
+  objectives::Vector{Function}
+  constraints::Vector{Function}
   name::String
+end
+
+function numberOfVariables(problem::Problem{T}) where {T}
+  return length(problem.bounds)
 end
 
 function numberOfObjectives(problem::Problem{T}) where {T}
@@ -18,7 +22,6 @@ end
 function numberOfConstraints(problem::Problem{T}) where {T}
   return length(problem.constraints)
 end
-
 
 function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T <: Number}
   push!(problem.objectives, objective)
