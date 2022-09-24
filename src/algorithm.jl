@@ -87,3 +87,4 @@ function replacement(population, b)
 end
 
 evolutionaryAlgorithm(solutionsCreation, evaluation, termination, selection, variation, replacement)
+
