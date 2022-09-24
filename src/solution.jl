@@ -5,8 +5,8 @@ abstract type Solution end
 
 mutable struct ContinuousSolution{T <: Number} <: Solution 
     variables::Array{T}
-    objectives::Array{Float64}
-    constraints::Array{Float64}
+    objectives::Array{Real}
+    constraints::Array{Real}
     attributes::Dict
     bounds::Array{Bounds{T}}
 end
