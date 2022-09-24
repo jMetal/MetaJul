@@ -15,6 +15,11 @@ function numberOfObjectives(problem::Problem{T}) where {T}
   return length(problem.objectives)
 end
   
+function numberOfConstraints(problem::Problem{T}) where {T}
+  return length(problem.constraints)
+end
+
+
 function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T <: Number}
   push!(problem.objectives, objective)
 
@@ -34,26 +39,49 @@ function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T}
   return solution
 end
 
-schaffer = ContinuousProblem{Float64}([],[],[], "Schaffer")
+function createSolution(problem::ContinuousProblem{T}) where {T <: Number}
+  x = [problem.bounds[i].lowerBound + rand()*(problem.bounds[i].upperBound-problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
 
-f(x::Vector{Float64}) =  x -> x[1] * x[1]
-g(x::Vector{Float64}) =  x -> (x[1] - 2.0) * (x[1] - 2.0)
+  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
+end
 
+########################
+function schafferProblem() 
+  schaffer = ContinuousProblem{Real}([],[],[], "Schaffer")
 
-addObjective(schaffer, f)
-addObjective(schaffer, g)
-addVariable(schaffer, Bounds{Float64}(-100000.0, 100000.0))
+  f = x -> x[1] * x[1]
+  g = x -> (x[1] - 2.0) * (x[1] - 2.0)
 
+  addObjective(schaffer, f)
+  addObjective(schaffer, g)
+  addVariable(schaffer, Bounds{Real}(-100000.0, 100000.0))
 
-solution = ContinuousSolution{Float64}([12.0], [0.0, 0.0], [], Dict(), schaffer.bounds)
+  return schaffer
+end
 
+function sphereProblem(numberOfVariables::Int) 
+  sphere = ContinuousProblem{Real}([],[],[], "Sphere")
+
+  f = x -> sum([v * v for v in x])
+
+  addObjective(sphere, f)
+
+  for i in 1:numberOfVariables
+    addVariable(sphere, Bounds{Real}(-5.12, 5.12))
+  end
+
+  return sphere
+end
+
+schaffer = schafferProblem()
+#solution = ContinuousSolution{Real}([12.0], [0.0, 0.0], [], Dict(), schaffer.bounds)
+solution = createSolution(schaffer)
 
 println("Solution: ", solution)
 println()
 println("Problem: ", schaffer)
 println()
-#solution = evaluate(solution, schaffer)
-#println("FF: ", f([3.3]))
-
-solution.objectives[1] = 4
+solution = evaluate(solution, schaffer)
 println("Solution: ", solution)
+
+println("Sphere: ", sphereProblem(10))
