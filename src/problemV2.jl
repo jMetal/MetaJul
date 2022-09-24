@@ -55,5 +55,5 @@ println()
 #solution = evaluate(solution, schaffer)
 #println("FF: ", f([3.3]))
 
-#solution.objectives[1] = 4
+solution.objectives[1] = 4
 println("Solution: ", solution)
