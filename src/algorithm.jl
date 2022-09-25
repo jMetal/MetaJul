@@ -25,7 +25,7 @@ end
 
 #################################
 
-
+"""
 struct EAState{T <: Solution}
   evaluations::Int
   population::Array{T}
@@ -114,3 +114,4 @@ end
 #evolutionaryAlgorithm(solutionsCreation, evaluation, termination, selection, variation, replacement)
 
 
+"""
