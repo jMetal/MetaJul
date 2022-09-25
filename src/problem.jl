@@ -1,75 +1,82 @@
 
 include("bounds.jl")
 include("solution.jl")
+include("operator.jl")
 
 abstract type Problem{T} end
 
-struct ContinuousProblem{T <: Number} <: Problem{T}
-    bounds::Array{Bounds{T}}
-    numberOfObjectives::Int
-    numberOfConstraints::Int
-    evaluation::Function
+abstract type AbstractContinuousProblem{T <: Number} <: Problem{T} end
+
+mutable struct ContinuousProblem{T} <: AbstractContinuousProblem{T}
+  bounds::Vector{Bounds{T}}
+  objectives::Vector{Function}
+  constraints::Vector{Function}
+  name::String
 end
 
-function numberOfVariables(problem:: ContinuousProblem) :: Int
+function numberOfVariables(problem::ContinuousProblem{T}) where {T}
   return length(problem.bounds)
 end
 
-function createSolution(problem::ContinuousProblem)
+function numberOfObjectives(problem::ContinuousProblem{T}) where {T}
+  return length(problem.objectives)
+end
+  
+function numberOfConstraints(problem::ContinuousProblem{T}) where {T}
+  return length(problem.constraints)
+end
+
+function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T <: Number}
+  push!(problem.objectives, objective)
+
+  return Nothing ;
+end
+
+function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T <: Number}
+  push!(problem.bounds, bounds)
+  return Nothing
+end
+
+function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T})::ContinuousSolution{T} where {T <: Number}
+  for i in 1:length(problem.objectives)
+    solution.objectives[i] =  problem.objectives[i](solution.variables)
+  end
+
+  return solution
+end
+
+function createSolution(problem::ContinuousProblem{T}) where {T <: Number}
   x = [problem.bounds[i].lowerBound + rand()*(problem.bounds[i].upperBound-problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
 
-  return ContinuousSolution{Float64}(x, zeros(problem.numberOfObjectives), zeros(problem.numberOfConstraints), Dict(), problem.bounds)
+  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end
 
+########################
+function schafferProblem() 
+  schaffer = ContinuousProblem{Real}([],[],[], "Schaffer")
 
-function evaluate(solution::S, problem::Problem) where {S <: Solution}
-  solution.variables = problem.evaluation(solution.variables)
-  return solution
-end
-  
+  f = x -> x[1] * x[1]
+  g = x -> (x[1] - 2.0) * (x[1] - 2.0)
 
-function evaluate(solution::S, evaluateFunction::Function) where {S <: Solution}
-  solution.variables = evaluateFunction(solution.variables)
-  return solution
-end
-  
+  addObjective(schaffer, f)
+  addObjective(schaffer, g)
+  addVariable(schaffer, Bounds{Real}(-100000.0, 100000.0))
 
-######## Sphere
-function sphere(x::Array{Float64}) :: Array{Float64} 
-  f = sum([v * v for v in x])
-
-  return [f]
+  return schaffer
 end
 
+########################
 
-function createSphereProblem(numberOfVariablesForSphere::Int)
-  return ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:numberOfVariablesForSphere],[5.12 for i in 1:numberOfVariablesForSphere]), 1, 0, sphere)
+function sphereProblem(numberOfVariables::Int) 
+  sphere = ContinuousProblem{Real}([],[],[], "Sphere")
+
+  f = x -> sum([v * v for v in x])
+
+  addObjective(sphere, f)
+
+  for i in 1:numberOfVariables
+    addVariable(sphere, Bounds{Real}(-5.12, 5.12))
+  end
+
+  return sphere
 end
-
-sphereProblem = createSphereProblem(10)
-
-sphereSolution = createSolution(sphereProblem)
-println("SPHERE: ", evaluate(sphereSolution, sphereProblem))
-#sphereSolution.variables = sphere(sphereSolution.variables)
-
-
-########
-function schaffer(x::Array{Float64}) :: Array{Float64} 
-  f0 = x[1] * x[1];
-  f1 = (x[1] - 2.0) * (x[1] - 2.0);
-
-  return [f0, f1]
-end
-
-function createSchafferProblem()
-  return ContinuousProblem{Float64}(createBounds([-10000.0],[10000.0]), 1, 0, schaffer)
-end
-
-schafferProblem = createSchafferProblem()
-
-schafferSolution = createSolution(schafferProblem)
-#schafferSolution.variables = schaffer(schafferSolution.variables)
-
-println("SCHAFFER: ", evaluate(schafferSolution, schafferProblem))
-
-########

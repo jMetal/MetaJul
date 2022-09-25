@@ -1,5 +1,28 @@
 include("solution.jl")
-include("problemV2.jl")
+include("problem.jl")
+
+
+###################################
+
+function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterationes::Int,
+  mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
+  for i in 1:numberOfIterationes
+    mutatedSolution = copySolution(currentSolution)
+    mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
+    mutatedSolution = evaluate(mutatedSolution, problem)
+
+    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
+      currentSolution = mutatedSolution
+    end
+
+    println("I: ", i, ". F: ", currentSolution.objectives[1])
+  end
+
+  return currentSolution
+end
+
+#################################
+
 
 struct EAState{T <: Solution}
   evaluations::Int
@@ -87,22 +110,5 @@ function replacement(population, b)
 end
 
 #evolutionaryAlgorithm(solutionsCreation, evaluation, termination, selection, variation, replacement)
-
-function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterationes::Int,
-  mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
-  for i in 1:numberOfIterationes
-    mutatedSolution = copySolution(currentSolution)
-    mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
-    mutatedSolution = evaluate(mutatedSolution, problem)
-
-    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
-      currentSolution = mutatedSolution
-    end
-
-    println("I: ", i, ". F: ", currentSolution.objectives[1])
-  end
-
-  return currentSolution
-end
 
 
