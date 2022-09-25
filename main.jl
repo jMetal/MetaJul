@@ -9,5 +9,6 @@ include("src/algorithm.jl")
 problem = sphereProblem(10)
 solution = createSolution(problem)
 solution = evaluate(solution, problem)
-println("Local search: ", localSearch(solution, problem, 10000, uniformMutationOperator, (probability=0.2, perturbation=0.5, bounds=problem.bounds)))
+#println("Local search: ", localSearch(solution, problem, 10000, uniformMutationOperator, (probability=0.1, perturbation=0.5, bounds=problem.bounds)))
 
+println("Local search: ", localSearch(solution, problem, 10000, polynomialMutationOperator, (probability=0.1, distributionIndex=20.0, bounds=problem.bounds)))
