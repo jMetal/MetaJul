@@ -12,6 +12,7 @@ function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: 
     end
   end
 
+  x = restrict(x, parameters.bounds)
   return x
 end
 
