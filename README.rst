@@ -7,5 +7,5 @@ Currently implemented elements:
 
 * Encoding: continuous solution
 * Problem: continuous problem, problems Schaffer and Sphere
-* Operator: uniform mutation, polynomial mutation, random selection
+* Operator: uniform mutation, polynomial mutation, random selection, binary tournament selection
 * Algorithm: local search
