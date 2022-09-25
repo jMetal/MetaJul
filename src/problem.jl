@@ -26,14 +26,30 @@ function numberOfConstraints(problem::ContinuousProblem{T}) where {T}
   return length(problem.constraints)
 end
 
+function name(problem::ContinuousProblem{T}) where {T}
+  return problem.name
+end
+
 function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T <: Number}
   push!(problem.objectives, objective)
 
   return Nothing ;
 end
 
+function addConstraint(problem::ContinuousProblem{T}, constraint::Function) where {T <: Number}
+  push!(problem.constraints, constraint)
+
+  return Nothing ;
+end
+
 function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T <: Number}
   push!(problem.bounds, bounds)
+  return Nothing
+end
+
+function setName(problem::Problem{T}, name::String) where {T}
+  problem.name = name
+
   return Nothing
 end
 
