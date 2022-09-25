@@ -7,8 +7,8 @@ function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: 
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
   bounds = parameters.bounds
-  if rand() < probability
-    for i in 1:length(x)
+  for i in 1:length(x)
+    if rand() < probability
       x[i] += (rand() - 0.5) * perturbation
     end
   end
