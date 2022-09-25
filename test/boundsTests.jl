@@ -14,23 +14,23 @@ function createBoundsWithLowerBoundHigherThanTheLowerBoundRaisesAndException()
     return Bounds{Real}(5.0, 3.0)
 end
 
-function restrictReturnTheValueIfTheValueIsWithinTheBounds()
+function restrictReturnsTheValueIfTheValueIsWithinTheBounds()
     return restrict(4, Bounds{Int}(1, 5)) == 4
 end
 
-function restrictReturnTheLowerBoundIsTheValueIsTheLowerBound()
+function restrictReturnsTheLowerBoundIsTheValueIsTheLowerBound()
     return restrict(1, Bounds{Int}(1, 5)) == 1
 end
 
-function restrictReturnTheLowerBoundIsTheValueIsTheUpperBound()
+function restrictReturnsTheLowerBoundIsTheValueIsTheUpperBound()
     return restrict(5.0, Bounds{Real}(1.0, 5.0)) == 5.0
 end
 
-function restrictReturnTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
+function restrictReturnsTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
     return restrict(1.0, Bounds{Real}(1.2, 5.9)) == 1.2
 end
 
-function restrictReturnTheUpperBoundIsTheValueIsHigherThanTheUpperBound()
+function restrictReturnsTheUpperBoundIsTheValueIsHigherThanTheUpperBound()
     return restrict(10.0, Bounds{Real}(1.2, 5.9)) == 5.9
 end
 
@@ -53,12 +53,12 @@ end
 
     @test_throws "The lower bound 5.0 is higher than the upper bound 3.0" createBoundsWithLowerBoundHigherThanTheLowerBoundRaisesAndException()
 
-    @test restrictReturnTheValueIfTheValueIsWithinTheBounds()
-    @test restrictReturnTheLowerBoundIsTheValueIsTheLowerBound()
-    @test restrictReturnTheLowerBoundIsTheValueIsTheUpperBound()
+    @test restrictReturnsTheValueIfTheValueIsWithinTheBounds()
+    @test restrictReturnsTheLowerBoundIsTheValueIsTheLowerBound()
+    @test restrictReturnsTheLowerBoundIsTheValueIsTheUpperBound()
 
-    @test restrictReturnTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
-    @test restrictReturnTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
+    @test restrictReturnsTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
+    @test restrictReturnsTheLowerBoundIsTheValueIsLowerThanTheLowerBound()
 
     @test valueIsInBoundsReturnsFalse()
     @test valueIsInBoundsReturnsTrue()

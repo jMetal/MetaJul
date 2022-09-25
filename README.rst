@@ -1,6 +1,11 @@
 MetaJul Web site
 ================
 
-The MetaJul project is aimed at studying the implementation of metaheuristics in the Julia programming language. 
+The MetaJul project is aimed at studying the implementation of metaheuristics in the Julia programming language. The implemented codes and unit tests are located, respectively, in the ``src`` and tests ``test`` folder.
 
-The implemented codes are located in the ``src`` folder and the unit tests are included in the ``test/runtests.jl`` file.
+Currently implemented elements:
+
+* Encoding: continuous solution
+* Problem: continuous problem, problems Schaffer and Sphere
+* Operator: uniform mutation, polynomial mutation, random selection
+* Algorithm: local search
