@@ -6,13 +6,14 @@ include("comparator.jl")
 function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
+  bounds = parameters.bounds
   if rand() < probability
     for i in 1:length(x)
       x[i] += (rand() - 0.5) * perturbation
     end
   end
 
-  x = restrict(x, parameters.bounds)
+  x = restrict(x, bounds)
   return x
 end
 
