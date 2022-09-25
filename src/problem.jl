@@ -58,6 +58,10 @@ function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T}
     solution.objectives[i] =  problem.objectives[i](solution.variables)
   end
 
+  for i in 1:length(problem.constraints)
+    solution.constraints[i] =  problem.constraints[i](solution.variables)
+  end
+
   return solution
 end
 

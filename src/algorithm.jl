@@ -9,6 +9,8 @@ function localSearch(currentSolution::ContinuousSolution{Real}, problem::Continu
   for i in 1:numberOfIterationes
     mutatedSolution = copySolution(currentSolution)
     mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
+    mutatedSolution.variables = restrict(mutatedSolution.variables, problem.bounds)
+
     mutatedSolution = evaluate(mutatedSolution, problem)
 
     if (mutatedSolution.objectives[1] < currentSolution.objectives[1])

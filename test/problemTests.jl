@@ -1,23 +1,24 @@
-# Test cases for struct Bounds
+# Test cases for continuous problems
 
 include("../src/problem.jl")
 
-continuousProblem = ContinuousProblem{Real}([],[],[],"")
-addObjective(continuousProblem, x -> x[1] + 1)
-addObjective(continuousProblem, x -> x[2] + x[2])
-addVariable(continuousProblem, Bounds{Real}(-1.0, 1.0))
-addVariable(continuousProblem, Bounds{Real}(-1.0, 1.0))
-addVariable(continuousProblem, Bounds{Real}(-1.0, 1.0))
-addConstraint(continuousProblem, x -> x[1] < 2)
-setName(continuousProblem, "TestProblem")
+continuousTestProblem = ContinuousProblem{Real}([],[],[],"")
+addObjective(continuousTestProblem, x -> x[1] + 1)
+addObjective(continuousTestProblem, x -> x[2] + x[2])
+addVariable(continuousTestProblem, Bounds{Real}(-1.0, 1.0))
+addVariable(continuousTestProblem, Bounds{Real}(4.0, 8.0))
+addVariable(continuousTestProblem, Bounds{Real}(15.2, 18.7))
+addConstraint(continuousTestProblem, x -> x[1] < 2)
+setName(continuousTestProblem, "TestProblem")
 
 @testset "ContinuousProblem tests" begin    
-    @test numberOfVariables(continuousProblem) == 3
-    @test numberOfObjectives(continuousProblem) == 2
-    @test numberOfConstraints(continuousProblem) == 1
-    @test name(continuousProblem) == "TestProblem"
+    @test numberOfVariables(continuousTestProblem) == 3
+    @test numberOfObjectives(continuousTestProblem) == 2
+    @test numberOfConstraints(continuousTestProblem) == 1
+    @test name(continuousTestProblem) == "TestProblem"
 end
 
+continuousTestSolution = createSolution(continuousTestProblem)
 """
 numberOfVariablesForSphere = 10
 sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:numberOfVariablesForSphere],[5.12 for i in 1:numberOfVariablesForSphere]), 1, 0)
