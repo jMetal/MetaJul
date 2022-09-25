@@ -5,6 +5,8 @@ include("operator.jl")
 
 abstract type Problem{T} end
 
+abstract type ContinumousProblem2{T <: Number} <: Problem{T} end
+
 mutable struct ContinuousProblem{T <: Number} <: Problem{T}
   bounds::Vector{Bounds{T}}
   objectives::Vector{Function}
