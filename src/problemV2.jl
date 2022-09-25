@@ -63,6 +63,8 @@ function schafferProblem()
   return schaffer
 end
 
+########################
+
 function sphereProblem(numberOfVariables::Int) 
   sphere = ContinuousProblem{Real}([],[],[], "Sphere")
 
@@ -77,9 +79,9 @@ function sphereProblem(numberOfVariables::Int)
   return sphere
 end
 
-schaffer = schafferProblem()
+#schaffer = schafferProblem()
 #solution = ContinuousSolution{Real}([12.0], [0.0, 0.0], [], Dict(), schaffer.bounds)
-solution = createSolution(schaffer)
+#solution = createSolution(schaffer)
 
 """
 println("Solution: ", solution)
@@ -91,23 +93,3 @@ println("Solution: ", solution)
 
 println("Sphere: ", sphereProblem(10))
 """
-
-function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterationes::Int)::ContinuousSolution{Real}
-  for i in 1:numberOfIterationes
-    mutatedSolution = copySolution(currentSolution)
-    mutatedSolution.variables = uniformMutationOperator(mutatedSolution.variables, 0.2, 0.5)
-    mutatedSolution = evaluate(mutatedSolution, problem)
-
-    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
-      currentSolution = mutatedSolution
-    end
-
-    println("I: ", i, ". F: ", currentSolution.objectives[1])
-  end
-
-  return currentSolution
-end
-
-solution = createSolution(sphereProblem(10))
-solution = evaluate(solution, sphereProblem(10))
-println("Local search: ", localSearch(solution, sphereProblem(10), 40000))

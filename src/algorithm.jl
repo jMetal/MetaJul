@@ -1,5 +1,5 @@
 include("solution.jl")
-include("problem.jl")
+include("problemV2.jl")
 
 struct EAState{T <: Solution}
   evaluations::Int
@@ -21,8 +21,8 @@ end
 println()
 println()
 
-data = createSolutionsFromProblemData(createSchafferProblem(), 5)
-println("Creating 5 solutions: ", createSolutions(data))
+#data = createSolutionsFromProblemData(createSchafferProblem(), 5)
+#println("Creating 5 solutions: ", createSolutions(data))
 println()
 println()
 
@@ -86,5 +86,23 @@ function replacement(population, b)
   return population 
 end
 
-evolutionaryAlgorithm(solutionsCreation, evaluation, termination, selection, variation, replacement)
+#evolutionaryAlgorithm(solutionsCreation, evaluation, termination, selection, variation, replacement)
+
+function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterationes::Int,
+  mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
+  for i in 1:numberOfIterationes
+    mutatedSolution = copySolution(currentSolution)
+    mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
+    mutatedSolution = evaluate(mutatedSolution, problem)
+
+    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
+      currentSolution = mutatedSolution
+    end
+
+    println("I: ", i, ". F: ", currentSolution.objectives[1])
+  end
+
+  return currentSolution
+end
+
 
