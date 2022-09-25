@@ -52,6 +52,37 @@ function polynomialMutationOperator(x::Array{T}, parameters)::Array{T} where {T 
   return x
 end
 
+# Crossover operators
+function blxAlphaCrossover(parent1::Array{T}, parent2::Array{T}, parameters)::Array{Array{T}} where {T <: Real}
+  probability::Real = parameters.probability
+  alpha::Real = parameters.alpha
+  bounds = parameters.bounds
+
+  child1 = deepcopy(parent1)
+  child2 = deepcopy(parent2)
+
+  if rand() < probability
+    for i in 1:length(x)
+      minValue = min(parent1[i], parent2[i])
+      maxValue = max(parent1[i], parent2[i])
+      range = maxValue - minValue
+
+      minRange = min - range * alpha
+      minRange = max + range * alpha
+
+      random = rand()
+      child1[i] = minRange + random * (maxRange - minRange)
+      random = rand()
+      child2[i] = minRange + random * (maxRange - minRange)
+    end
+  end
+  
+  child1 = restrict(child1, bounds)
+  child2 = restrict(child2, bounds)
+
+  return [child1, child2]
+end
+
 # Selection operators
 function randomSelection(x::Array)
   return x[rand(1:length(x))]
