@@ -1,10 +1,29 @@
 include("solution.jl")
-include("problem.jl")git
+include("problem.jl")
+
+abstract type Metaheuristic end
+
+mutable struct LocalSearch <: Metaheuristic
+  startingSolution::Solution
+  problem::Problem
+  numberOfIterations::Int
+  mutation::Function
+  mutationParameters::NamedTuple
+  foundSolution::Solution
+
+  LocalSearch() = new()
+end
+
+function optimize(algorithm :: LocalSearch)
+  algorithm.foundSolution = localSearch(algorithm.startingSolution, algorithm.problem,
+  algorithm.numberOfIterations, algorithm.mutation, algorithm.mutationParameters)
+  
+  return Nothing
+end
 
 ###################################
 
-function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterations::Int,
-  mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
+function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterations::Int, mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
   for i in 1:numberOfIterations
     mutatedSolution = copySolution(currentSolution)
     mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
