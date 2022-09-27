@@ -21,7 +21,6 @@ optimize(solver)
 
 foundSolution = solver.foundSolution
 
-#localSearch(solution, problem, 10000, uniformMutationOperator, (probability=0.1, perturbation=0.5, bounds=problem.bounds))
 println("Local search result: ", foundSolution)
 println("Fitness of the starting solution: ", solution.objectives[1])
 println("Fitness of the found solution: ", foundSolution.objectives[1])
