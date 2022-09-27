@@ -9,3 +9,8 @@ Currently implemented elements:
 * Problem: continuous problem, problems Schaffer and Sphere
 * Operator: uniform mutation, polynomial mutation, random selection, binary tournament selection
 * Algorithm: local search
+
+The ``examples`` folder contains:
+
+* Local search algorithm using uniform mutation to solve the Sphere problem (10 variables)
+* Local search algorithm using polynomial mutation to solve the Sphere problem (10 variables)
