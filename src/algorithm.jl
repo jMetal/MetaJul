@@ -3,6 +3,8 @@ include("problem.jl")
 
 abstract type Metaheuristic end
 
+###################################
+
 mutable struct LocalSearch <: Metaheuristic
   startingSolution::Solution
   problem::Problem
@@ -20,8 +22,6 @@ function optimize(algorithm :: LocalSearch)
   
   return Nothing
 end
-
-###################################
 
 function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterations::Int, mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
   for i in 1:numberOfIterations
