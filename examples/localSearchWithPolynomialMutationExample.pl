@@ -14,14 +14,13 @@ solver = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 10000
-solver.mutation = uniformMutationOperator
-solver.mutationParameters = (probability=0.1, perturbation=0.5, bounds=problem.bounds)
+solver.mutation = polynomialMutationOperator
+solver.mutationParameters = (probability=0.1, distributionIndex=20.0, bounds=problem.bounds)
 
 optimize(solver)
 
 foundSolution = solver.foundSolution
 
-#localSearch(solution, problem, 10000, uniformMutationOperator, (probability=0.1, perturbation=0.5, bounds=problem.bounds))
 println("Local search result: ", foundSolution)
 println("Fitness of the starting solution: ", solution.objectives[1])
 println("Fitness of the found solution: ", foundSolution.objectives[1])
