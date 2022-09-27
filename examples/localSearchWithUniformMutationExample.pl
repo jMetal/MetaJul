@@ -10,7 +10,7 @@ problem = sphereProblem(10)
 solution::Solution = createSolution(problem)
 solution = evaluate(solution, problem)
 
-solver = LocalSearch()
+solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 10000
