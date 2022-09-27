@@ -1,12 +1,11 @@
 include("solution.jl")
-include("problem.jl")
-
+include("problem.jl")git
 
 ###################################
 
-function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterationes::Int,
+function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterations::Int,
   mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
-  for i in 1:numberOfIterationes
+  for i in 1:numberOfIterations
     mutatedSolution = copySolution(currentSolution)
     mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
     mutatedSolution.variables = restrict(mutatedSolution.variables, problem.bounds)
