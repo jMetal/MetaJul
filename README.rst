@@ -5,7 +5,7 @@ The MetaJul project is aimed at studying the implementation of metaheuristics in
 
 Currently implemented elements:
 
-* Encoding: continuous solution
+* Encoding: continuous, binary
 * Problem: continuous problem, problems Schaffer and Sphere
 * Operator: uniform mutation, polynomial mutation, random selection, binary tournament selection
 * Algorithm: local search
