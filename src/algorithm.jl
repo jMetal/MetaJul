@@ -35,7 +35,7 @@ function localSearch(currentSolution::ContinuousSolution{Real}, problem::Continu
       currentSolution = mutatedSolution
     end
 
-    println("I: ", i, ". F: ", currentSolution.objectives[1])
+    #println("I: ", i, ". F: ", currentSolution.objectives[1])
   end
 
   return currentSolution

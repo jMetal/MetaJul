@@ -16,7 +16,7 @@ function copySolution(solution::ContinuousSolution{})::ContinuousSolution{}
         deepcopy(solution.variables),
         copy(solution.objectives),
         copy(solution.constraints),
-        deepcopy(solution.attributes),
+        Dict(),
         solution.bounds
     )
 end
@@ -30,16 +30,51 @@ struct BitVector
     bits::Vector{Bool}
 end
 
-function initBitVector(zeroAndOneString::String) ::  BitVector
-    bits::Vector{Bool}
-    for char in zeroAndOneString
-        if (char == '0')
-            bits.add(False)
+function toString(bitVector::BitVector)::String
+    string = ""
+    for i in bitVector.bits
+        if i
+            string = string * '0'
         else
-            bits.add(True)
+            string = string * '1'
+        end
+    end
+   return string
+end
+
+function initBitVector(zeroAndOneString::String)::BitVector
+    bits::Vector{Bool} = []
+    for char in zeroAndOneString
+        if char == '0'
+            push!(bits, false)
+        else
+            push!(bits, true)
+        end
     end
 
     return BitVector(bits)
+end
+
+function initBitVector(length::Integer)::BitVector
+    bits::Vector{Bool} = []
+    for i in range(1,length) 
+        if rand() < 0.5
+            push!(bits, false)
+        else
+            push!(bits, true)
+        end
+    end
+
+    return BitVector(bits)
+end
+
+function bitFlip(bitVector::BitVector, index::Int)::BitVector
+    if bitVector.bits[index]
+         bitVector.bits[index] = false
+    else 
+        bitVector.bits[index] = true
+    end
+    return bitVector
 end
 
 mutable struct BinarySolution <: Solution
@@ -49,12 +84,15 @@ mutable struct BinarySolution <: Solution
     attributes::Dict
 end
 
-function copySolution(solution::BinarySolution{})::BinarySolution{}
-    return ContinuousSolution{}(
+function copySolution(solution::BinarySolution)::BinarySolution
+    return BinarySolution(
         deepcopy(solution.variables),
         copy(solution.objectives),
         copy(solution.constraints),
-        deepcopy(solution.attributes),
+        Dict(),
     )
 end
 
+function Base.isequal(solution1::BinarySolution, solution2::BinarySolution)::Bool
+    return Base.isequal(solution1.variables, solution2.variables)
+end
