@@ -1,9 +1,8 @@
 
+include("core.jl")
 include("bounds.jl")
 include("solution.jl")
 include("operator.jl")
-
-abstract type Problem{T} end
 
 abstract type AbstractContinuousProblem{T <: Number} <: Problem{T} end
 

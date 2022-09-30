@@ -1,7 +1,7 @@
 
+include("core.jl")
 include("bounds.jl")
 
-abstract type Solution end
 
 mutable struct ContinuousSolution{T <: Number} <: Solution 
     variables::Array{T}

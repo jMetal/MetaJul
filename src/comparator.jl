@@ -1,3 +1,4 @@
+include("core.jl")
 
 function singleObjectiveComparator(solution1::Solution, solution2::Solution)::Int
     result = 0 ;
