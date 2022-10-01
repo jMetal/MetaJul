@@ -72,7 +72,6 @@ function createSolution(problem::ContinuousProblem{T}) where {T <: Number}
   return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end
 
-########################
 function schafferProblem() 
   schaffer = ContinuousProblem{Real}([],[],[], "Schaffer")
 
@@ -85,8 +84,6 @@ function schafferProblem()
 
   return schaffer
 end
-
-########################
 
 function sphereProblem(numberOfVariables::Int) 
   sphere = ContinuousProblem{Real}([],[],[], "Sphere")
@@ -101,3 +98,4 @@ function sphereProblem(numberOfVariables::Int)
 
   return sphere
 end
+

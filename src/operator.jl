@@ -3,6 +3,8 @@ include("solution.jl")
 include("comparator.jl")
 
 # Mutation operators
+function bitFlipMutation()
+
 function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
