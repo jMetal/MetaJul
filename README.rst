@@ -12,5 +12,6 @@ Currently implemented elements:
 
 The ``examples`` folder contains:
 
-* Local search algorithm using uniform mutation to solve the Sphere problem (10 variables)
-* Local search algorithm using polynomial mutation to solve the Sphere problem (10 variables)
+* Local search algorithm using uniform mutation to solve the Sphere problem
+* Local search algorithm using polynomial mutation to solve the Sphere problem
+* Local search algorithm using bit blip mutation to solve the OneMax problem
