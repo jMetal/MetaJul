@@ -30,6 +30,10 @@ struct BitVector
     bits::Vector{Bool}
 end
 
+function Base.length(bitVector::BitVector)::Int
+    return length(bitVector.bits)
+end
+
 function toString(bitVector::BitVector)::String
     string = ""
     for i in bitVector.bits

@@ -3,7 +3,17 @@ include("solution.jl")
 include("comparator.jl")
 
 # Mutation operators
-function bitFlipMutation()
+function bitFlipMutation(x::BitVector, parameters)::BitVector
+  probability::Real = parameters.probability
+  for i in 1:length(x)
+    r = rand()
+    if r < probability
+      bitFlip(x, i)
+    end
+  end
+
+  return x
+end
 
 function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability

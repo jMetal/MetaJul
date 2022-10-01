@@ -65,7 +65,7 @@ end
 function oneMax(numberOfBits::Int) 
   oneMax = BinaryProblem(numberOfBits,[],[], "OneMax")
 
-  f = x -> length([i for i in x.bits if i])
+  f = x -> -1.0 * length([i for i in x.bits if i])
 
   addObjective(oneMax, f)
 

@@ -23,19 +23,16 @@ function optimize(algorithm :: LocalSearch)
   return Nothing
 end
 
-function localSearch(currentSolution::ContinuousSolution{Real}, problem::ContinuousProblem{Real}, numberOfIterations::Int, mutationOperator::Function, mutationParameters)::ContinuousSolution{Real}
+function localSearch(currentSolution::Solution, problem::Problem, numberOfIterations::Int, mutationOperator::Function, mutationParameters)::Solution
   for i in 1:numberOfIterations
     mutatedSolution = copySolution(currentSolution)
     mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
-    mutatedSolution.variables = restrict(mutatedSolution.variables, problem.bounds)
-
+    
     mutatedSolution = evaluate(mutatedSolution, problem)
 
     if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
       currentSolution = mutatedSolution
     end
-
-    #println("I: ", i, ". F: ", currentSolution.objectives[1])
   end
 
   return currentSolution
