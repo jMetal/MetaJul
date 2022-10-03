@@ -1,20 +1,32 @@
 include("core.jl")
 
+"""
+    objectiveComparator(x, y, index)
 
-function objectiveComparator(x::Array{T}, y::Array{T}, objectid::Int)::Int where {T <: Number}
+Compare the values in the same position (`index`) of two numeric arrays `x` and `y`. The result value is 0, -1, or 
++1 depending, respectively, on the conditions `x[index] == y[index]`, `x[index] < y[index]` or `x[index] > y[index]`
+
+"""
+function objectiveComparator(x::Array{T}, y::Array{T}, index::Int)::Int where {T <: Number}
   @assert length(x) == length(y) "The arrays have a different length"
-  @assert objectid in range(1, length(x)) "The objective id is out of range"
+  @assert index in range(1, length(x)) "The objective id is out of range"
 
   result = 0 ;
-  if x[objectid] < y[objectid]
+  if x[index] < y[index]
     result = -1 ;
-  elseif x[objectid] > y[objectid]
+  elseif x[index] > y[index]
     result = 1
   end
 
   return result
 end
 
+"""
+    dominanceComparator(x, y)
+
+Compare two numerics vectors `x` and `y` according to the dominance relationship. The result is 0 if both vectors are non-dominated, -1 if vector `x` dominates vector `y`, and +1 if vector `x` is dominated by vector `y`. The dominance comparison assumes minimization, i.e., the lower the compared values, the better.
+
+"""
 function dominanceComparator(x::Array{T}, y::Array{T})::Int where {T <: Number}
     @assert length(x) == length(y) "The arrays have a different length"
   
