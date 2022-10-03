@@ -1,24 +1,25 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Test
+name: RunUnitTests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-  build:
-
+  tests:
     runs-on: ubuntu-latest
-
+    strategy:
+	    matrix:
+		    julia-version: ['1.8']
+        julia-arch: [x64]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Julia 1.8.0
-      uses: julia-actions/setup-julia@v1
+    - uses: julia-actions/setup-julia@latest
       with:
         version: '1.8.0'
-    - name: Run tests
-      run: julia src/runtests.jl
+    - uses: julia-actions/julia-buildpkg@latest
+    - uses: julia-actions/julia-runtest@latest
