@@ -5,11 +5,16 @@ name: RunUnitTests
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        julia-version: ['1.8']
+        julia-arch: [x64]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
-          version: '1.8'
+          version: ${{ matrix.julia-version }}
       - uses: julia-actions/julia-buildpkg@latest
       - uses: julia-actions/julia-runtest@latest
