@@ -1,5 +1,5 @@
+include("core.jl")
 include("solution.jl")
-include("problem.jl")
 
 abstract type Metaheuristic end
 

@@ -1,8 +1,7 @@
 include("../src/bounds.jl")
 include("../src/solution.jl")
 include("../src/operator.jl")
-include("../src/problem.jl")
-include("../src/ranking.jl")
+include("../src/continuousProblem.jl")
 include("../src/algorithm.jl")
 
 using Dates
