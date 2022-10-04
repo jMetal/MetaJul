@@ -2,15 +2,22 @@
 include("core.jl")
 
 mutable struct Ranking{T <: Solution}
-    rank::Array{Array{T}}
+    rank::Vector{Vector{T}}
 end 
 
-function getSubFront(ranking::Ranking, subFrontId::Integer)
-    return ranking.rank[subFrontId]
+function getSubFront(ranking::Ranking, rankId::Integer)
+    message = string("The subfront id ", rankId, " is not in the range 1:", length(ranking.rank))
+    @assert length(ranking.rank)  >= rankId message
+    return ranking.rank[rankId]
 end
 
-function numberOfSubFronts(ranking::Ranking)
+function numberOfRanks(ranking::Ranking)
     return length(ranking.rank)
+end
+
+function appendRank!(newRank::Vector{T}, ranking::Ranking{T}) where {T <: Solution}
+    push!(ranking.rank, newRank)
+    return Nothing
 end
 
 """
