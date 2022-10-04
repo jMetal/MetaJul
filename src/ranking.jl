@@ -31,27 +31,5 @@ end
 
 
 
-abstract type Archive end
 
-struct nonDominatedArchive <: Archive
-  solutions::Array{Solution}
-  comparator::Function
-  function nonDominatedArchive()
-
-  end
-end
-
-function isEmpty(archive::nonDominatedArchive)::Bool
-    return length(archive.solutions) == 0
-end
-
-function add(solution::Solution, archive::nonDominatedArchive)::Bool
-    solutionIsInserted = false
-    if isEmpty(archive)
-        push!(solution, archive.solutions)
-        solutionIsInserted = true
-    else
-
-    end
-end
 """
