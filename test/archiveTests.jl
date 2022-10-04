@@ -40,7 +40,7 @@ emptyArchive = NonDominatedArchive([])
   @test addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
 end
 
-###########
+#########################################################################
 
 solution = ContinuousSolution{Float64}([1.0, 2.0], [1.0, 2.0], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
 nonDominatedSolution = ContinuousSolution{Float64}([1.0, 2.0], [2.0, 1.0], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
@@ -82,7 +82,6 @@ function addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
 end
 
 function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength() 
-  #function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLengthAndRemovesTheExistingSolution() 
   archive = NonDominatedArchive([solution])
   add(archive, dominatingSolution)
 
