@@ -63,6 +63,6 @@ end
     @test valueIsInBoundsReturnsFalse()
     @test valueIsInBoundsReturnsTrue()
 
-    @test length(createBounds([1, 2, 3], [4, 5, 6])) == 3
+    @test length(createBounds([1, 2, 3], [4, 5, 6])) == 2
     @test_throws "The length of the lowerbound and upperbound arrays are different: 2, 4" createBoundsRaiseAnExceptionIfTheLengthOfTheLowerAndUpperBoundsArraysIsNotTheSame()
 end
