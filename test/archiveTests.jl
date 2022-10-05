@@ -1,4 +1,3 @@
-using Test
 
 include("../src/archive.jl")
 
@@ -8,31 +7,42 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
   return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])
 end
 
+#########################################################################
+
 function addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
+  solution = createContinuousSolution(3)
+
+  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  add!(archive, solution)
+
+  return length(archive) == 1
+end
+
+function addASolutionToAnEmtpyArchiveEffectivelyAddTheSolution()
   solution = createContinuousSolution(3)
 
   emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
   add!(emptyArchive, solution)
 
-  return length(emptyArchive) == 1
+  return contain(emptyArchive, solution)
 end
 
 function addASolutionToAnEmtpyArchiveMakesItNonEmpty()
   solution = createContinuousSolution(3)
 
-  emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add!(emptyArchive, solution)
+  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  add!(archive, solution)
 
-  return isEmpty(emptyArchive) == false
+  return isEmpty(archive) == false
 end
 
 function addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
   solution = createContinuousSolution(3)
 
-  emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add!(emptyArchive, solution)
+  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  add!(archive, solution)
 
-  return isequal(solution, emptyArchive.solutions[1])
+  return isequal(solution, archive.solutions[1])
 end
 
 emptyArchive = NonDominatedArchive([])
@@ -42,6 +52,7 @@ emptyArchive = NonDominatedArchive([])
   @test isEmpty(emptyArchive)
 
   @test addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
+  @test addASolutionToAnEmtpyArchiveEffectivelyAddTheSolution()
   @test addASolutionToAnEmtpyArchiveMakesItNonEmpty()
   @test addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
 end
@@ -58,6 +69,19 @@ function addANonDominatedSolutionToAnArchiveWithASolutionReturnsTrue()
   archive = NonDominatedArchive([solution])
   
   return add!(archive, nonDominatedSolution)
+end
+
+function addANonDominatedSolutionToAnArchiveWithASolutionContainsBothSolutions() 
+  solution = createContinuousSolution(3)
+  solution.objectives = [1.0, 2.0, 3.0]
+
+  nonDominatedSolution = createContinuousSolution(3)
+  nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
+
+  archive = NonDominatedArchive([solution])
+  add!(archive, nonDominatedSolution)
+  
+  return contain(archive, solution) && contain(archive, nonDominatedSolution)
 end
 
 
@@ -137,7 +161,7 @@ function addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhic
   archive = NonDominatedArchive([solution])
   add!(archive, dominatingSolution)
 
-  return isequal(dominatingSolution, archive.solutions[1])
+  return contain(archive, dominatingSolution) && !contain(archive, solution)
 end
 
 
@@ -148,6 +172,7 @@ archiveWithASolution = NonDominatedArchive([createContinuousSolution(5)])
 
   @test addANonDominatedSolutionToAnArchiveWithASolutionReturnsTrue()
   @test addANonDominatedSolutionToAnArchiveWithASolutionIncreasesItsLengthByOne()
+  @test addANonDominatedSolutionToAnArchiveWithASolutionContainsBothSolutions()
 
   @test addADominatedSolutionToAnArchiveWithASolutionReturnFalse()
   @test addADominatedSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength()
@@ -172,7 +197,7 @@ function addADominantSolutionInAnArchiveOfSizeTwoDiscardTheExistingOfSolutions()
 
   add!(archive, dominatingSolution)
 
-  return length(archive) == 1 && isequal(dominatingSolution.objectives, archive.solutions[1].objectives)
+  return length(archive) == 1 && !contain(archive, solution1) && !contain(archive, solution2)
 end
 
 function addADominatedSolutionInAnArchiveOfSizeTwoReturnFalse()
@@ -204,11 +229,11 @@ function addASolutionInAnArchiveOfSizeTwoDominatingTheFirstOneDiscardThisOne()
 
   solutionIsAdded = add!(archive, dominatingSolution)
 
-  return length(archive) == 2 && solutionIsAdded
+  return length(archive) == 2 && solutionIsAdded && !contain(archive, solution1) && contain(archive, solution2)
 end
 
 function addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
-  solution1 = createContinuousSolution(3)
+  solution1 = createContinuousSolution(3) 
   solution1.objectives = [1.0, 2.0, 3.0]
   solution2 = createContinuousSolution(3)
   solution2.objectives = [1.0, 1.0, 4.0]
@@ -226,7 +251,6 @@ function addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
 
   return length(archive) == 2 && !solution1IsAdded && !solution2IsAdded
 end
-
 
 @testset "Archive with two solution tests" begin    
   @test addADominantSolutionInAnArchiveOfSizeTwoDiscardTheExistingOfSolutions()

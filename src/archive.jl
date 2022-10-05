@@ -46,3 +46,15 @@ function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function
 
     return solutionIsInserted
 end
+
+function contain(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <: Solution}
+  result = false
+  for solutionInArchive in archive.solutions
+    if isequal(solutionInArchive.objectives, solution.objectives)
+      result = true 
+      break
+    end
+  end
+
+  return result
+end
