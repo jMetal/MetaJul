@@ -12,7 +12,7 @@ function addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
   solution = createContinuousSolution(3)
 
   emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add(emptyArchive, solution)
+  add!(emptyArchive, solution)
 
   return length(emptyArchive) == 1
 end
@@ -21,7 +21,7 @@ function addASolutionToAnEmtpyArchiveMakesItNonEmpty()
   solution = createContinuousSolution(3)
 
   emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add(emptyArchive, solution)
+  add!(emptyArchive, solution)
 
   return isEmpty(emptyArchive) == false
 end
@@ -30,7 +30,7 @@ function addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
   solution = createContinuousSolution(3)
 
   emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add(emptyArchive, solution)
+  add!(emptyArchive, solution)
 
   return isequal(solution, emptyArchive.solutions[1])
 end
@@ -57,7 +57,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionReturnsTrue()
 
   archive = NonDominatedArchive([solution])
   
-  return add(archive, nonDominatedSolution)
+  return add!(archive, nonDominatedSolution)
 end
 
 
@@ -69,7 +69,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionIncreasesItsLengthByOne
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
   archive = NonDominatedArchive([solution])
-  add(archive, nonDominatedSolution)
+  add!(archive, nonDominatedSolution)
 
   return length(archive) == 2
 end
@@ -82,9 +82,9 @@ function addADominatedSolutionToAnArchiveWithASolutionReturnFalse()
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
   archive = NonDominatedArchive([solution])
-  add(archive, dominatedSolution)
+  add!(archive, dominatedSolution)
 
-  return !add(archive, dominatedSolution)
+  return !add!(archive, dominatedSolution)
 end
 
 
@@ -96,7 +96,7 @@ function addADominatedSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength(
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
   archive = NonDominatedArchive([solution])
-  add(archive, dominatedSolution)
+  add!(archive, dominatedSolution)
 
   return length(archive) == 1
 end
@@ -111,7 +111,7 @@ function addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
 
   archive = NonDominatedArchive([solution])
   
-  return add(archive, dominatingSolution)
+  return add!(archive, dominatingSolution)
 end
 
 function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength() 
@@ -122,7 +122,7 @@ function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
   archive = NonDominatedArchive([solution])
-  add(archive, dominatingSolution)
+  add!(archive, dominatingSolution)
 
   return length(archive) == 1
 end
@@ -135,10 +135,11 @@ function addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhic
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
   archive = NonDominatedArchive([solution])
-  add(archive, dominatingSolution)
+  add!(archive, dominatingSolution)
 
   return isequal(dominatingSolution, archive.solutions[1])
 end
+
 
 archiveWithASolution = NonDominatedArchive([createContinuousSolution(5)])
 @testset "Archive with a solution tests" begin    
@@ -154,6 +155,82 @@ archiveWithASolution = NonDominatedArchive([createContinuousSolution(5)])
   @test addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
   @test addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength()
   @test addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhichIsReplacedByTheDominatingOne()
+
 end
 
 #########################################################################
+function addADominantSolutionInAnArchiveOfSizeTwoDiscardTheExistingOfSolutions()
+  solution1 = createContinuousSolution(3)
+  solution1.objectives = [1.0, 2.0, 3.0]
+  solution2 = createContinuousSolution(3)
+  solution2.objectives = [1.0, 1.0, 4.0]
+
+  archive = NonDominatedArchive([solution1, solution2])
+
+  dominatingSolution = createContinuousSolution(3)
+  dominatingSolution.objectives = [1.0, 1.0, 1.0]
+
+  add!(archive, dominatingSolution)
+
+  return length(archive) == 1 && isequal(dominatingSolution.objectives, archive.solutions[1].objectives)
+end
+
+function addADominatedSolutionInAnArchiveOfSizeTwoReturnFalse()
+  solution1 = createContinuousSolution(3)
+  solution1.objectives = [1.0, 2.0, 3.0]
+  solution2 = createContinuousSolution(3)
+  solution2.objectives = [1.0, 1.0, 4.0]
+
+  archive = NonDominatedArchive([solution1, solution2])
+
+  dominatingSolution = createContinuousSolution(3)
+  dominatingSolution.objectives = [2.0, 3.0, 5.0]
+
+  solutionIsAdded = add!(archive, dominatingSolution)
+
+  return length(archive) == 2 && !solutionIsAdded
+end
+
+function addASolutionInAnArchiveOfSizeTwoDominatingTheFirstOneDiscardThisOne()
+  solution1 = createContinuousSolution(3)
+  solution1.objectives = [1.0, 2.0, 3.0]
+  solution2 = createContinuousSolution(3)
+  solution2.objectives = [1.0, 1.0, 4.0]
+
+  archive = NonDominatedArchive([solution1, solution2])
+
+  dominatingSolution = createContinuousSolution(3)
+  dominatingSolution.objectives = [1.0, 2.0, 2.0]
+
+  solutionIsAdded = add!(archive, dominatingSolution)
+
+  return length(archive) == 2 && solutionIsAdded
+end
+
+function addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
+  solution1 = createContinuousSolution(3)
+  solution1.objectives = [1.0, 2.0, 3.0]
+  solution2 = createContinuousSolution(3)
+  solution2.objectives = [1.0, 1.0, 4.0]
+
+  archive = NonDominatedArchive([solution1, solution2])
+
+  existingSolution1 = createContinuousSolution(3)
+  existingSolution1.objectives = [1.0, 2.0, 3.0]
+
+  existingSolution2 = createContinuousSolution(3)
+  existingSolution2.objectives = [1.0, 1.0, 4.0]
+
+  solution1IsAdded = add!(archive, existingSolution1)
+  solution2IsAdded = add!(archive, existingSolution2)
+
+  return length(archive) == 2 && !solution1IsAdded && !solution2IsAdded
+end
+
+
+@testset "Archive with two solution tests" begin    
+  @test addADominantSolutionInAnArchiveOfSizeTwoDiscardTheExistingOfSolutions()
+  @test addADominatedSolutionInAnArchiveOfSizeTwoReturnFalse()
+  @test addASolutionInAnArchiveOfSizeTwoDominatingTheFirstOneDiscardThisOne()
+  @test addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
+end

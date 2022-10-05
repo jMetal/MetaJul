@@ -16,17 +16,29 @@ function Base.length(archive::NonDominatedArchive)::Int
   return length(archive.solutions)
 end
 
-function add(archive::NonDominatedArchive{T}, solution::T, comparator::Function = dominanceComparator)::Bool where {T <: Solution}
+function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function = dominanceComparator)::Bool where {T <: Solution}
     solutionIsInserted = false
     if isEmpty(archive)
         push!(archive.solutions, solution)
         solutionIsInserted = true
     else
-      if dominanceComparator(solution.objectives, archive.solutions[1].objectives) == 0
-        push!(archive.solutions, solution)
-        solutionIsInserted = true
-      elseif dominanceComparator(solution.objectives, archive.solutions[1].objectives) == -1
-        deleteat!(archive.solutions, 1)
+      solutionIsDominated = false
+      solutionIsAlreadyInTheArchive = false
+      currentSolutionIndex = 1
+      while !solutionIsDominated && !solutionIsAlreadyInTheArchive && currentSolutionIndex <= length(archive)
+        result = dominanceComparator(solution.objectives, archive.solutions[currentSolutionIndex].objectives)
+        if result == -1
+          deleteat!(archive.solutions, 1)
+        elseif result == 1
+          solutionIsDominated = true
+        elseif isequal(solution.objectives, archive.solutions[currentSolutionIndex].objectives)
+          solutionIsAlreadyInTheArchive = true
+        else
+          currentSolutionIndex += 1
+        end
+      end
+
+      if !solutionIsDominated && !solutionIsAlreadyInTheArchive
         push!(archive.solutions, solution)
         solutionIsInserted = true
       end
