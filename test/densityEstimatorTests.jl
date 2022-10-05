@@ -1,5 +1,5 @@
 include("../src/solution.jl")
-include("../src/DensityEstimator.jl")
+include("../src/densityEstimator.jl")
 
 # Utility functions
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
