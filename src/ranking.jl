@@ -1,6 +1,7 @@
 # Struct and methods to implement the non-dominated ranking sorting method
 include("core.jl")
 include("solution.jl")
+include("archive.jl")
 
 mutable struct Ranking{T <: Solution}
     rank::Vector{Vector{T}}
@@ -18,17 +19,47 @@ function numberOfRanks(ranking::Ranking)::Int
     return length(ranking.rank)
 end
 
-function appendRank!(newRank::Vector{T}, ranking::Ranking{T}) where {T <: Solution}
+function appendRank!(ranking::Ranking{T}, newRank::Vector{T}) where {T <: Solution}
     push!(ranking.rank, newRank)
     return Nothing
 end
 
-function getRank2(solution::T) where {T <: Solution}
-    return solution.attributes.get("RANKING_ATTRIBUTE")
+function getRank(solution::T) where {T <: Solution}
+    return solution.attributes["RANKING_ATTRIBUTE"]
+end
+
+function setRank(solution::T, rank::Int) where {T <: Solution}
+    return solution.attributes["RANKING_ATTRIBUTE"] = rank
 end
 
 function computeRanking(solutions::Array{T})::Ranking{T} where {T <: Solution}
-    @assert length(solutions) == 0 "The solution list is empty"
+    ranking = Ranking{T}()
 
-   return 
+    solutionsToRank = [solution for solution in solutions]
+    rankCounter = 1
+
+    println("Solutions to rank. START: ", solutionsToRank)
+
+    while length(solutionsToRank) > 0
+        nonDominatedArchive = NonDominatedArchive{T}([])
+        for (index, solution) in enumerate(solutionsToRank)
+            solution.attributes["INDEX"] = index
+            add!(nonDominatedArchive, solution)
+        end
+
+        counterOfDeletedSolutions = 0
+        for solution in nonDominatedArchive.solutions
+            setRank(solution, rankCounter)
+            println("Index: ", solution.attributes["INDEX"])
+            deleteat!(solutionsToRank, solution.attributes["INDEX"]-counterOfDeletedSolutions)
+            counterOfDeletedSolutions += 1
+        end
+
+        println("Solutions to rank: ", solutionsToRank)
+        appendRank!(ranking, nonDominatedArchive.solutions)
+        
+        rankCounter += 1
+    end
+
+    return ranking
 end
