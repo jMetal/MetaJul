@@ -153,6 +153,32 @@ function computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRanking
     (getRank(solution2Front2) == 2) 
 end
 
+function computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper() 
+    # https://doi.org/10.1109/TCYB.2020.2968301
+
+    objectiveValues = [
+        [34.0, 30.0, 41.0],
+        [33.0, 34.0, 30.0],
+        [32.0, 32.0, 31.0],
+        [31.0, 34.0, 34.0],
+        [34.0, 30.0, 40.0],
+        [36.0, 33.0, 32.0],
+        [35.0, 31.0, 43.0],
+        [37.0, 36.0, 39.0],
+        [35.0, 34.0, 38.0],
+        [38.0, 38.0, 37.0],
+        [39.0, 37.0, 31.0]
+    ]
+
+    solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
+    ranking = computeRanking(solutions)
+
+    return numberOfRanks(ranking) == 3 &&
+    length(ranking.rank[1]) == 4 &&
+    length(ranking.rank[2]) == 4 &&
+    length(ranking.rank[3]) == 3
+end
+
 @testset "Compute ranking tests" begin    
     @test computeRankingOfAnEmptySolutionListReturnAnEmptyRanking()
 
@@ -162,4 +188,6 @@ end
     @test computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRankings()
     @test computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRankings()
     @test computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRankings()
+
+    @test computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
 end
