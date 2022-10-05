@@ -4,17 +4,9 @@ include("solution.jl")
 
 mutable struct Ranking{T <: Solution}
     rank::Vector{Vector{T}}
-    """
-    function Ranking() 
-        this = new{T}()
-        this.rank = new(Ranking{T}(Vector{Vector{T}}(undef, 0)))
-        
-        return this
-    end
-    """
 end 
 
-Ranking{T}() where {T <: Solution} = Ranking{T}(Array{Array{T}}(undef, 0))
+Ranking{T}() where {T <: Solution} = Ranking{T}(Vector{Vector{T}}(undef, 0))
 
 function getSubFront(ranking::Ranking, rankId::Integer)
     message = string("The subfront id ", rankId, " is not in the range 1:", length(ranking.rank))
