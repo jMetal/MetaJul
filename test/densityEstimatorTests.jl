@@ -1,8 +1,6 @@
 include("../src/solution.jl")
 include("../src/DensityEstimator.jl")
 
-using Test
-
 # Utility functions
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])

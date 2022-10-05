@@ -2,10 +2,6 @@ include("core.jl")
 include("solution.jl")
 include("archive.jl")
 
-# Struct and methods to implement the non-dominated ranking sorting method
-
-# abstract type DensityEstimator end
-
 
 """
     computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Solution}
