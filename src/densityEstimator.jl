@@ -2,7 +2,6 @@ include("core.jl")
 include("solution.jl")
 include("archive.jl")
 
-
 """
     computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Solution}
 
@@ -42,18 +41,3 @@ function computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Sol
 
     return Nothing
 end
-
-
-"""
-function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
-    return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])
-end
-
-solution1 = createContinuousSolution([0.0, 1.0])
-solution2 = createContinuousSolution([1.0, 0.0])
-solution3 = createContinuousSolution([0.5, 0.5])
-solutions = [solution1, solution2, solution3]
-
-computeCrowdingDistanceEstimator!(solutions)
-
-"""
