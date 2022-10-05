@@ -1,9 +1,20 @@
 # Struct and methods to implement the non-dominated ranking sorting method
 include("core.jl")
+include("solution.jl")
 
 mutable struct Ranking{T <: Solution}
     rank::Vector{Vector{T}}
+    """
+    function Ranking() 
+        this = new{T}()
+        this.rank = new(Ranking{T}(Vector{Vector{T}}(undef, 0)))
+        
+        return this
+    end
+    """
 end 
+
+Ranking{T}() where {T <: Solution} = Ranking{T}(Array{Array{T}}(undef, 0))
 
 function getSubFront(ranking::Ranking, rankId::Integer)
     message = string("The subfront id ", rankId, " is not in the range 1:", length(ranking.rank))
@@ -11,7 +22,7 @@ function getSubFront(ranking::Ranking, rankId::Integer)
     return ranking.rank[rankId]
 end
 
-function numberOfRanks(ranking::Ranking)
+function numberOfRanks(ranking::Ranking)::Int
     return length(ranking.rank)
 end
 
@@ -20,16 +31,12 @@ function appendRank!(newRank::Vector{T}, ranking::Ranking{T}) where {T <: Soluti
     return Nothing
 end
 
-"""
-function getRank(solution::Solution)::Int where {T :< Solution}
+function getRank2(solution::T) where {T <: Solution}
     return solution.attributes.get("RANKING_ATTRIBUTE")
 end
 
 function computeRanking(solutions::Array{T})::Ranking{T} where {T <: Solution}
+    @assert length(solutions) == 0 "The solution list is empty"
+
    return 
 end
-
-
-
-
-"""
