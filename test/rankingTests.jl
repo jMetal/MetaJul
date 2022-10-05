@@ -1,5 +1,3 @@
-using Test
-
 include("../src/ranking.jl")
 include("../src/solution.jl")
 
@@ -179,6 +177,27 @@ function computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
     length(ranking.rank[3]) == 3
 end
 
+function computeRankingMustWorkProperlyWithAnExampleOfNineSolutions() 
+    objectiveValues = [
+        [1.4648056109874181, 8.970087855444899E-34, 5.301705982489511E-43],
+        [1.5908547487753466, 4.21325648871815E-91, 5.492563533270124E-38],
+        [1.460628598699147, 7.251230487490275E-13, 6.836254915688127E-21],
+        [1.53752105026832, 1.30774962272882E-89, 1.964911546564003E-276],
+        [1.7827030380249338, 4.7213519324741183E-91, 1.093734894701149E-8],
+        [1.5077459267903963, 3.717675758529715E-9, 7.056780562019277E-21],
+        [1.7182703887918194, 4.567060424443055E-69, 6.126880230825156E-225],
+        [1.551119525194089, 3.0514004681678587E-46, 1.927008515185969E-40],
+        [1.572731735111519, 1.337698324772074E-89, 4.4182881457366E-206]
+    ]
+
+    solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
+    ranking = computeRanking(solutions)
+
+    return numberOfRanks(ranking) == 2 &&
+    length(ranking.rank[1]) == 4 &&
+    length(ranking.rank[2]) == 5
+end
+
 @testset "Compute ranking tests" begin    
     @test computeRankingOfAnEmptySolutionListReturnAnEmptyRanking()
 
@@ -190,4 +209,5 @@ end
     @test computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRankings()
 
     @test computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
+    @test computeRankingMustWorkProperlyWithAnExampleOfNineSolutions()
 end

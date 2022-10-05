@@ -38,8 +38,6 @@ function computeRanking(solutions::Array{T})::Ranking{T} where {T <: Solution}
     solutionsToRank = [solution for solution in solutions]
     rankCounter = 1
 
-    println("Solutions to rank. START: ", solutionsToRank)
-
     while length(solutionsToRank) > 0
         nonDominatedArchive = NonDominatedArchive{T}([])
         for (index, solution) in enumerate(solutionsToRank)
@@ -50,12 +48,10 @@ function computeRanking(solutions::Array{T})::Ranking{T} where {T <: Solution}
         counterOfDeletedSolutions = 0
         for solution in nonDominatedArchive.solutions
             setRank(solution, rankCounter)
-            println("Index: ", solution.attributes["INDEX"])
             deleteat!(solutionsToRank, solution.attributes["INDEX"]-counterOfDeletedSolutions)
             counterOfDeletedSolutions += 1
         end
 
-        println("Solutions to rank: ", solutionsToRank)
         appendRank!(ranking, nonDominatedArchive.solutions)
         
         rankCounter += 1
