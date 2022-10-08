@@ -1,5 +1,23 @@
 include("core.jl")
 
+
+"""
+    multiComparator(comparators::Vector{Function}, x:: Vector, y::Vector)
+
+TBW
+"""
+function multiComparator(comparators::Vector{Function}, x:: Vector, y::Vector)
+  result = 0 
+  for comparator in comparators
+    result = comparator(x,y)
+    if result != 0
+      break
+    end
+  end
+  return result 
+end
+
+
 """
     objectiveComparator(x, y, index)
 
@@ -27,7 +45,7 @@ end
 Compare two numerics vectors `x` and `y` according to the dominance relationship. The result is 0 if both vectors are non-dominated, -1 if vector `x` dominates vector `y`, and +1 if vector `x` is dominated by vector `y`. The dominance comparison assumes minimization, i.e., the lower the compared values, the better.
 
 """
-function dominanceComparator(x::Array{T}, y::Array{T})::Int where {T <: Number}
+function dominanceComparator(x::Vector{T}, y::Vector{T})::Int where {T <: Number}
     @assert length(x) == length(y) "The arrays have a different length"
   
     x==y && return 0

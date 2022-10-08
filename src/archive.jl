@@ -4,15 +4,19 @@ include("comparator.jl")
 
 abstract type Archive end
 
+
+"""
+  struct containing an unbounded archive of non-dominated solutions
+"""
 struct NonDominatedArchive{T} <: Archive where {T}
   solutions::Array{T}
 end
 
-function isEmpty(archive::NonDominatedArchive)::Bool
+function isEmpty(archive::Archive)::Bool
     return length(archive.solutions) == 0
 end
 
-function Base.length(archive::NonDominatedArchive)::Int
+function Base.length(archive::Archive)::Int
   return length(archive.solutions)
 end
 

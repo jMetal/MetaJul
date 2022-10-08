@@ -1,6 +1,7 @@
 
 include("solution.jl")
 include("comparator.jl")
+include("ranking.jl")
 
 # Mutation operators
 function bitFlipMutation(x::BitVector, parameters)::BitVector
@@ -113,3 +114,78 @@ function binaryTournamentSelectionOperator(x::Array, comparator::Function)
   return result
 end
 
+# Replacement operators
+
+"""
+    muPlusLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
+
+TBW
+"""
+function muPlusLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
+  jointVector = vcat(x,y)
+
+  sort!(jointVector, lt=comparator)
+
+  println(jointVector)
+
+  return jointVector[1:length(x)]
+end
+
+"""
+    muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
+
+TBW
+"""
+function muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
+  @assert length(x) >= length(y) "The length of the x vector is lower than the length of the y vector" 
+
+  resultVector = Vector(y)
+  sort!(resultVector, lt=comparator)
+
+  println(resultVector
+  )
+
+  return resultVector[1:length(x)]
+end
+
+"""
+x = [1,3,5,7]
+y = [2,4,6,8]
+
+z = muPlusLambdaReplacement(x,y)
+println(z)
+
+function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{Float64}
+  objectives = [_ for _ in range(1, numberOfObjectives)]
+  return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])
+end
+
+solution1 = createContinuousSolution(3)
+solution1.objectives = [1.0, 2.0, 3.0]
+
+solution2 = createContinuousSolution(3)
+solution2.objectives = [1.0, 1.0, 1.0]
+
+solution3 = createContinuousSolution(3)
+solution3.objectives = [0.0, 0.0, 0.0]
+
+solution4 = createContinuousSolution(3)
+solution4.objectives = [3.0, 3.0, 3.0]
+
+solutions1 = [solution1, solution2]
+ranking = computeRanking(solutions1)
+
+solutions = [solution1, solution2, solution3, solution4]
+sort!(solutions, lt = (x,y) -> dominanceComparator(x.objectives, y.objectives) <=0)
+
+for s in solutions println(s.objectives) end
+
+
+solutions2 = [solution3, solution4]
+ranking = computeRanking(solutions2)
+
+z1 = muCommaLambdaReplacement(solutions1,solutions2,
+(x,y) -> dominanceComparator(solution1.objectives, solution2.objectives) <= 0)
+
+for s in z1 println(s.objectives) end
+"""

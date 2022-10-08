@@ -1,5 +1,5 @@
 include("../src/solution.jl")
-include("../src/densityEstimator.jl")
+include("../src/DensityEstimator.jl")
 
 # Utility functions
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
@@ -12,17 +12,21 @@ end
 
 function computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
     solutions = [createContinuousSolution([1.0, 2.0])]
-    computeCrowdingDistanceEstimator!(solutions)
 
-    return solutions[1].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == typemax(Float64)
+    crowdingDistance = CrowdingDistance()
+    crowdingDistance.compute(solutions)
+
+    return solutions[1].attributes[crowdingDistance.attributedId] == typemax(Float64)
 end
 
 function computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
     solutions = [createContinuousSolution([1.0, 2.0]), createContinuousSolution([2.0, 1.0])]
-    computeCrowdingDistanceEstimator!(solutions)
 
-    return solutions[1].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == typemax(Float64)
-    return solutions[2].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == typemax(Float64)
+    crowdingDistance = CrowdingDistance()
+    crowdingDistance.compute(solutions)
+
+    return solutions[1].attributes[crowdingDistance.attributedId] == typemax(Float64)
+    return solutions[2].attributes[crowdingDistance.attributedId] == typemax(Float64)
 end
 
 function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsTheRightValues()
@@ -31,11 +35,12 @@ function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsT
     solution3 = createContinuousSolution([0.5, 0.5])
     solutions = [solution1, solution2, solution3]
 
-    computeCrowdingDistanceEstimator!(solutions)
+    crowdingDistance = CrowdingDistance()
+    crowdingDistance.compute(solutions)
 
-    return solutions[1].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == typemax(Float64)
-    return solutions[2].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == 2.0
-    return solutions[3].attributes["CROWDING_DISTANCE_ATTRIBUTE"] == typemax(Float64)
+    return solutions[1].attributes[crowdingDistance.attributedId] == typemax(Float64)
+    return solutions[2].attributes[crowdingDistance.attributedId] == 2.0
+    return solutions[3].attributes[crowdingDistance.attributedId] == typemax(Float64)
 end
 
 @testset "Crowding distance estimator test cases" begin    

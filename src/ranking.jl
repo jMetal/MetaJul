@@ -25,12 +25,23 @@ function appendRank!(ranking::Ranking{T}, newRank::Vector{T}) where {T <: Soluti
     return Nothing
 end
 
-function getRank(solution::T) where {T <: Solution}
-    return solution.attributes["RANKING_ATTRIBUTE"]
+function getRank(solution::Solution) 
+    return get(solution.attributes,"RANKING_ATTRIBUTE", 0)
 end
 
-function setRank(solution::T, rank::Int) where {T <: Solution}
+function setRank(solution::Solution, rank::Int) 
     return solution.attributes["RANKING_ATTRIBUTE"] = rank
+end
+
+function rankingCompataror(solution1::Solution, solution2::Solution) 
+    result = 0
+    if getRank(solution1) < getRank(solution2)
+        result = -1
+    elseif getRank(solution1) > getRank(solution2)
+        result = 1
+    end
+
+    return result
 end
 
 function computeRanking(solutions::Array{T})::Ranking{T} where {T <: Solution}
