@@ -66,7 +66,7 @@ function polynomialMutationOperator(x::Array{T}, parameters)::Array{T} where {T 
 end
 
 # Crossover operators
-function blxAlphaCrossover(parent1::Array{T}, parent2::Array{T}, parameters)::Array{Array{T}} where {T <: Real}
+function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::Array{Array{T}} where {T <: Real}
   probability::Real = parameters.probability
   alpha::Real = parameters.alpha
   bounds = parameters.bounds
@@ -96,12 +96,30 @@ function blxAlphaCrossover(parent1::Array{T}, parent2::Array{T}, parameters)::Ar
   return [child1, child2]
 end
 
+function singlePointCrossover(x::BitVector, y::BitVector, parameters::NamedTuple)::BitVector
+  @assert length(x) == length(y) "The length of the two vectors to recombine is not equal"
+  probability::Real = parameters.probability
+  child1 = deepcopy(x)
+  child2 = deepcopy(y)
+
+  if rand() < parameters.probability
+    cuttingPoint = rand(1:length(x))
+
+    tmp = child1[cuttingPoint:end] 
+    child1[cuttingPoint:end] = child2[cuttingPoint:end]
+    child2[cuttingPoint:end] = tmp
+  end
+
+  return [child1, child2]
+end
+
 # Selection operators
-function randomSelection(x::Array)
+function randomSelection(x::Array, parameters = [])
   return x[rand(1:length(x))]
 end
 
-function binaryTournamentSelectionOperator(x::Array, comparator::Function)
+function binaryTournamentSelectionOperator(x::Array, parameters::NamedTuple)
+  comparator = parameters.comparator
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
 
@@ -123,11 +141,7 @@ TBW
 """
 function muPlusLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
   jointVector = vcat(x,y)
-
   sort!(jointVector, lt=comparator)
-
-  println(jointVector)
-
   return jointVector[1:length(x)]
 end
 
@@ -141,9 +155,6 @@ function muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isl
 
   resultVector = Vector(y)
   sort!(resultVector, lt=comparator)
-
-  println(resultVector
-  )
 
   return resultVector[1:length(x)]
 end

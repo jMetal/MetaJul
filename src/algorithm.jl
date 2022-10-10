@@ -39,32 +39,52 @@ function localSearch(currentSolution::Solution, problem::Problem, numberOfIterat
 end
 
 #################################
+mutable struct GeneticAlgorithm <: Metaheuristic
+  problem::Problem
+  populationSize::Int
+  offspringPopulationSize::Int
+  numberOfEvaluations::Int
+  crossover::Function
+  crossoverParameters::NamedTuple
+  mutation::Function
+  mutationParameters::NamedTuple
+  foundSolutions::Vector{Solution}
+  termination::Function
+  matingPoolSize::Int
+  selectionComparator::Function
+
+
+  GeneticAlgorithm() = new()
+end
+
+function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function)
+  #,  selection::Function, variation::Function, replacement::Function)
+  println("START of algorithm")
+
+  population = solutionsCreation((problem = ga.problem, populationSize = ga.populationSize))
+  population = evaluation((population = population, problem = ga.problem))
+
+  eaStatus = Dict("EVALUATIONS" => ga.populationSize, "MAX_EVALUATIONS" => ga.numberOfEvaluations)
+
+  while !terminationCondition(eaStatus)
+    matingPool = selection((population = population, matingPoolSize = 100)
+  end
+
+  foundSolutions = population
+  return foundSolutions
+end
+
+function optimize(algorithm :: GeneticAlgorithm)
+  algorithm.foundSolutions = geneticAlgorithm(algorithm, defaultSolutionsCreation, sequentialEvaluation, algorithm.termination, binaryTournamentSelection)
+  
+  return Nothing
+end
 
 """
-struct EAState{T <: Solution}
+struct EvolutionaryAlgorithmAState{T <: Solution}
   evaluations::Int
   population::Array{T}
-  #computingTime
 end
-
-abstract type CreateSolutionsData end
-
-struct createSolutionsFromProblemData <: CreateSolutionsData
-  problem::Problem
-  numberOfSolutionsToCreate::Int
-end
-
-function createSolutions(data::createSolutionsFromProblemData)::Vector
-  return [createSolution(data.problem) for _ in 1:data.numberOfSolutionsToCreate]
-end
-
-println()
-println()
-
-#data = createSolutionsFromProblemData(createSchafferProblem(), 5)
-#println("Creating 5 solutions: ", createSolutions(data))
-println()
-println()
 
 
 function evolutionaryAlgorithm(solutionsCreation::Function, evaluation::Function, termination::Function, selection::Function, variation::Function, replacement::Function)
