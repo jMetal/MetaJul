@@ -25,7 +25,7 @@ Compare the values in the same position (`index`) of two numeric arrays `x` and 
 +1 depending, respectively, on the conditions `x[index] == y[index]`, `x[index] < y[index]` or `x[index] > y[index]`
 
 """
-function objectiveComparator(x::Array{T}, y::Array{T}, index::Int)::Int where {T <: Number}
+function objectiveComparator(x::Array{T}, y::Array{T}, index::Int = 1)::Int where {T <: Number}
   @assert length(x) == length(y) "The arrays have a different length"
   @assert index in range(1, length(x)) "The objective id is out of range"
 
@@ -85,8 +85,7 @@ function dominanceComparator(x::Vector{T}, y::Vector{T})::Int where {T <: Number
   function dominanceComparator(solution1::Solution, solution2::Solution)::Int
     return dominanceComparator(solution1.objectives, solution2.objectives)
   end
-
-  function objectiveComparator(solution1::Solution, solution2::Solution, objectiveId::Int)::Int
+  """
+  function objectiveComparator(solution1::Solution, solution2::Solution, objectiveId::Int=1)::Int
     return objectiveComparator(solution1.objectives, solution2.objectives, objectiveId)
   end
-  """

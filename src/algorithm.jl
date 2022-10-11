@@ -50,9 +50,9 @@ mutable struct GeneticAlgorithm <: Metaheuristic
   mutationParameters::NamedTuple
   foundSolutions::Vector{Solution}
   termination::Function
-  matingPoolSize::Int
-  selectionComparator::Function
 
+  selection::Function
+  selectionParameters::NamedTuple
 
   GeneticAlgorithm() = new()
 end
@@ -67,7 +67,9 @@ function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, eva
   eaStatus = Dict("EVALUATIONS" => ga.populationSize, "MAX_EVALUATIONS" => ga.numberOfEvaluations)
 
   while !terminationCondition(eaStatus)
-    matingPool = selection((population = population, matingPoolSize = 100)
+    matingPool = selection(population, ga.selectionParameters)
+    println("MatingPoolSize: ", length(matingPool))
+    break
   end
 
   foundSolutions = population
