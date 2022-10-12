@@ -44,11 +44,14 @@ mutable struct GeneticAlgorithm <: Metaheuristic
   populationSize::Int
   offspringPopulationSize::Int
   numberOfEvaluations::Int
+
+  foundSolutions::Vector{Solution}
+
+  variation::Function
   crossover::Function
   crossoverParameters::NamedTuple
   mutation::Function
   mutationParameters::NamedTuple
-  foundSolutions::Vector{Solution}
   termination::Function
 
   selection::Function
@@ -57,19 +60,25 @@ mutable struct GeneticAlgorithm <: Metaheuristic
   GeneticAlgorithm() = new()
 end
 
-function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function)
-  #,  selection::Function, variation::Function, replacement::Function)
+function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function)
+  #replacement::Function)
   println("START of algorithm")
 
   population = solutionsCreation((problem = ga.problem, populationSize = ga.populationSize))
   population = evaluation((population = population, problem = ga.problem))
 
-  eaStatus = Dict("EVALUATIONS" => ga.populationSize, "MAX_EVALUATIONS" => ga.numberOfEvaluations)
+  evaluations = length(population)
+  eaStatus = Dict("EVALUATIONS" => evaluations, "MAX_EVALUATIONS" => ga.numberOfEvaluations)
 
   while !terminationCondition(eaStatus)
     matingPool = selection(population, ga.selectionParameters)
-    println("MatingPoolSize: ", length(matingPool))
-    break
+    offspringPopulation = variation(matingPool, ga.offspringPopulationSize, ga.crossover, ga.crossoverParameters, ga.mutation, ga.mutationParameters)
+    offspringPopulation = evaluation((population = offspringPopulation, problem = ga.problem))
+
+    population = muPlusLambdaReplacement(population, offspringPopulation, objectiveComparator)
+    
+    evaluations += length(offspringPopulation)
+    eaStatus["EVALUATIONS"] = evaluations
   end
 
   foundSolutions = population
@@ -77,7 +86,7 @@ function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, eva
 end
 
 function optimize(algorithm :: GeneticAlgorithm)
-  algorithm.foundSolutions = geneticAlgorithm(algorithm, defaultSolutionsCreation, sequentialEvaluation, algorithm.termination, binaryTournamentSelection)
+  algorithm.foundSolutions = geneticAlgorithm(algorithm, defaultSolutionsCreation, sequentialEvaluation, algorithm.termination, binaryTournamentSelection, crossoverAndMutationVariation)
   
   return Nothing
 end

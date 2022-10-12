@@ -16,6 +16,12 @@ function bitFlipMutation(x::BitVector, parameters)::BitVector
   return x
 end
 
+function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
+  solution.variables = bitFlipMutation(solution.variables, parameters)
+  return solution
+end
+
+
 function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
@@ -96,8 +102,9 @@ function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::
   return [child1, child2]
 end
 
-function singlePointCrossover(x::BitVector, y::BitVector, parameters::NamedTuple)::BitVector
+function singlePointCrossover(x::BitVector, y::BitVector, parameters::NamedTuple)::Vector{BitVector}
   @assert length(x) == length(y) "The length of the two vectors to recombine is not equal"
+
   probability::Real = parameters.probability
   child1 = deepcopy(x)
   child2 = deepcopy(y)
@@ -105,10 +112,19 @@ function singlePointCrossover(x::BitVector, y::BitVector, parameters::NamedTuple
   if rand() < parameters.probability
     cuttingPoint = rand(1:length(x))
 
-    tmp = child1[cuttingPoint:end] 
-    child1[cuttingPoint:end] = child2[cuttingPoint:end]
-    child2[cuttingPoint:end] = tmp
+    tmp = child1.bits[cuttingPoint:end] 
+    child1.bits[cuttingPoint:end] = child2.bits[cuttingPoint:end]
+    child2.bits[cuttingPoint:end] = tmp
   end
+
+  return [child1, child2]
+end
+
+function singlePointCrossover(solution1::BinarySolution, solution2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
+  child1 = copySolution(solution1)
+  child2 = copySolution(solution2)
+
+  child1.variables, child2.variables = singlePointCrossover(child1.variables, child2.variables, parameters)
 
   return [child1, child2]
 end
@@ -160,6 +176,7 @@ function muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isl
 end
 
 """
+
 x = [1,3,5,7]
 y = [2,4,6,8]
 
@@ -172,25 +189,24 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
 end
 
 solution1 = createContinuousSolution(3)
-solution1.objectives = [1.0, 2.0, 3.0]
+solution1.objectives = [5.0, 2.0, 3.0]
 
 solution2 = createContinuousSolution(3)
-solution2.objectives = [1.0, 1.0, 1.0]
+solution2.objectives = [2.0, 1.0, 1.0]
 
 solution3 = createContinuousSolution(3)
-solution3.objectives = [0.0, 0.0, 0.0]
+solution3.objectives = [4.0, 0.0, 0.0]
 
 solution4 = createContinuousSolution(3)
 solution4.objectives = [3.0, 3.0, 3.0]
 
 solutions1 = [solution1, solution2]
-ranking = computeRanking(solutions1)
+#ranking = computeRanking(solutions1)
 
-solutions = [solution1, solution2, solution3, solution4]
-sort!(solutions, lt = (x,y) -> dominanceComparator(x.objectives, y.objectives) <=0)
+solutions = [solution1, solution2,solution3, solution4]
+sort!(solutions, lt = (x,y) -> objectiveComparator(x,y) <=0)
 
 for s in solutions println(s.objectives) end
-
 
 solutions2 = [solution3, solution4]
 ranking = computeRanking(solutions2)

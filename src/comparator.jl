@@ -81,11 +81,10 @@ function dominanceComparator(x::Vector{T}, y::Vector{T})::Int where {T <: Number
     """
   end
   
-  """
   function dominanceComparator(solution1::Solution, solution2::Solution)::Int
     return dominanceComparator(solution1.objectives, solution2.objectives)
   end
-  """
+  
   function objectiveComparator(solution1::Solution, solution2::Solution, objectiveId::Int=1)::Int
     return objectiveComparator(solution1.objectives, solution2.objectives, objectiveId)
   end

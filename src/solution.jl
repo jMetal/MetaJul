@@ -100,3 +100,7 @@ end
 function Base.isequal(solution1::BinarySolution, solution2::BinarySolution)::Bool
     return Base.isequal(solution1.variables, solution2.variables)
 end
+
+function Base.length(solution::BinarySolution)::Int
+    return length(solution.bits)
+end
