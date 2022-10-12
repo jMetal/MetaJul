@@ -20,12 +20,19 @@ solver.mutationParameters = (probability=1.0/numberOfVariables(problem),)
 solver.crossover = singlePointCrossover
 solver.crossoverParameters = (probability = 1.0,)
 
+solver.solutionsCreation = defaultSolutionsCreation
+
+solver.evaluation = sequentialEvaluation
+
 solver.termination = terminationByEvaluations
 
 solver.selection = binaryTournamentSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = objectiveComparator)
 
 solver.variation = crossoverAndMutationVariation
+
+solver.replacement = muPlusLambdaReplacement
+solver.replacementComparator = objectiveComparator
 
 startingTime = Dates.now()
 optimize(solver)

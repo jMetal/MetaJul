@@ -47,21 +47,28 @@ mutable struct GeneticAlgorithm <: Metaheuristic
 
   foundSolutions::Vector{Solution}
 
+  solutionsCreation::Function
+
+  evaluation::Function
+
   variation::Function
   crossover::Function
   crossoverParameters::NamedTuple
   mutation::Function
   mutationParameters::NamedTuple
+
   termination::Function
 
   selection::Function
   selectionParameters::NamedTuple
 
+  replacement::Function
+  replacementComparator::Function
+
   GeneticAlgorithm() = new()
 end
 
-function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function)
-  #replacement::Function)
+function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function, replacement::Function)
   println("START of algorithm")
 
   population = solutionsCreation((problem = ga.problem, populationSize = ga.populationSize))
@@ -75,7 +82,7 @@ function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, eva
     offspringPopulation = variation(matingPool, ga.offspringPopulationSize, ga.crossover, ga.crossoverParameters, ga.mutation, ga.mutationParameters)
     offspringPopulation = evaluation((population = offspringPopulation, problem = ga.problem))
 
-    population = muPlusLambdaReplacement(population, offspringPopulation, objectiveComparator)
+    population = replacement(population, offspringPopulation, ga.replacementComparator)
     
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
@@ -85,8 +92,8 @@ function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, eva
   return foundSolutions
 end
 
-function optimize(algorithm :: GeneticAlgorithm)
-  algorithm.foundSolutions = geneticAlgorithm(algorithm, defaultSolutionsCreation, sequentialEvaluation, algorithm.termination, binaryTournamentSelection, crossoverAndMutationVariation)
+function optimize(algorithm::GeneticAlgorithm)
+  algorithm.foundSolutions = geneticAlgorithm(algorithm, algorithm.solutionsCreation, algorithm.evaluation, algorithm.termination, algorithm.selection, algorithm.variation, algorithm.replacement)
   
   return Nothing
 end
