@@ -70,12 +70,13 @@ function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T}
   return solution
 end
 
-function createSolution(problem::ContinuousProblem{T}) where {T <: Number}
+function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T <: Number}
   x = [problem.bounds[i].lowerBound + rand()*(problem.bounds[i].upperBound-problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
 
   return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end
 
+### Single objective problems
 function schafferProblem() 
   schaffer = ContinuousProblem{Real}("Schaffer")
 
@@ -103,3 +104,96 @@ function sphereProblem(numberOfVariables::Int)
   return sphere
 end
 
+#### Multi-Objective problems
+function fonsecaProblem()
+  fonseca = ContinuousProblem{Real}("Fonseca")
+
+  numberOfVariables = 3
+  for _ in 1:numberOfVariables
+    addVariable(fonseca, Bounds{Real}(-4.0, 4.0))
+  end
+
+
+  f1 = x -> begin
+  sum1 = 0.0
+  for i in range(1, numberOfVariables)
+    sum1 += ^(x[i] - (1.0/sqrt(1.0 * numberOfVariables)), 2.0)
+
+    return 1.0 - exp(-1.0*sum1)
+  end
+  end
+
+  f2 = x -> begin
+  sum2 = 0.0
+  for i in range(1, numberOfVariables)
+    sum2 += ^(x[i] + (1.0/sqrt(1.0 * numberOfVariables)), 2.0)
+
+    return 1.0 - exp(-1.0*sum2)
+  end
+  end
+
+  addObjective(fonseca, f1)
+  addObjective(fonseca, f2)
+
+  return fonseca
+end
+
+function kursaweProblem(numberOfVariables::Int = 3)
+  kursawe = ContinuousProblem{Real}("Kursawe")
+
+  for _ in 1:numberOfVariables
+    addVariable(kursawe, Bounds{Real}(-5.0, 5.0))
+  end
+
+
+  f1 = x -> begin
+  sum1 = 0.0
+  for i in range(1, numberOfVariables-1)
+    xi = x[i] * x[i]
+    xj = x[i + 1] * x[i + 1]
+    aux = (-0.2) * sqrt(xi + xj)
+    sum1 += (-10.0) * exp(aux)
+
+    return sum1
+  end
+end
+
+f2 = x -> begin
+sum2 = 0.0
+for i in range(1, numberOfVariables)
+  sum2 += ^(abs(x[i]), 0.8) + 5.0 * sin(^(x[i], 3.0))
+
+  return sum2
+end
+end
+
+  addObjective(kursawe, f1)
+  addObjective(kursawe, f2)
+
+  return kursawe
+end
+
+"""
+struct Fonseca <: AbstractContinuousProblem{Float64}
+  bounds::Vector{Bounds}
+  numberOfObjectives
+  numberOfConstraints 
+  name::String
+  function Fonseca() 
+    x = new()
+    x.bounds = [Bounds{Float64}(-4.0, 4.0) for _ in range(1,3)]
+    x.numberOfObjectives = 2
+    x.numberOfConstraints = 0
+    x.name = "Fonseca"
+
+    return x
+  end
+end
+
+function evaluate(solution::ContinuousSolution{Float64}, problem::Fonseca)::ContinuousSolution{Float64}
+  sum1 = 0.0
+  for x in solution.variables
+    sum1 += Ba
+  end
+end
+"""

@@ -13,7 +13,7 @@ problem = schafferProblem()
 
 solver::GeneticAlgorithm = GeneticAlgorithm()
 solver.problem = problem
-solver.numberOfEvaluations = 50000
+solver.numberOfEvaluations = 25000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
