@@ -13,6 +13,10 @@ mutable struct ContinuousProblem{T} <: AbstractContinuousProblem{T}
   name::String
 end
 
+function ContinuousProblem{T}(problemName::String) where {T <: Number}
+  return ContinuousProblem{T}([],[],[], problemName)
+end
+
 function numberOfVariables(problem::ContinuousProblem{T}) where {T}
   return length(problem.bounds)
 end
@@ -73,7 +77,7 @@ function createSolution(problem::ContinuousProblem{T}) where {T <: Number}
 end
 
 function schafferProblem() 
-  schaffer = ContinuousProblem{Real}([],[],[], "Schaffer")
+  schaffer = ContinuousProblem{Real}("Schaffer")
 
   f = x -> x[1] * x[1]
   g = x -> (x[1] - 2.0) * (x[1] - 2.0)
@@ -86,7 +90,7 @@ function schafferProblem()
 end
 
 function sphereProblem(numberOfVariables::Int) 
-  sphere = ContinuousProblem{Real}([],[],[], "Sphere")
+  sphere = ContinuousProblem{Real}("Sphere")
 
   f = x -> sum([v * v for v in x])
 

@@ -13,6 +13,10 @@ mutable struct BinaryProblem <: AbstractBinaryProblem
   name::String
 end
 
+function BinaryProblem(numberOfBits::Int, problemName::String)
+  return BinaryProblem(numberOfBits, [],[], problemName)
+end
+
 function numberOfVariables(problem::BinaryProblem) 
   return problem.numberOfBits
 end
@@ -63,7 +67,7 @@ function createSolution(problem::BinaryProblem)
 end
 
 function oneMax(numberOfBits::Int) 
-  oneMax = BinaryProblem(numberOfBits,[],[], "OneMax")
+  oneMax = BinaryProblem(numberOfBits, "OneMax")
 
   f = x -> -1.0 * length([i for i in x.bits if i])
 
@@ -73,7 +77,7 @@ function oneMax(numberOfBits::Int)
 end
 
 function oneZeroMax(numberOfBits::Int) 
-  problem = BinaryProblem(numberOfBits,[],[], "OneZeroMax")
+  problem = BinaryProblem(numberOfBits, "OneZeroMax")
 
   f = x -> length([i for i in x.bits if i])
   g = y -> length([j for j in y.bits if !j])
