@@ -4,30 +4,28 @@ using Test
 
 include("../src/comparator.jl")
 
-@testset "Vector position comparator tests" begin
-    @test_throws "The vectors have a different length" vectorElementComparator([1,2,3], [4,5], 1)
-    @test_throws "The index is out of range" vectorElementComparator([1,2,3], [1,2,3], -1)
-    @test_throws "The index is out of range" vectorElementComparator([1,2,3], [1,2,3], 4)
+@testset "Compare elements at the same position tests" begin
+    @test_throws "The vectors have a different length" compareElementAt([1,2,3], [4,5], 1)
+    @test_throws "The index is out of range" compareElementAt([1,2,3], [1,2,3], -1)
+    @test_throws "The index is out of range" compareElementAt([1,2,3], [1,2,3], 4)
 
-    @test vectorElementComparator([1.0,2.0,3.1], [4.0,5.2,0.5], 1) == -1
-    @test vectorElementComparator([1.0,2.1,3], [4.1,1.4,3.1], 2) ==  1
-    @test vectorElementComparator([1,2,3], [4,5,3], 3) ==  0
+    @test compareElementAt([1.0,2.0,3.1], [4.0,5.2,0.5], 1) == -1
+    @test compareElementAt([1.0,2.1,3], [4.1,1.4,3.1], 2) ==  1
+    @test compareElementAt([1,2,3], [4,5,3],3 ) ==  0
 end
 
-@testset "Dominance comparator tests" begin
-    @test_throws "The vectors have a different length" dominanceComparator([1,2,3], [4,5])
+@testset "Dominance comparison tests" begin
+    @test_throws "The vectors have a different length" compareForDominance([1,2,3], [4,5])
 
-    @test dominanceComparator([1.0], [1.0]) == 0
-    @test dominanceComparator([1.0], [2.0]) == -1
-    @test dominanceComparator([2.0], [1.0]) == 1
-
-    @test dominanceComparator([1.0,2.0,3.1], [1.0,2.0,3.1]) == 0
     
-    @test dominanceComparator([1.0,3.1,4.0], [4.2,2.0,4.0]) == 0
-    @test dominanceComparator([1.0,2.0,3.1], [1.0,2.0,3.2]) == -1
-    @test dominanceComparator([1.0,2.0,3.2], [1.0,2.0,3.0]) == 1
-end
+    @test compareForDominance([1.0], [1.0]) == 0
+    @test compareForDominance([1.0], [2.0]) == -1
+    @test compareForDominance([2.0], [1.0]) == 1
 
-@testset "Multi-comparator tests" begin
+    @test compareForDominance([1.0,2.0,3.1], [1.0,2.0,3.1]) == 0
+    
+    @test compareForDominance([1.0,3.1,4.0], [4.2,2.0,4.0]) == 0
+    @test compareForDominance([1.0,2.0,3.1], [1.0,2.0,3.2]) == -1
+    @test compareForDominance([1.0,2.0,3.2], [1.0,2.0,3.0]) == 1
 end
 

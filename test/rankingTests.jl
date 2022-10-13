@@ -219,7 +219,7 @@ function compareTwoSolutionsWithEqualRankReturnsZero()
     setRank(solution1, 1)
     setRank(solution2, 1)
 
-    return rankingComparator(solution1, solution2) == 0
+    return compareRanking(solution1, solution2) == 0
 end
 
 function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
@@ -229,7 +229,7 @@ function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
     setRank(solution1, 1)
     setRank(solution2, 2)
 
-    return rankingComparator(solution1, solution2) == -1
+    return compareRanking(solution1, solution2) == -1
 end
 
 function compareTwoSolutionsReturnOneIfTheFirstSolutionHasAHigherRankValue()
@@ -239,7 +239,7 @@ function compareTwoSolutionsReturnOneIfTheFirstSolutionHasAHigherRankValue()
     setRank(solution1, 2)
     setRank(solution2, 1)
 
-    return rankingComparatorComparator(solution1, solution2) == 1
+    return compareRanking(solution1, solution2) == 1
 end
 
 @testset "Ranking comparators tests" begin    

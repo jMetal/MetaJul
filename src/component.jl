@@ -77,11 +77,15 @@ function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, compa
 end
 
 
-function rankingAndCrowdingDistanceComparator(x::Solution, y::Solution)::Int
-  return multiComparator(x,y, (rankingComparator, crowdingDistanceComparator))
+function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
+  result = compareRanking(x, y)
+  if (result == 0)
+    result = compareCrowdingDistance(x,y)
+  end
+  return result
 end
 
-function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution})
+function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -89,7 +93,7 @@ function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{So
     computeCrowdingDistanceEstimator!(rank)
   end
 
-  sort!(jointVector, lt=((x,y) -> rankingAndCrowdingDistanceComparator(x,y) <= 0))
+  sort!(jointVector, lt=((x,y) -> comparator(x,y) <= 0))
   return jointVector[1:length(x)]
 end
 

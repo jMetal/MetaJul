@@ -84,7 +84,7 @@ function schafferProblem()
 
   addObjective(schaffer, f)
   addObjective(schaffer, g)
-  addVariable(schaffer, Bounds{Real}(-100000.0, 100000.0))
+  addVariable(schaffer, Bounds{Real}(-1000.0, 1000.0))
 
   return schaffer
 end

@@ -35,7 +35,7 @@ function setRank(solution::Solution, rank::Int)
     return solution.attributes["RANKING_ATTRIBUTE"] = rank
 end
 
-function rankingComparator(solution1::Solution, solution2::Solution) 
+function compareRanking(solution1::Solution, solution2::Solution) 
     result = 0
     if getRank(solution1) < getRank(solution2)
         result = -1

@@ -20,7 +20,7 @@ function Base.length(archive::Archive)::Int
   return length(archive.solutions)
 end
 
-function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function = dominanceComparator)::Bool where {T <: Solution}
+function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function = compareForDominance)::Bool where {T <: Solution}
     solutionIsInserted = false
     if isEmpty(archive)
         push!(archive.solutions, solution)
@@ -30,7 +30,7 @@ function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function
       solutionIsAlreadyInTheArchive = false
       currentSolutionIndex = 1
       while !solutionIsDominated && !solutionIsAlreadyInTheArchive && currentSolutionIndex <= length(archive)
-        result = dominanceComparator(solution.objectives, archive.solutions[currentSolutionIndex].objectives)
+        result = comparator(solution.objectives, archive.solutions[currentSolutionIndex].objectives)
         if result == -1
           deleteat!(archive.solutions, 1)
         elseif result == 1

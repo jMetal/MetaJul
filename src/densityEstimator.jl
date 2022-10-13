@@ -10,7 +10,7 @@ function setCrowdingDistance(solution::T, crowdingDistance::Real) where {T <: So
     return solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
 end
 
-function crowdingDistanceComparator(solution1::Solution, solution2::Solution)::Int
+function compareCrowdingDistance(solution1::Solution, solution2::Solution)::Int
     result = 0
     if getCrowdingDistance(solution1) > getCrowdingDistance(solution2)
         result = -1

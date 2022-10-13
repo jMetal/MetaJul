@@ -62,7 +62,7 @@ function compareTwoSolutionsWithEqualCrowdingDistanceReturnsZero()
     setCrowdingDistance(solution1, 1.0)
     setCrowdingDistance(solution2, 1.0)
 
-    return crowdingDistanceComparator(solution1, solution2) == 0
+    return compareCrowdingDistance(solution1, solution2) == 0
 end
 
 function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasAHigherCrowdingDistance()
@@ -72,7 +72,7 @@ function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasAHigherCrowdingDi
     setCrowdingDistance(solution1, 20.0)
     setCrowdingDistance(solution2, 1.0)
 
-    return crowdingDistanceComparator(solution1, solution2) == -1
+    return compareCrowdingDistance(solution1, solution2) == -1
 end
 
 function compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance()
@@ -82,7 +82,7 @@ function compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance
     setCrowdingDistance(solution1, 1.0)
     setCrowdingDistance(solution2, 2.0)
 
-    return crowdingDistanceComparator(solution1, solution2) == 1
+    return compareCrowdingDistance(solution1, solution2) == 1
 end
 
 @testset "Ranking comparators tests" begin    
