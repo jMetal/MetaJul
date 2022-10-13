@@ -86,13 +86,13 @@ function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::
   child2 = deepcopy(parent2)
 
   if rand() < probability
-    for i in 1:length(x)
+    for i in range(1,length(parent1))
       minValue = min(parent1[i], parent2[i])
       maxValue = max(parent1[i], parent2[i])
       range = maxValue - minValue
 
-      minRange = min - range * alpha
-      minRange = max + range * alpha
+      minRange = minValue - range * alpha
+      maxRange = maxValue + range * alpha
 
       random = rand()
       child1[i] = minRange + random * (maxRange - minRange)
@@ -103,6 +103,15 @@ function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::
   
   child1 = restrict(child1, bounds)
   child2 = restrict(child2, bounds)
+
+  return [child1, child2]
+end
+
+function blxAlphaCrossover(solution1::ContinuousSolution, solution2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
+  child1 = copySolution(solution1)
+  child2 = copySolution(solution2)
+
+  child1.variables, child2.variables = blxAlphaCrossover(child1.variables, child2.variables, parameters)
 
   return [child1, child2]
 end
@@ -134,15 +143,6 @@ function singlePointCrossover(solution1::BinarySolution, solution2::BinarySoluti
   return [child1, child2]
 end
 
-
-function singlePointCrossover(solution1::BinarySolution, solution2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
-  child1 = copySolution(solution1)
-  child2 = copySolution(solution2)
-
-  child1.variables, child2.variables = singlePointCrossover(child1.variables, child2.variables, parameters)
-
-  return [child1, child2]
-end
 
 # Selection operators
 function randomSelection(x::Array, parameters = [])
