@@ -50,9 +50,9 @@ function terminationByEvaluations(algorithmAttributes::Dict)::Bool
 end
 
 ## Selection components
-function binaryTournamentSelection(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
+function binaryTournamentMatingPoolSelection(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
   matingPoolSize::Int = parameters.matingPoolSize
-  return [binaryTournamentSelectionOperator(solutions, (comparator = parameters.comparator,)) for _ in range(1,matingPoolSize)]
+  return [binaryTournamentSelection(solutions, (comparator = parameters.comparator,)) for _ in range(1,matingPoolSize)]
 end
 
 ## Variation components

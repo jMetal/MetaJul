@@ -15,10 +15,6 @@ solver.problem = problem
 solver.numberOfEvaluations = 40000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
-solver.mutation = bitFlipMutation
-solver.mutationParameters = (probability=1.0/numberOfVariables(problem),)
-solver.crossover = singlePointCrossover
-solver.crossoverParameters = (probability = 1.0,)
 
 solver.solutionsCreation = defaultSolutionsCreation
 
@@ -26,10 +22,14 @@ solver.evaluation = sequentialEvaluation
 
 solver.termination = terminationByEvaluations
 
-solver.selection = binaryTournamentSelection
+solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = objectiveComparator)
 
 solver.variation = crossoverAndMutationVariation
+solver.mutation = bitFlipMutation
+solver.mutationParameters = (probability=1.0/numberOfVariables(problem),)
+solver.crossover = singlePointCrossover
+solver.crossoverParameters = (probability = 1.0,)
 
 solver.replacement = muPlusLambdaReplacement
 solver.replacementComparator = objectiveComparator

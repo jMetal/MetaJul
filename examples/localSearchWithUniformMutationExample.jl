@@ -13,7 +13,7 @@ solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 10000
-solver.mutation = uniformMutationOperator
+solver.mutation = uniformMutation
 solver.mutationParameters = (probability=0.1, perturbation=0.5, bounds=problem.bounds)
 
 optimize(solver)

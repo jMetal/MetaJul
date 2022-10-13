@@ -15,7 +15,7 @@ solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 10000
-solver.mutation = polynomialMutationOperator
+solver.mutation = polynomialMutation
 solver.mutationParameters = (probability=0.1, distributionIndex=20.0, bounds=problem.bounds)
 
 startingTime = Dates.now()

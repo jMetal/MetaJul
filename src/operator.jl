@@ -22,7 +22,7 @@ function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
 end
 
 
-function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
+function uniformMutation(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
   bounds = parameters.bounds
@@ -36,7 +36,7 @@ function uniformMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: 
   return x
 end
 
-function polynomialMutationOperator(x::Array{T}, parameters)::Array{T} where {T <: Real}
+function polynomialMutation(x::Array{T}, parameters)::Array{T} where {T <: Real}
   probability::Real = parameters.probability
   distributionIndex::Real = parameters.distributionIndex
   bounds = parameters.bounds
@@ -69,6 +69,11 @@ function polynomialMutationOperator(x::Array{T}, parameters)::Array{T} where {T 
   end
   x = restrict(x, bounds)
   return x
+end
+
+function polynomialMutation(solution::ContinuousSolution, parameters)::ContinuousSolution
+  solution.variables = polynomialMutation(solution.variables, parameters)
+  return solution
 end
 
 # Crossover operators
@@ -129,12 +134,22 @@ function singlePointCrossover(solution1::BinarySolution, solution2::BinarySoluti
   return [child1, child2]
 end
 
+
+function singlePointCrossover(solution1::BinarySolution, solution2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
+  child1 = copySolution(solution1)
+  child2 = copySolution(solution2)
+
+  child1.variables, child2.variables = singlePointCrossover(child1.variables, child2.variables, parameters)
+
+  return [child1, child2]
+end
+
 # Selection operators
 function randomSelection(x::Array, parameters = [])
   return x[rand(1:length(x))]
 end
 
-function binaryTournamentSelectionOperator(x::Array, parameters::NamedTuple)
+function binaryTournamentSelection(x::Array, parameters::NamedTuple)
   comparator = parameters.comparator
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
