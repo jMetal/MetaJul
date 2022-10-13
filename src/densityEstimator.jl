@@ -2,21 +2,6 @@ include("core.jl")
 include("solution.jl")
 include("archive.jl")
 
-"""
-struct CrowdingDistance
-    attributedId::String
-    compute::Function
-
-    function CrowdingDistance()
-        new("CROWDING_DISTANCE_ATTRIBUTE", computeCrowdingDistanceEstimator!)
-    end
-end
-
-
-function getDensityEstimatorValue(crowdingDistance::CrowdingDistance, solution::Solution)
-    return solution.attributes[crowdingDistance.attributedId]
-end
-"""
 function getCrowdingDistance(solution::T) where {T <: Solution}
     return get(solution.attributes, "CROWDING_DISTANCE_ATTRIBUTE", 0)
 end
@@ -25,18 +10,6 @@ function setCrowdingDistance(solution::T, crowdingDistance::Real) where {T <: So
     return solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
 end
 
-"""
-function comparator(crowdingDistance::CrowdingDistance, solution1::Solution, solution2::Solution)::Int
-    result = 0
-    if solution1.attributes[crowdingDistance.attributedId] > solution2.attributes[crowdingDistance.attributedId] 
-        result = -1
-    elseif solution1.attributes[crowdingDistance.attributedId] < solution2.attributes[crowdingDistance.attributedId] 
-        result = 1
-    end
-
-    return result
-end
-"""
 function crowdingDistanceComparator(solution1::Solution, solution2::Solution)::Int
     result = 0
     if getCrowdingDistance(solution1) > getCrowdingDistance(solution2)
@@ -71,7 +44,7 @@ function computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Sol
             minimumObjectiveValue = solutions[1].objectives[i]
             maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]
 
-            setCrowdingDistance(solution[1], typemax(Float64))
+            setCrowdingDistance(solutions[1], typemax(Float64))
             setCrowdingDistance(solutions[length(solutions)], typemax(Float64))
 
             for j in range(2, length(solutions)-1)

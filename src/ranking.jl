@@ -4,6 +4,8 @@ include("archive.jl")
 
 # Struct and methods to implement the non-dominated ranking sorting method
 
+using Test
+
 mutable struct Ranking{T <: Solution}
     rank::Vector{Vector{T}}
 end 
@@ -33,7 +35,7 @@ function setRank(solution::Solution, rank::Int)
     return solution.attributes["RANKING_ATTRIBUTE"] = rank
 end
 
-function rankingCompataror(solution1::Solution, solution2::Solution) 
+function rankingComparator(solution1::Solution, solution2::Solution) 
     result = 0
     if getRank(solution1) < getRank(solution2)
         result = -1

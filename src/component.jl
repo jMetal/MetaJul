@@ -1,6 +1,7 @@
 include("core.jl")
 include("solution.jl")
 include("operator.jl")
+include("densityEstimator.jl")
 
 using Base.Iterators
 
@@ -71,7 +72,24 @@ end
 ## Replacement components
 function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function)
   jointVector = vcat(x,y)
-  sort!(jointVector, lt=((x,y) -> comparator(x,y) <= 0))
+  sort!(jointVector, lt=((a,b) -> comparator(a,b) <= 0))
+  return jointVector[1:length(x)]
+end
+
+
+function rankingAndCrowdingDistanceComparator(x::Solution, y::Solution)::Int
+  return multiComparator(x,y, (rankingComparator, crowdingDistanceComparator))
+end
+
+function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution})
+  jointVector = vcat(x,y)
+  
+  ranking = computeRanking(jointVector)
+  for rank in ranking.rank
+    computeCrowdingDistanceEstimator!(rank)
+  end
+
+  sort!(jointVector, lt=((x,y) -> rankingAndCrowdingDistanceComparator(x,y) <= 0))
   return jointVector[1:length(x)]
 end
 

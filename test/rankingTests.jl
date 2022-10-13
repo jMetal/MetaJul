@@ -5,7 +5,7 @@ include("../src/solution.jl")
 function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{Float64}
     objectives = [_ for _ in range(1, numberOfObjectives)]
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])
-  end
+end
   
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(1.0, 2.0)])
@@ -210,4 +210,41 @@ end
 
     @test computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
     @test computeRankingMustWorkProperlyWithAnExampleOfNineSolutions()
+end
+
+function compareTwoSolutionsWithEqualRankReturnsZero()
+    solution1 = createContinuousSolution(2)
+    solution2 = createContinuousSolution(2)
+
+    setRank(solution1, 1)
+    setRank(solution2, 1)
+
+    return rankingComparator(solution1, solution2) == 0
+end
+
+function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
+    solution1 = createContinuousSolution(2)
+    solution2 = createContinuousSolution(2)
+
+    setRank(solution1, 1)
+    setRank(solution2, 2)
+
+    return rankingComparator(solution1, solution2) == -1
+end
+
+function compareTwoSolutionsReturnOneIfTheFirstSolutionHasAHigherRankValue()
+    solution1 = createContinuousSolution(2)
+    solution2 = createContinuousSolution(2)
+
+    setRank(solution1, 2)
+    setRank(solution2, 1)
+
+    return rankingComparatorComparator(solution1, solution2) == 1
+end
+
+@testset "Ranking comparators tests" begin    
+    @test compareTwoSolutionsWithEqualRankReturnsZero()
+
+    @test compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
+    @test compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
 end

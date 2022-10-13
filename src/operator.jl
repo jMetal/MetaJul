@@ -22,7 +22,7 @@ function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
 end
 
 
-function uniformMutation(x::Array{T}, parameters)::Array{T} where {T <: Real}
+function uniformMutation(x::Vector{T}, parameters)::Vector{T} where {T <: Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
   bounds = parameters.bounds
@@ -36,7 +36,13 @@ function uniformMutation(x::Array{T}, parameters)::Array{T} where {T <: Real}
   return x
 end
 
-function polynomialMutation(x::Array{T}, parameters)::Array{T} where {T <: Real}
+function uniformMutation(solution::ContinuousSolution, parameters)::ContinuousSolution
+  solution.variables = uniformMutation(solution.variables, parameters)
+  return solution
+end
+
+
+function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T <: Real}
   probability::Real = parameters.probability
   distributionIndex::Real = parameters.distributionIndex
   bounds = parameters.bounds
@@ -77,7 +83,7 @@ function polynomialMutation(solution::ContinuousSolution, parameters)::Continuou
 end
 
 # Crossover operators
-function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::Array{Array{T}} where {T <: Real}
+function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::Vector{Vector{T}} where {T <: Real}
   probability::Real = parameters.probability
   alpha::Real = parameters.alpha
   bounds = parameters.bounds
@@ -145,11 +151,11 @@ end
 
 
 # Selection operators
-function randomSelection(x::Array, parameters = [])
+function randomSelection(x::Vector, parameters = [])
   return x[rand(1:length(x))]
 end
 
-function binaryTournamentSelection(x::Array, parameters::NamedTuple)
+function binaryTournamentSelection(x::Vector{Solution}, parameters::NamedTuple)
   comparator = parameters.comparator
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
