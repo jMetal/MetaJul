@@ -1,5 +1,5 @@
 include("../src/solution.jl")
-include("../src/DensityEstimator.jl")
+include("../src/densityEstimator.jl")
 
 using Test
 
