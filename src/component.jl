@@ -85,7 +85,7 @@ function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
   return result
 end
 
-function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)
+function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{Solution}
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -95,6 +95,33 @@ function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{So
 
   sort!(jointVector, lt=((x,y) -> comparator(x,y) <= 0))
   return jointVector[1:length(x)]
+end
+
+function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{Solution}
+  jointVector = vcat(x,y)
+  
+  ranking = computeRanking(jointVector)
+
+  resultSolutions = []
+  remainingSolutions = length(x)
+  currentRank = 1 
+  while (remainingSolutions > 0)
+    computeCrowdingDistanceEstimator!(getSubFront(ranking, currentRank))
+    currentRankLength = length(getSubFront(ranking, currentRank))
+    println("Remaining: ", remainingSolutions, ". Current rank length: ", currentRankLength)
+
+    if currentRankLength <= remainingSolutions
+      resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank))
+      remainingSolutions -= currentRankLength
+      currentRank += 1
+    else
+      sort!(getSubFront(ranking, currentRank), lt=((x,y) -> compareCrowdingDistance(x,y) <= 0))
+      resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank)[1:remainingSolutions])
+      remainingSolutions = 0
+    end
+  end
+
+  return resultSolutions
 end
 
 

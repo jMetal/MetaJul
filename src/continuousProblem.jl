@@ -4,7 +4,7 @@ include("bounds.jl")
 include("solution.jl")
 include("operator.jl")
 
-abstract type AbstractContinuousProblem{T <: Number} <: Problem{T} end
+abstract type AbstractContinuousProblem{T<:Number} <: Problem{T} end
 
 mutable struct ContinuousProblem{T} <: AbstractContinuousProblem{T}
   bounds::Vector{Bounds{T}}
@@ -13,8 +13,8 @@ mutable struct ContinuousProblem{T} <: AbstractContinuousProblem{T}
   name::String
 end
 
-function ContinuousProblem{T}(problemName::String) where {T <: Number}
-  return ContinuousProblem{T}([],[],[], problemName)
+function ContinuousProblem{T}(problemName::String) where {T<:Number}
+  return ContinuousProblem{T}([], [], [], problemName)
 end
 
 function numberOfVariables(problem::ContinuousProblem{T}) where {T}
@@ -24,7 +24,7 @@ end
 function numberOfObjectives(problem::ContinuousProblem{T}) where {T}
   return length(problem.objectives)
 end
-  
+
 function numberOfConstraints(problem::ContinuousProblem{T}) where {T}
   return length(problem.constraints)
 end
@@ -33,19 +33,19 @@ function name(problem::ContinuousProblem{T}) where {T}
   return problem.name
 end
 
-function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T <: Number}
+function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T<:Number}
   push!(problem.objectives, objective)
 
-  return Nothing ;
+  return Nothing
 end
 
-function addConstraint(problem::ContinuousProblem{T}, constraint::Function) where {T <: Number}
+function addConstraint(problem::ContinuousProblem{T}, constraint::Function) where {T<:Number}
   push!(problem.constraints, constraint)
 
-  return Nothing ;
+  return Nothing
 end
 
-function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T <: Number}
+function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T<:Number}
   push!(problem.bounds, bounds)
   return Nothing
 end
@@ -56,28 +56,28 @@ function setName(problem::Problem{T}, name::String) where {T}
   return Nothing
 end
 
-function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T})::ContinuousSolution{T} where {T <: Number}
+function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T})::ContinuousSolution{T} where {T<:Number}
   for i in 1:length(problem.objectives)
-    solution.objectives[i] =  problem.objectives[i](solution.variables)
+    solution.objectives[i] = problem.objectives[i](solution.variables)
   end
 
   #solution.objectives = [f(solution.variables) for f in problem.objectives]
 
   for i in 1:length(problem.constraints)
-    solution.constraints[i] =  problem.constraints[i](solution.variables)
+    solution.constraints[i] = problem.constraints[i](solution.variables)
   end
 
   return solution
 end
 
-function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T <: Number}
-  x = [problem.bounds[i].lowerBound + rand()*(problem.bounds[i].upperBound-problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
+function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<:Number}
+  x = [problem.bounds[i].lowerBound + rand() * (problem.bounds[i].upperBound - problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
 
   return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end
 
 ### Single objective problems
-function schafferProblem() 
+function schafferProblem()
   schaffer = ContinuousProblem{Real}("Schaffer")
 
   f = x -> x[1] * x[1]
@@ -90,7 +90,7 @@ function schafferProblem()
   return schaffer
 end
 
-function sphereProblem(numberOfVariables::Int) 
+function sphereProblem(numberOfVariables::Int)
   sphere = ContinuousProblem{Real}("Sphere")
 
   f = x -> sum([v * v for v in x])
@@ -115,21 +115,20 @@ function fonsecaProblem()
 
 
   f1 = x -> begin
-  sum1 = 0.0
-  for i in range(1, numberOfVariables)
-    sum1 += ^(x[i] - (1.0/sqrt(1.0 * numberOfVariables)), 2.0)
-
-    return 1.0 - exp(-1.0*sum1)
-  end
+    sum1 = 0.0
+    for i in range(1, numberOfVariables)
+      sum1 += ^(x[i] - (1.0 / sqrt(1.0 * numberOfVariables)), 2.0)
+    end
+    return 1.0 - exp(-1.0 * sum1)
   end
 
   f2 = x -> begin
-  sum2 = 0.0
-  for i in range(1, numberOfVariables)
-    sum2 += ^(x[i] + (1.0/sqrt(1.0 * numberOfVariables)), 2.0)
+    sum2 = 0.0
+    for i in range(1, numberOfVariables)
+      sum2 += ^(x[i] + (1.0 / sqrt(1.0 * numberOfVariables)), 2.0)
+    end
 
-    return 1.0 - exp(-1.0*sum2)
-  end
+    return 1.0 - exp(-1.0 * sum2)
   end
 
   addObjective(fonseca, f1)
@@ -138,7 +137,13 @@ function fonsecaProblem()
   return fonseca
 end
 
-function kursaweProblem(numberOfVariables::Int = 3)
+problem = fonsecaProblem()
+solution = createSolution(problem)
+solution.variables = [1.0, 1.0, 1.0]
+evaluate(solution, problem)
+println(solution)
+
+function kursaweProblem(numberOfVariables::Int=3)
   kursawe = ContinuousProblem{Real}("Kursawe")
 
   for _ in 1:numberOfVariables
@@ -147,25 +152,25 @@ function kursaweProblem(numberOfVariables::Int = 3)
 
 
   f1 = x -> begin
-  sum1 = 0.0
-  for i in range(1, numberOfVariables-1)
-    xi = x[i] * x[i]
-    xj = x[i + 1] * x[i + 1]
-    aux = (-0.2) * sqrt(xi + xj)
-    sum1 += (-10.0) * exp(aux)
+    sum1 = 0.0
+    for i in range(1, numberOfVariables - 1)
+      xi = x[i] * x[i]
+      xj = x[i+1] * x[i+1]
+      aux = (-0.2) * sqrt(xi + xj)
+      sum1 += (-10.0) * exp(aux)
+    end
 
     return sum1
   end
-end
 
-f2 = x -> begin
-sum2 = 0.0
-for i in range(1, numberOfVariables)
-  sum2 += ^(abs(x[i]), 0.8) + 5.0 * sin(^(x[i], 3.0))
+  f2 = x -> begin
+    sum2 = 0.0
+    for i in range(1, numberOfVariables)
+      sum2 += ^(abs(x[i]), 0.8) + 5.0 * sin(^(x[i], 3.0))
+    end
+    return sum2
 
-  return sum2
-end
-end
+  end
 
   addObjective(kursawe, f1)
   addObjective(kursawe, f2)

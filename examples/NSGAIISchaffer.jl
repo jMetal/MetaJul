@@ -9,7 +9,7 @@ include("../src/utils.jl")
 using Dates
 
 # Genetic algorithm example applied to problem Schaffer
-problem = schafferProblem()
+problem = kursaweProblem()
 
 solver::GeneticAlgorithm = GeneticAlgorithm()
 solver.problem = problem
@@ -30,7 +30,7 @@ solver.variation = crossoverAndMutationVariation
 solver.mutation = polynomialMutation
 solver.mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds)
 solver.crossover = blxAlphaCrossover
-solver.crossoverParameters = (probability = 1.0, alpha = 0.5, bounds=problem.bounds)
+solver.crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds)
 
 solver.replacement = rankingAndDensityEstimatorReplacement
 solver.replacementComparator = compareRankingAndCrowdingDistance

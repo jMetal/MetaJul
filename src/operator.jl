@@ -197,7 +197,6 @@ function muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isl
 end
 
 """
-
 x = [1,3,5,7]
 y = [2,4,6,8]
 
