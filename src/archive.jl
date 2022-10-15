@@ -8,7 +8,7 @@ abstract type Archive end
 """
   struct containing an unbounded archive of non-dominated solutions
 """
-struct NonDominatedArchive{T} <: Archive where {T}
+struct NonDominatedArchive{T} <: Archive where {T <: Solution}
   solutions::Array{T}
 end
 
@@ -32,7 +32,7 @@ function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function
       while !solutionIsDominated && !solutionIsAlreadyInTheArchive && currentSolutionIndex <= length(archive)
         result = comparator(solution.objectives, archive.solutions[currentSolutionIndex].objectives)
         if result == -1
-          deleteat!(archive.solutions, 1)
+          deleteat!(archive.solutions, currentSolutionIndex)
         elseif result == 1
           solutionIsDominated = true
         elseif isequal(solution.objectives, archive.solutions[currentSolutionIndex].objectives)

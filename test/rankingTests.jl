@@ -31,7 +31,7 @@ end
 
 function computeRankingOfASolutionListWithASolutionReturnsARankingContainingThatSolution()
     solutions = [createContinuousSolution(3)]
-    ranking = computeRanking(solutions)
+    ranking = computeRanking(solutions) 
 
     return numberOfRanks(ranking) == 1 && isequal(solutions[1].objectives, ranking.rank[1][1].objectives)
 end
@@ -101,6 +101,31 @@ function computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRan
     (getRank(solution1) == 3)
 end
 
+"""
+4 o
+3  o
+2     o
+1         o
+0 1 2 3 4 5
+"""
+
+function computeRankingOfASolutionListWithFourNonDominatedSolutionsReturnsOneRanking()
+    solution1 = createContinuousSolution([1.0, 4.0])
+    solution2 = createContinuousSolution([1.5, 3.0])
+    solution3 = createContinuousSolution([3.0, 2.0])
+    solution4 = createContinuousSolution([5.0, 1.0])
+
+    solutions = [solution1, solution2, solution3, solution4]
+    ranking = computeRanking(solutions)
+
+    return (numberOfRanks(ranking) == 1) && 
+    (length(ranking.rank[1]) == 4) && 
+    (getRank(solution4) == 1) && 
+    (getRank(solution3) == 1) && 
+    (getRank(solution2) == 1) &&
+    (getRank(solution1) == 1)
+end
+
 function computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRankings()
     solution1 = createContinuousSolution(3)
     solution1.objectives = [1.0, 2.0, 3.0]
@@ -138,6 +163,34 @@ function computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRanking
     (length(ranking.rank[2]) == 3) && 
     (getRank(solution1Front1) == 1) && 
     (getRank(solution2Front2) == 2) 
+end
+
+"""
+Case 7: o = offspring, x = population
+6 o
+5    o
+4    x
+3         x
+2         o
+1           x    
+0 1 2 3 4 5 6
+"""
+function computeRankingOfASolutionListWithWeakDominatedSolutionsWorkProperly()
+    solution1 = createContinuousSolution([1.0, 6.0])
+    solution2 = createContinuousSolution([2.5, 5.0])
+    solution3 = createContinuousSolution([2.5, 4.0])
+    solution4 = createContinuousSolution([5.0, 3.0])
+    solution5 = createContinuousSolution([5.0, 2.0])
+    solution6 = createContinuousSolution([6.0, 1.0])
+
+    solutions = [solution1, solution2, solution3, solution4, solution5, solution6]
+    ranking = computeRanking(solutions)
+
+    return (numberOfRanks(ranking) == 2) && 
+    (length(ranking.rank[1]) == 4) && 
+    (length(ranking.rank[2]) == 2) && 
+    (getRank(solution1) == 1) && 
+    (getRank(solution6) == 1) 
 end
 
 function computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper() 
@@ -193,9 +246,12 @@ end
     @test computeRankingOfASolutionListWithASolutionReturnsARankingContainingThatSolution()
     @test computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingleRank()
     @test computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingleRankWithTheSolutions()
+    @test computeRankingOfASolutionListWithFourNonDominatedSolutionsReturnsOneRanking()
+
     @test computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRankings()
     @test computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRankings()
     @test computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRankings()
+    @test computeRankingOfASolutionListWithWeakDominatedSolutionsWorkProperly()
 
     @test computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
     @test computeRankingMustWorkProperlyWithAnExampleOfNineSolutions()

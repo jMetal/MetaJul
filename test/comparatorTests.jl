@@ -16,11 +16,12 @@ end
 
 @testset "Dominance comparison tests" begin
     @test_throws "The vectors have a different length" compareForDominance([1,2,3], [4,5])
-
     
     @test compareForDominance([1.0], [1.0]) == 0
     @test compareForDominance([1.0], [2.0]) == -1
     @test compareForDominance([2.0], [1.0]) == 1
+
+    @test compareForDominance([1.0, 2.0], [1.0, 1.0]) == 1
 
     @test compareForDominance([1.0,2.0,3.1], [1.0,2.0,3.1]) == 0
     

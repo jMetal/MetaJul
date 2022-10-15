@@ -48,7 +48,7 @@ function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T <: Rea
   bounds = parameters.bounds
 
   for i in 1:length(x)
-    if rand() < probability
+    if rand() <= probability
         y = x[i]
         yl = bounds[i].lowerBound
         yu = bounds[i].upperBound
@@ -62,18 +62,18 @@ function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T <: Rea
           if (rnd <= 0.5) 
             xy = 1.0 - delta1
             val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (xy^ (distributionIndex + 1.0))
-            deltaq = val ^ mutPow - 1.0
+            deltaq = (val ^ mutPow) - 1.0
           else 
             xy = 1.0 - delta2
             val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (xy ^ (distributionIndex + 1.0))
-            deltaq = 1.0 - val ^ mutPow
+            deltaq = 1.0 - (val ^ mutPow)
           end
           y = y + deltaq * (yu - yl)
         end
         x[i] = y
       end
   end
-  x = restrict(x, bounds)
+  x = randomRestrict(x, bounds)
   return x
 end
 

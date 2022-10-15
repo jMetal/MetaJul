@@ -10,7 +10,7 @@ abstract type Selection <: EAComponent end
 abstract type Evaluation <: EAComponent end
 abstract type Variation <: EAComponent end
 
-
+"""
 struct SequentialEvaluation <: Evaluation
    evaluate::Function
    function SequentialEvaluation() new(sequentialEvaluation) end
@@ -20,15 +20,13 @@ struct BinaryTournamentSelection <: Evaluation
   matingPoolSize::Int
   select::Function
   function BinaryTournamentSelection(matingPoolSize) 
-    x = new(); x.matingPoolSize = matingPoolSize; 
+    x = new(); 
+    x.matingPoolSize = matingPoolSize; 
     x.select = binaryTournamentSelection; 
     return x 
   end
 end
-
-struct CrossoverAndMutationVariation <: Variation
-
-end
+"""
 
 ## Solution creation components
 
@@ -47,7 +45,7 @@ end
 
 ## Termination components
 function terminationByEvaluations(algorithmAttributes::Dict)::Bool
-  return get(algorithmAttributes, "EVALUATIONS",0) > get(algorithmAttributes, "MAX_EVALUATIONS",0)
+  return get(algorithmAttributes, "EVALUATIONS",0) >= get(algorithmAttributes, "MAX_EVALUATIONS",0)
 end
 
 ## Selection components
@@ -85,7 +83,7 @@ function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
   return result
 end
 
-function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{Solution}
+function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{T} where {T <: Solution}
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -93,7 +91,7 @@ function rankingAndDensityEstimatorReplacement(x::Vector{Solution}, y::Vector{So
     computeCrowdingDistanceEstimator!(rank)
   end
 
-  sort!(jointVector, lt=((x,y) -> comparator(x,y) <= 0))
+  sort!(jointVector, lt=((x,y) -> comparator(x,y) < 0))
   return jointVector[1:length(x)]
 end
 
@@ -108,7 +106,6 @@ function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{
   while (remainingSolutions > 0)
     computeCrowdingDistanceEstimator!(getSubFront(ranking, currentRank))
     currentRankLength = length(getSubFront(ranking, currentRank))
-    println("Remaining: ", remainingSolutions, ". Current rank length: ", currentRankLength)
 
     if currentRankLength <= remainingSolutions
       resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank))

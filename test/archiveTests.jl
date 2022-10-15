@@ -252,3 +252,37 @@ end
   @test addASolutionInAnArchiveOfSizeTwoDominatingTheFirstOneDiscardThisOne()
   @test addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
 end
+
+"""
+6 o
+5    o
+4    x
+3         x
+2         o
+1           x    
+0 1 2 3 4 5 6
+"""
+function addWeakDominatedSolutionsInAnArchiveWorkProperly()
+  solution1 = createContinuousSolution([1.0, 6.0])
+  solution2 = createContinuousSolution([2.5, 5.0])
+  solution3 = createContinuousSolution([2.5, 4.0])
+  solution4 = createContinuousSolution([5.0, 3.0])
+  solution5 = createContinuousSolution([5.0, 2.0])
+  solution6 = createContinuousSolution([6.0, 1.0])
+
+  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  add!(archive, solution1)
+  add!(archive, solution2)
+  add!(archive, solution3)
+  add!(archive, solution4)
+  add!(archive, solution5)
+  add!(archive, solution6)
+
+  return length(archive) == 4
+end
+
+@testset "Archive with six solution tests" begin    
+  @test addWeakDominatedSolutionsInAnArchiveWorkProperly()
+end
+
+

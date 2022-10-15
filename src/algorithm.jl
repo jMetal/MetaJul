@@ -79,6 +79,7 @@ function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, eva
 
   while !terminationCondition(eaStatus)
     matingPool = selection(population, ga.selectionParameters)
+    
     offspringPopulation = variation(matingPool, ga.offspringPopulationSize, ga.crossover, ga.crossoverParameters, ga.mutation, ga.mutationParameters)
     offspringPopulation = evaluation((population = offspringPopulation, problem = ga.problem))
 

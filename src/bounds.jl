@@ -34,6 +34,19 @@ function restrict(values::Vector{T}, bounds::Array{Bounds{T}}) where {T <: Numbe
     return values
 end
 
+function randomRestrict(value::Number, bounds::Bounds)::Number
+    result = bounds.lowerBound + rand() * (bounds.upperBound - bounds.lowerBound)
+    return result 
+end
+
+function randomRestrict(values::Vector{T}, bounds::Array{Bounds{T}}) where {T <: Number}
+    for i in 1:length(values)
+        values[i] = restrict(values[i], bounds[i])
+    end
+
+    return values
+end
+
 function valueIsWithinBounds(value::Number, bounds::Bounds)::Bool
     return value >= bounds.lowerBound && value <= bounds.upperBound 
 end

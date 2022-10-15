@@ -39,13 +39,14 @@ function computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Sol
         end
 
         for i in range(1, numberOfObjectives)
-            sort!(solutions, by = s -> s.objectives[i])
+            #sort!(solutions, by = s -> s.objectives[i])
+            sort!(solutions, lt = (x,y) -> compareIthObjective(x,y,i) <= 0)
 
             minimumObjectiveValue = solutions[1].objectives[i]
             maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]
 
-            setCrowdingDistance(solutions[1], typemax(Float64))
-            setCrowdingDistance(solutions[length(solutions)], typemax(Float64))
+            setCrowdingDistance(solutions[begin], typemax(Float64))
+            setCrowdingDistance(solutions[end], typemax(Float64))
 
             for j in range(2, length(solutions)-1)
                 distance = solutions[j+1].objectives[i] - solutions[j-1].objectives[i]
