@@ -7,10 +7,9 @@ include("../src/component.jl")
 include("../src/utils.jl")
 
 using Dates
-using Plots
 
-# Genetic algorithm example applied to problem Fonseca
-problem = fonsecaProblem()
+# Genetic algorithm example applied to problem Kursawe
+problem = kursaweProblem()
 
 solver::GeneticAlgorithm = GeneticAlgorithm()
 solver.problem = problem
