@@ -137,12 +137,6 @@ function fonsecaProblem()
   return fonseca
 end
 
-problem = fonsecaProblem()
-solution = createSolution(problem)
-solution.variables = [1.0, 1.0, 1.0]
-evaluate(solution, problem)
-println(solution)
-
 function kursaweProblem(numberOfVariables::Int=3)
   kursawe = ContinuousProblem{Real}("Kursawe")
 

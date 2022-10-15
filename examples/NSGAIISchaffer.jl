@@ -7,9 +7,10 @@ include("../src/component.jl")
 include("../src/utils.jl")
 
 using Dates
+using Plots
 
-# Genetic algorithm example applied to problem Schaffer
-problem = kursaweProblem()
+# Genetic algorithm example applied to problem Fonseca
+problem = fonsecaProblem()
 
 solver::GeneticAlgorithm = GeneticAlgorithm()
 solver.problem = problem
@@ -41,8 +42,7 @@ endTime = Dates.now()
 
 foundSolutions = solver.foundSolutions
 
-printObjectivesToCSVFile("FUN.csv", foundSolutions)
-
-println("GA result: ", length(foundSolutions))
-println("Best found solution: ", foundSolutions[1].objectives[1])
+outputFile = "FUN.csv"
+println("Solutions stored in file ", outputFile)
+printObjectivesToCSVFile(outputFile, foundSolutions)
 println("Computing time: ", (endTime - startingTime))
