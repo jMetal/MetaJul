@@ -11,29 +11,30 @@ using Dates
 # Genetic algorithm example applied to problem Sphere
 problem = sphereProblem(100)
 
-solver::GeneticAlgorithm = GeneticAlgorithm()
+solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem
 solver.numberOfEvaluations = 75000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = defaultSolutionsCreation
+solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize)
 
 solver.evaluation = sequentialEvaluation
+solver.evaluationParameters = (problem = solver.problem, )
 
 solver.termination = terminationByEvaluations
+solver.terminationParameters = (numberOfEvaluationToStop = solver.numberOfEvaluations, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareIthObjective)
 
 solver.variation = crossoverAndMutationVariation
-solver.mutation = polynomialMutation
-solver.mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds)
-solver.crossover = blxAlphaCrossover
-solver.crossoverParameters = (probability = 1.0, alpha = 0.5, bounds=problem.bounds)
+solver.variationParameters = (offspringPopulationSize = 100, mutation = polynomialMutation, mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds),
+crossover = blxAlphaCrossover, crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds))
 
-solver.replacement = muPlusLambdaReplacement
-solver.replacementComparator = compareRankingAndCrowdingDistance
+solver.replacement = solver.replacement = muPlusLambdaReplacement
+solver.replacementParameters = (comparator = compareIthObjective, )
 
 startingTime = Dates.now()
 optimize(solver)

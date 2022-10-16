@@ -9,20 +9,19 @@ using Base.Iterators
 
 function defaultSolutionsCreation(parameters::NamedTuple)::Vector{Solution}
   problem = parameters.problem
-  numberOfSolutionsToCreate = parameters.populationSize
+  numberOfSolutionsToCreate = parameters.numberOfSolutionsToCreate
   [createSolution(problem) for _ in range(1, numberOfSolutionsToCreate)]
 end
 
 ## Evaluation components
-function sequentialEvaluation(parameters::NamedTuple)::Vector{Solution} 
-  solutions::Vector{Solution} = parameters.population
+function sequentialEvaluation(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution} 
   problem::Problem = parameters.problem
   return [evaluate(solution, problem) for solution in solutions]
 end
 
 ## Termination components
-function terminationByEvaluations(algorithmAttributes::Dict)::Bool
-  return get(algorithmAttributes, "EVALUATIONS",0) >= get(algorithmAttributes, "MAX_EVALUATIONS",0)
+function terminationByEvaluations(algorithmAttributes::Dict, parameters::NamedTuple)::Bool
+  return get(algorithmAttributes, "EVALUATIONS",0) >= parameters.numberOfEvaluationToStop
 end
 
 ## Selection components
@@ -32,22 +31,20 @@ function binaryTournamentMatingPoolSelection(solutions::Vector{Solution}, parame
 end
 
 ## Variation components
-function crossoverAndMutationVariation(matingPool::Vector{Solution},
-  offspringSolutionSize::Int, crossover::Function, crossoverParameters, mutation::Function, mutationParameters)
-
+function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
   parents = collect(zip(matingPool[1:2:end], matingPool[2:2:end]))
 
-  crossedSolutions = [crossover(parent[1], parent[2], crossoverParameters) for parent in parents]
+  crossedSolutions = [parameters.crossover(parent[1], parent[2], parameters.crossoverParameters) for parent in parents]
   solutionsToMutate = collect(flatten(crossedSolutions))
-  offpring = [mutation(solutionsToMutate[i], mutationParameters) for i in range(1, offspringSolutionSize)]
+  offpring = [parameters.mutation(solutionsToMutate[i], parameters.mutationParameters) for i in range(1, parameters.offspringPopulationSize)]
 
   return offpring
 end
 
 ## Replacement components
-function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, comparator::Function)
+function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)
   jointVector = vcat(x,y)
-  sort!(jointVector, lt=((a,b) -> comparator(a,b) <= 0))
+  sort!(jointVector, lt=((a,b) -> parameters.comparator(a,b) <= 0))
   return jointVector[1:length(x)]
 end
 
@@ -60,7 +57,8 @@ function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
   return result
 end
 
-function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{T} where {T <: Solution}
+function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, 
+  parameters::NamedTuple)::Vector{T} where {T <: Solution}
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -68,11 +66,11 @@ function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, compa
     computeCrowdingDistanceEstimator!(rank)
   end
 
-  sort!(jointVector, lt=((x,y) -> comparator(x,y) < 0))
+  sort!(jointVector, lt=((x,y) -> parameters.comparator(x,y) < 0))
   return jointVector[1:length(x)]
 end
 
-function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{Solution}, comparator::Function = compareRankingAndCrowdingDistance)::Vector{Solution}
+function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -89,7 +87,7 @@ function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{
       remainingSolutions -= currentRankLength
       currentRank += 1
     else
-      sort!(getSubFront(ranking, currentRank), lt=((x,y) -> compareCrowdingDistance(x,y) <= 0))
+      sort!(getSubFront(ranking, currentRank), lt=((x,y) -> parameters.comparator(x,y) <= 0))
       resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank)[1:remainingSolutions])
       remainingSolutions = 0
     end

@@ -8,30 +8,33 @@ include("../src/utils.jl")
 
 using Dates
 
-# NSGA-II example applied to problem Kursawe
+# Genetic algorithm example applied to problem Kursawe
 problem = kursaweProblem()
 
-solver::GeneticAlgorithm = GeneticAlgorithm()
+solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem
 solver.numberOfEvaluations = 25000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = defaultSolutionsCreation
+solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize)
+
 solver.evaluation = sequentialEvaluation
+solver.evaluationParameters = (problem = solver.problem, )
+
 solver.termination = terminationByEvaluations
+solver.terminationParameters = (numberOfEvaluationToStop = solver.numberOfEvaluations, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
 
 solver.variation = crossoverAndMutationVariation
-solver.mutation = polynomialMutation
-solver.mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds)
-solver.crossover = blxAlphaCrossover
-solver.crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds)
+solver.variationParameters = (offspringPopulationSize = 100, mutation = polynomialMutation, mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds),
+crossover = blxAlphaCrossover, crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds))
 
 solver.replacement = rankingAndDensityEstimatorReplacement
-solver.replacementComparator = compareRankingAndCrowdingDistance
+solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )
 
 startingTime = Dates.now()
 optimize(solver)
