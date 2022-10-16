@@ -8,12 +8,11 @@ include("../src/utils.jl")
 
 using Dates
 
-# Genetic algorithm example applied to problem Kursawe
+# NSGA-II algorithm configured from a generic evolutionary algorithm template
 problem = kursaweProblem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem
-solver.numberOfEvaluations = 25000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
@@ -24,13 +23,13 @@ solver.evaluation = sequentialEvaluation
 solver.evaluationParameters = (problem = solver.problem, )
 
 solver.termination = terminationByEvaluations
-solver.terminationParameters = (numberOfEvaluationToStop = solver.numberOfEvaluations, )
+solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
 
 solver.variation = crossoverAndMutationVariation
-solver.variationParameters = (offspringPopulationSize = 100, mutation = polynomialMutation, mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds),
+solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = polynomialMutation, mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds),
 crossover = blxAlphaCrossover, crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds))
 
 solver.replacement = rankingAndDensityEstimatorReplacement
