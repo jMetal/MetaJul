@@ -18,9 +18,7 @@ solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = defaultSolutionsCreation
-
 solver.evaluation = sequentialEvaluation
-
 solver.termination = terminationByEvaluations
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
@@ -41,7 +39,12 @@ endTime = Dates.now()
 
 foundSolutions = solver.foundSolutions
 
-outputFile = "FUN.csv"
-println("Solutions stored in file ", outputFile)
-printObjectivesToCSVFile(outputFile, foundSolutions)
+objectivesFileName = "FUN.csv"
+variablesFileName = "VAR.csv"
+
+println("Objectives stored in file ", objectivesFileName)
+printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+
+println("Variavbles stored in file ", variablesFileName)
+printVariablesToCSVFile(variablesFileName, foundSolutions)
 println("Computing time: ", (endTime - startingTime))

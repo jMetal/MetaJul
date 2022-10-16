@@ -69,8 +69,6 @@ mutable struct GeneticAlgorithm <: Metaheuristic
 end
 
 function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function, replacement::Function)
-  println("START of algorithm")
-
   population = solutionsCreation((problem = ga.problem, populationSize = ga.populationSize))
   population = evaluation((population = population, problem = ga.problem))
 
