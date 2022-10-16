@@ -24,3 +24,7 @@ The ``examples`` folder contains:
 * Local search algorithm using uniform mutation to solve the Sphere problem
 * Local search algorithm using polynomial mutation to solve the Sphere problem
 * Local search algorithm using bit blip mutation to solve the OneMax problem
+* Single objective genetic algorithm solving problem OneMax
+* Single objective genetic algorithm solving problem Sphere
+* NSGA-II algorithm configured from a generic evolutionary template
+* NSGA-II algorithm configured from the NSGA-II template
