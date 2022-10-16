@@ -44,7 +44,6 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   problem::Problem
   populationSize::Int
   offspringPopulationSize::Int
-  numberOfEvaluations::Int
 
   foundSolutions::Vector{Solution}
 
@@ -65,20 +64,20 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   EvolutionaryAlgorithm() = new()
 end
 
-function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function, replacement::Function)
-  population = solutionsCreation(ea.solutionsCreationParameters)
-  population = evaluation(population, ea.evaluationParameters)
+function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
+  population = ea.solutionsCreation(ea.solutionsCreationParameters)
+  population = ea.evaluation(population, ea.evaluationParameters)
 
   evaluations = length(population)
   eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population)
 
-  while !terminationCondition(eaStatus, ea.terminationParameters)
-    matingPool = selection(population, ea.selectionParameters)
+  while !ea.termination(eaStatus, ea.terminationParameters)
+    matingPool = ea.selection(population, ea.selectionParameters)
     
-    offspringPopulation = variation(population, matingPool, ea.variationParameters)
-    offspringPopulation = evaluation(offspringPopulation, ea.evaluationParameters)
+    offspringPopulation = ea.variation(population, matingPool, ea.variationParameters)
+    offspringPopulation = ea.evaluation(offspringPopulation, ea.evaluationParameters)
 
-    population = replacement(population, offspringPopulation, ea.replacementParameters)
+    population = ea.replacement(population, offspringPopulation, ea.replacementParameters)
     
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
@@ -90,66 +89,70 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm, solutionsCreation::Fun
 end
 
 function optimize(algorithm::EvolutionaryAlgorithm)
-  algorithm.foundSolutions = evolutionaryAlgorithm(algorithm, algorithm.solutionsCreation, algorithm.evaluation, algorithm.termination, algorithm.selection, algorithm.variation, algorithm.replacement)
+  algorithm.foundSolutions = evolutionaryAlgorithm(algorithm)
   
   return Nothing
 end
 
 
-mutable struct GeneticAlgorithm <: Metaheuristic
+#################################
+
+mutable struct NSGAII <: Metaheuristic
   problem::Problem
   populationSize::Int
-  offspringPopulationSize::Int
   numberOfEvaluations::Int
 
   foundSolutions::Vector{Solution}
 
   solutionsCreation::Function
-
   evaluation::Function
+  termination::Function
+  selection::Function
 
-  variation::Function
-  crossover::Function
-  crossoverParameters::NamedTuple
   mutation::Function
   mutationParameters::NamedTuple
+  crossover::Function
+  crossoverParameters::NamedTuple
 
-  termination::Function
-
-  selection::Function
+  solutionsCreationParameters::NamedTuple
+  evaluationParameters::NamedTuple
+  terminationParameters::NamedTuple
   selectionParameters::NamedTuple
 
-  replacement::Function
-  replacementComparator::Function
-
-  GeneticAlgorithm() = new()
+  NSGAII() = new()
 end
 
-function geneticAlgorithm(ga::GeneticAlgorithm, solutionsCreation::Function, evaluation::Function, terminationCondition::Function, selection::Function, variation::Function, replacement::Function)
-  population = solutionsCreation((problem = ga.problem, populationSize = ga.populationSize))
-  population = evaluation((population = population, problem = ga.problem))
+function NSGAII(nsgaII::NSGAII)
+  solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
+  solver.problem = nsgaII.problem
+  solver.populationSize = nsgaII.populationSize
+  solver.offspringPopulationSize = nsgaII.populationSize
 
-  evaluations = length(population)
-  eaStatus = Dict("EVALUATIONS" => evaluations, "MAX_EVALUATIONS" => ga.numberOfEvaluations)
+  solver.solutionsCreation = nsgaII.solutionsCreation
+  solver.solutionsCreationParameters = nsgaII.solutionsCreationParameters
 
-  while !terminationCondition(eaStatus)
-    matingPool = selection(population, ga.selectionParameters)
-    
-    offspringPopulation = variation(matingPool, ga.offspringPopulationSize, ga.crossover, ga.crossoverParameters, ga.mutation, ga.mutationParameters)
-    offspringPopulation = evaluation((population = offspringPopulation, problem = ga.problem))
+  solver.evaluation = nsgaII.evaluation
+  solver.evaluationParameters = nsgaII.evaluationParameters
 
-    population = replacement(population, offspringPopulation, ga.replacementComparator)
-    
-    evaluations += length(offspringPopulation)
-    eaStatus["EVALUATIONS"] = evaluations
-  end
+  solver.termination = nsgaII.termination
+  solver.terminationParameters = nsgaII.terminationParameters
 
-  foundSolutions = population
-  return foundSolutions
+  solver.selection = nsgaII.selection
+  solver.selectionParameters = nsgaII.selectionParameters
+
+  solver.variation = crossoverAndMutationVariation
+  solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation, mutationParameters = nsgaII.mutationParameters,
+  crossover = nsgaII.crossover, crossoverParameters = nsgaII.crossoverParameters)
+
+  solver.replacement = rankingAndDensityEstimatorReplacement
+  solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )
+
+  return evolutionaryAlgorithm(solver)
 end
 
-function optimize(algorithm::GeneticAlgorithm)
-  algorithm.foundSolutions = geneticAlgorithm(algorithm, algorithm.solutionsCreation, algorithm.evaluation, algorithm.termination, algorithm.selection, algorithm.variation, algorithm.replacement)
+function optimize(algorithm::NSGAII)
+  algorithm.foundSolutions = NSGAII(algorithm)
   
   return Nothing
 end
+
