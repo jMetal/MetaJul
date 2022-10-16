@@ -12,8 +12,8 @@ Currently implemented elements:
 
 * Encoding: continuous, binary
 * Problem: 
-   * Single-objective problems: continuous (Sphere), binary (OneMax)
-   * Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe)
+     * Single-objective problems: continuous (Sphere), binary (OneMax)
+     * Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe)
 * Operator: uniform mutation, polynomial mutation, random selection, binary tournament selection
 * Algorithm: local search, evolutionary algorithm, NSGA-II
 
