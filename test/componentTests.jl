@@ -265,8 +265,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     getRank(solution3) == 1 && 
     getRank(solution4) == 2 && 
     getRank(solution5) == 1 && 
-    getRank(solution6) == 1 
-    """&& 
+    getRank(solution6) == 1 && 
     solution1 in resultPopulation &&
     solution3 in resultPopulation &&
     solution6 in resultPopulation &&
@@ -274,7 +273,6 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     getCrowdingDistance(solution2) == typemax(Float64) && 
     getCrowdingDistance(solution4) == typemax(Float64) && 
     getCrowdingDistance(solution6) ==  typemax(Float64)
-    """
 end
 
 
