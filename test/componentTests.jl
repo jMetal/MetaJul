@@ -259,8 +259,6 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
 
     resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation)
 
-    println(resultPopulation)
-
     return length(resultPopulation) == 3 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 2 && 
