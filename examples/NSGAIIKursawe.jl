@@ -8,7 +8,7 @@ include("../src/utils.jl")
 
 using Dates
 
-# Genetic algorithm example applied to problem Kursawe
+# NSGA-II example applied to problem Kursawe
 problem = kursaweProblem()
 
 solver::GeneticAlgorithm = GeneticAlgorithm()
