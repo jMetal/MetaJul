@@ -5,29 +5,6 @@ include("densityEstimator.jl")
 
 using Base.Iterators
 
-abstract type EAComponent end
-abstract type Selection <: EAComponent end
-abstract type Evaluation <: EAComponent end
-abstract type Variation <: EAComponent end
-
-"""
-struct SequentialEvaluation <: Evaluation
-   evaluate::Function
-   function SequentialEvaluation() new(sequentialEvaluation) end
-end
-
-struct BinaryTournamentSelection <: Evaluation
-  matingPoolSize::Int
-  select::Function
-  function BinaryTournamentSelection(matingPoolSize) 
-    x = new(); 
-    x.matingPoolSize = matingPoolSize; 
-    x.select = binaryTournamentSelection; 
-    return x 
-  end
-end
-"""
-
 ## Solution creation components
 
 function defaultSolutionsCreation(parameters::NamedTuple)::Vector{Solution}
