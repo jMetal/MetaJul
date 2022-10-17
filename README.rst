@@ -8,7 +8,7 @@ MetaJul Web site
 
 The MetaJul project is aimed at studying the implementation of metaheuristics in the Julia programming language. The implemented codes and unit tests are located, respectively, in the ``src`` and tests ``test`` folder.
 
-Currently implemented elements:
+Current features:
 
 * Encoding: continuous, binary
 * Problems: 
@@ -16,8 +16,8 @@ Currently implemented elements:
      - Single-objective problems: continuous (Sphere), binary (OneMax)
      - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe)
 
-* Operator: uniform mutation, polynomial mutation, random selection, binary tournament selection
-* Algorithm: local search, evolutionary algorithm, NSGA-II
+* Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, random selection, binary tournament selection
+* Algorithms: local search, evolutionary algorithm, NSGA-II
 
 The ``examples`` folder contains:
 
@@ -28,3 +28,8 @@ The ``examples`` folder contains:
 * Single objective genetic algorithm solving problem Sphere
 * NSGA-II algorithm configured from a generic evolutionary template
 * NSGA-II algorithm configured from the NSGA-II template
+
+
+TODO list:
+* Revise the implementation to make the code more Julia compliant.
+* Optimize the code to improve efficiency (the running time of NSGA-II is similar to the Java implementation included in jMetal).
