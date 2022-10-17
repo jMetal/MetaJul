@@ -31,5 +31,6 @@ The ``examples`` folder contains:
 
 
 TODO list:
+
 * Revise the implementation to make the code more Julia compliant.
 * Optimize the code to improve efficiency (the running time of NSGA-II is similar to the Java implementation included in jMetal).
