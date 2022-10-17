@@ -172,27 +172,3 @@ function kursaweProblem(numberOfVariables::Int=3)
   return kursawe
 end
 
-"""
-struct Fonseca <: AbstractContinuousProblem{Float64}
-  bounds::Vector{Bounds}
-  numberOfObjectives
-  numberOfConstraints 
-  name::String
-  function Fonseca() 
-    x = new()
-    x.bounds = [Bounds{Float64}(-4.0, 4.0) for _ in range(1,3)]
-    x.numberOfObjectives = 2
-    x.numberOfConstraints = 0
-    x.name = "Fonseca"
-
-    return x
-  end
-end
-
-function evaluate(solution::ContinuousSolution{Float64}, problem::Fonseca)::ContinuousSolution{Float64}
-  sum1 = 0.0
-  for x in solution.variables
-    sum1 += Ba
-  end
-end
-"""
