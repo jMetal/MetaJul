@@ -29,6 +29,8 @@ The ``examples`` folder contains:
 * NSGA-II algorithm configured from a generic evolutionary template
 * NSGA-II algorithm configured from the NSGA-II template
 
+Some notebooks with examples can be found in the ``notebooks`` folder.
+
 
 TODO list:
 
