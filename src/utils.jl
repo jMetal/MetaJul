@@ -1,5 +1,5 @@
 
-function printObjectivesToCSVFile(fileName::String, solutions::Vector{Solution})
+function printObjectivesToCSVFile(fileName::String, solutions::Vector{T}) where {T <: Solution}
     open(fileName, "w") do outputFile
         for solution in solutions
             line = join(solution.objectives, ",")
@@ -8,10 +8,19 @@ function printObjectivesToCSVFile(fileName::String, solutions::Vector{Solution})
     end
 end
 
-function printVariablesToCSVFile(fileName::String, solutions::Vector{Solution})
+function printVariablesToCSVFile(fileName::String, solutions::Vector{T}) where {T <: ContinuousSolution}
     open(fileName, "w") do outputFile
         for solution in solutions
             line = join(solution.variables, ",")
+            println(outputFile, line)
+        end
+    end
+end
+
+function printVariablesToCSVFile(fileName::String, solutions::Vector{BinarySolution}) 
+    open(fileName, "w") do outputFile
+        for solution in solutions
+            line = toString(solution.variables)
             println(outputFile, line)
         end
     end
