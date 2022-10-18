@@ -26,7 +26,7 @@ function restrict(value::Number, bounds::Bounds)::Number
     return result 
 end
 
-function restrict(values::Vector{T}, bounds::Array{Bounds{T}}) where {T <: Number}
+function restrict(values::Vector{T}, bounds::Vector{Bounds{T}}) where {T <: Number}
     for i in 1:length(values)
         values[i] = restrict(values[i], bounds[i])
     end
@@ -39,7 +39,7 @@ function randomRestrict(value::Number, bounds::Bounds)::Number
     return result 
 end
 
-function randomRestrict(values::Vector{T}, bounds::Array{Bounds{T}}) where {T <: Number}
+function randomRestrict(values::Vector{T}, bounds::Vector{Bounds{T}}) where {T <: Number}
     for i in 1:length(values)
         values[i] = restrict(values[i], bounds[i])
     end

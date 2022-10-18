@@ -45,7 +45,7 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   populationSize::Int
   offspringPopulationSize::Int
 
-  foundSolutions::Vector{Solution}
+  foundSolutions::Vector
 
   solutionsCreation::Function
   evaluation::Function
@@ -78,7 +78,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     offspringPopulation = ea.evaluation(offspringPopulation, ea.evaluationParameters)
 
     population = ea.replacement(population, offspringPopulation, ea.replacementParameters)
-    
+
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
     eaStatus["POPULATION"] = population
@@ -102,7 +102,7 @@ mutable struct NSGAII <: Metaheuristic
   populationSize::Int
   numberOfEvaluations::Int
 
-  foundSolutions::Vector{Solution}
+  foundSolutions::Vector
 
   solutionsCreation::Function
   evaluation::Function
@@ -122,7 +122,7 @@ mutable struct NSGAII <: Metaheuristic
   NSGAII() = new()
 end
 
-function NSGAII(nsgaII::NSGAII)
+function NSGAII(nsgaII::NSGAII) 
   solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
   solver.problem = nsgaII.problem
   solver.populationSize = nsgaII.populationSize
