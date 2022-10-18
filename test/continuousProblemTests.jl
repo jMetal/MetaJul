@@ -41,8 +41,8 @@ schafferSolution = createSolution(schaffer)
     @test numberOfVariables(schaffer) == 1
     @test numberOfObjectives(schaffer) == 2
     @test numberOfConstraints(schaffer) == 0
-    @test bounds(schaffer)[1].lowerBound == -10000.0
-    @test bounds(schaffer)[1].upperBound == 10000.0
+    @test bounds(schaffer)[1].lowerBound == -1000.0
+    @test bounds(schaffer)[1].upperBound == 1000.0
 
     @test length(schafferSolution.variables) == numberOfVariables(schaffer)
     @test length(schafferSolution.objectives) == numberOfObjectives(schaffer)
