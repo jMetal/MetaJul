@@ -18,41 +18,37 @@ setName(continuousTestProblem, "TestProblem")
     @test name(continuousTestProblem) == "TestProblem"
 end
 
-continuousTestSolution = createSolution(continuousTestProblem)
-"""
 numberOfVariablesForSphere = 10
-sphereProblem = ContinuousProblem{Float64}(createBounds([-5.12 for i in 1:numberOfVariablesForSphere],[5.12 for i in 1:numberOfVariablesForSphere]), 1, 0)
-
-sphereSolution = createSolution(sphereProblem)
+sphere = sphereProblem(numberOfVariablesForSphere)
+sphereSolution = createSolution(sphere)
 @testset "Sphere problem tests" begin    
-    @test numberOfVariables(sphereProblem) == numberOfVariablesForSphere
-    @test sphereProblem.numberOfObjectives == 1
-    @test sphereProblem.numberOfConstraints == 0
+    @test numberOfVariables(sphere) == numberOfVariablesForSphere
+    @test numberOfObjectives(sphere) == 1
+    @test numberOfConstraints(sphere) == 0
 
-    @test length(sphereSolution.variables) == numberOfVariables(sphereProblem)
-    @test length(sphereSolution.objectives) == sphereProblem.numberOfObjectives
-    @test length(sphereSolution.constraints) == sphereProblem.numberOfConstraints
+    @test length(sphereSolution.variables) == numberOfVariables(sphere)
+    @test length(sphereSolution.objectives) == numberOfObjectives(sphere)
+    @test length(sphereSolution.constraints) == numberOfConstraints(sphere)
 
-    @test sphereSolution.bounds == sphereProblem.bounds
-    @test sphereSolution.variables[1] <= sphereProblem.bounds[1].upperBound
-    @test sphereSolution.variables[1] >= sphereProblem.bounds[1].lowerBound
+    @test sphereSolution.bounds == sphere.bounds
+    @test sphereSolution.variables[1] <= sphere.bounds[1].upperBound
+    @test sphereSolution.variables[1] >= sphere.bounds[1].lowerBound
 end
 
-schafferProblem = ContinuousProblem{Float64}(createBounds([-10000.0],[10000.0]), 1, 0)
-schafferSolution = createSolution(schafferProblem)
+schaffer = schafferProblem()
+schafferSolution = createSolution(schaffer)
 @testset "Schaffer problem tests" begin    
-    @test numberOfVariables(schafferProblem) == 1
-    @test schafferProblem.numberOfObjectives == 1
-    @test schafferProblem.numberOfConstraints == 0
-    @test schafferProblem.bounds[1].lowerBound == -10000.0
-    @test schafferProblem.bounds[1].upperBound == 10000.0
+    @test numberOfVariables(schaffer) == 1
+    @test numberOfObjectives(schaffer) == 2
+    @test numberOfConstraints(schaffer) == 0
+    @test bounds(schaffer)[1].lowerBound == -10000.0
+    @test bounds(schaffer)[1].upperBound == 10000.0
 
-    @test length(schafferSolution.variables) == numberOfVariables(schafferProblem)
-    @test length(schafferSolution.objectives) == schafferProblem.numberOfObjectives
-    @test length(schafferSolution.constraints) == schafferProblem.numberOfConstraints
+    @test length(schafferSolution.variables) == numberOfVariables(schaffer)
+    @test length(schafferSolution.objectives) == numberOfObjectives(schaffer)
+    @test length(schafferSolution.constraints) == numberOfConstraints(schaffer)
 
     @test schafferSolution.bounds == schafferSolution.bounds
     @test schafferSolution.variables[1] <= schafferSolution.bounds[1].upperBound
     @test schafferSolution.variables[1] >= schafferSolution.bounds[1].lowerBound
 end
-"""

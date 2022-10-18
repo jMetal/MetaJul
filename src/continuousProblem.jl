@@ -33,6 +33,10 @@ function name(problem::ContinuousProblem{T}) where {T}
   return problem.name
 end
 
+function bounds(problem::ContinuousProblem{T}) where {T}
+  return problem.bounds
+end
+
 function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T<:Number}
   push!(problem.objectives, objective)
 
@@ -85,7 +89,7 @@ function schafferProblem()
 
   addObjective(schaffer, f)
   addObjective(schaffer, g)
-  addVariable(schaffer, Bounds{Real}(-1000.0, 1000.0))
+  addVariable(schaffer, Bounds{Real}(-10000.0, 10000.0))
 
   return schaffer
 end
