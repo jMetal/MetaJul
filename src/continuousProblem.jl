@@ -271,9 +271,9 @@ function zdt4Problem(numberOfVariables::Int=10)
   end
 
   function evalG(x::Vector{Real})
-    g = sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
+    g = 1.0 +10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
 
-    return g + 1.0 +10.0 * (length(x) - 1)
+    return g 
   end
 
   function evalH(v::Real, g::Real)

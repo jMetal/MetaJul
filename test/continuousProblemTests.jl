@@ -25,14 +25,15 @@ sphereSolution = createSolution(sphere)
     @test numberOfVariables(sphere) == numberOfVariablesForSphere
     @test numberOfObjectives(sphere) == 1
     @test numberOfConstraints(sphere) == 0
+    @test name(sphere) == "Sphere"
 
     @test length(sphereSolution.variables) == numberOfVariables(sphere)
     @test length(sphereSolution.objectives) == numberOfObjectives(sphere)
     @test length(sphereSolution.constraints) == numberOfConstraints(sphere)
 
     @test sphereSolution.bounds == sphere.bounds
-    @test sphereSolution.variables[1] <= sphere.bounds[1].upperBound
-    @test sphereSolution.variables[1] >= sphere.bounds[1].lowerBound
+    @test sphereSolution.variables[1] <= bounds(sphere)[1].upperBound
+    @test sphereSolution.variables[1] >= bounds(sphere)[1].lowerBound
 end
 
 schaffer = schafferProblem()
@@ -43,6 +44,7 @@ schafferSolution = createSolution(schaffer)
     @test numberOfConstraints(schaffer) == 0
     @test bounds(schaffer)[1].lowerBound == -1000.0
     @test bounds(schaffer)[1].upperBound == 1000.0
+    @test name(schaffer) == "Schaffer"
 
     @test length(schafferSolution.variables) == numberOfVariables(schaffer)
     @test length(schafferSolution.objectives) == numberOfObjectives(schaffer)
