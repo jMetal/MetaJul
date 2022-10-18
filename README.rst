@@ -14,9 +14,9 @@ Current features:
 * Problems: 
   
      - Single-objective problems: continuous (Sphere), binary (OneMax)
-     - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe)
+     - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark)
 
-* Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, random selection, binary tournament selection
+* Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
 * Algorithms: local search, evolutionary algorithm, NSGA-II
 
 The ``examples`` folder contains:
@@ -32,7 +32,10 @@ The ``examples`` folder contains:
 Some notebooks with examples can be found in the ``notebooks`` folder.
 
 
-TODO list:
+TODO list (open issues):
 
 * Revise the implementation to make the code more Julia compliant.
+* Improve documentation
 * Optimize the code to improve efficiency (the running time of NSGA-II is similar to the Java implementation included in jMetal).
+* By default, objective functions are assumed to be minimized, so their values have to be multiplied by -1 in case of maximization. Revise this issue.
+* NSGA-II does not solve problem ZDT4 when stopping at 25000 evaluations
