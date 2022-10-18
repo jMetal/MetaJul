@@ -8,7 +8,7 @@ function printObjectivesToCSVFile(fileName::String, solutions::Vector{T}) where 
     end
 end
 
-function printVariablesToCSVFile(fileName::String, solutions::Vector{T}) where {T <: ContinuousSolution}
+function printVariablesToCSVFile(fileName::String, solutions::Vector{T}) where {T <: Solution}
     open(fileName, "w") do outputFile
         for solution in solutions
             line = join(solution.variables, ",")
