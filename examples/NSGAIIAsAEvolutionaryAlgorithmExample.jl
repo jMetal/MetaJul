@@ -9,7 +9,7 @@ include("../src/utils.jl")
 using Dates
 
 # NSGA-II algorithm configured from a generic evolutionary algorithm template
-problem = kursaweProblem()
+problem = zdt1Problem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem

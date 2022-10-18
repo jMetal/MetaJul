@@ -172,3 +172,173 @@ function kursaweProblem(numberOfVariables::Int=3)
   return kursawe
 end
 
+################### 
+# ZDT benchmark
+
+function zdt1Problem(numberOfVariables::Int=30)
+  zdt1 = ContinuousProblem{Real}("ZDT1")
+
+  for _ in 1:numberOfVariables
+    addVariable(zdt1, Bounds{Real}(0.0, 1.0))
+  end
+
+  function evalG(x::Vector{Real})
+    g = sum(x[2:length(x)])
+    return g * 9.0 / (length(x) - 1) + 1.0
+  end
+
+  f1 = x -> x[1]
+  f2 = x -> begin
+    g = evalG(x)
+    h = 1.0 - sqrt(x[1]/ g)
+
+    return h * g
+  end
+
+  addObjective(zdt1, f1)
+  addObjective(zdt1, f2)
+
+  return zdt1
+end
+
+function zdt2Problem(numberOfVariables::Int=30)
+  zdt2 = ContinuousProblem{Real}("ZDT2")
+
+  for _ in 1:numberOfVariables
+    addVariable(zdt2, Bounds{Real}(0.0, 1.0))
+  end
+
+  function evalG(x::Vector{Real})
+    g = sum(x[2:length(x)])
+    return g * 9.0 / (length(x) - 1) + 1.0
+  end
+
+  f1 = x -> x[1]
+  f2 = x -> begin
+    g = evalG(x)
+    h = 1.0 - ^(x[1]/ g, 2.0)
+
+    return h * g
+  end
+
+  addObjective(zdt2, f1)
+  addObjective(zdt2, f2)
+
+  return zdt2
+end
+
+function zdt3Problem(numberOfVariables::Int=30)
+  zdt3 = ContinuousProblem{Real}("ZDT3")
+
+  for _ in 1:numberOfVariables
+    addVariable(zdt3, Bounds{Real}(0.0, 1.0))
+  end
+
+  function evalG(x::Vector{Real})
+    g = sum(x[2:length(x)])
+    return g * 9.0 / (length(x) - 1) + 1.0
+  end
+
+  function evalH(v::Real, g::Real)
+    return 1.0 - sqrt(v/g) - (v/g)*sin(10.0 * pi * v)
+  end
+
+  f1 = x -> x[1]
+  f2 = x -> begin
+    g = evalG(x)
+    h = evalH(x[1], g)
+
+    return h * g
+  end
+
+  addObjective(zdt3, f1)
+  addObjective(zdt3, f2)
+
+  return zdt3
+end
+
+function zdt4Problem(numberOfVariables::Int=10)
+  zdt4 = ContinuousProblem{Real}("ZDT4")
+
+  addVariable(zdt4, Bounds{Real}(0.0, 1.0))
+  for _ in 2:numberOfVariables
+    addVariable(zdt4, Bounds{Real}(-5.0, 5.0))
+  end
+
+  function evalG(x::Vector{Real})
+    g = sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
+
+    return g + 1.0 +10.0 * (length(x) - 1)
+  end
+
+  function evalH(v::Real, g::Real)
+    return 1.0 - sqrt(v/g)
+  end
+
+  f1 = x -> x[1]
+  f2 = x -> begin
+    g = evalG(x)
+    h = evalH(x[1], g)
+
+    return h * g
+  end
+
+  addObjective(zdt4, f1)
+  addObjective(zdt4, f2)
+
+  return zdt4
+end
+
+struct ZDT6 <: AbstractContinuousProblem{Float64}
+  bounds::Vector{Bounds{Float64}}
+  name::String
+end
+
+function zdt6Problem(numberOfVariables::Int=10)
+  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
+
+  return ZDT6(bounds,"ZDT6")
+end
+
+function numberOfVariables(problem::ZDT6)
+  return length(problem.bounds)
+end
+
+function numberOfObjectives(problem::ZDT6)
+  return 2
+end
+
+function numberOfConstraints(problem::ZDT6)
+  return 0
+end
+
+function evaluate(solution::ContinuousSolution{Float64}, problem::ZDT6)::ContinuousSolution{Float64}
+  x = solution.variables
+  @assert length(x) == numberOfVariables(problem) "The number of variables of the solution to be evaluated is not correct"
+
+  function evalG(x::Vector{Float64})
+    g = sum(x[i] for i in range(2,length(x)))
+    g = g / (length(x) - 1.0)
+
+    g = ^(g, 0.25)
+    g = 9.0 * g
+    g = 1.0 * g
+
+    return g
+  end
+
+  function evalH(v::Float64, g::Float64)
+    return 1.0 - sqrt(v/g)
+  end
+
+  f1 = 1.0 - exp(-4.0*x[1]) * ^(sin(6*pi*x[1]),6)
+  g = evalG(x)
+  h = evalH(f1, g)
+  f2 = g * h
+ 
+  solution.objectives = [f1, f2]
+
+  return solution
+end
+
+
