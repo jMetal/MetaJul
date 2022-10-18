@@ -13,7 +13,6 @@ problem = sphereProblem(100)
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem
-solver.numberOfEvaluations = 75000
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
@@ -24,7 +23,7 @@ solver.evaluation = sequentialEvaluation
 solver.evaluationParameters = (problem = solver.problem, )
 
 solver.termination = terminationByEvaluations
-solver.terminationParameters = (numberOfEvaluationToStop = solver.numberOfEvaluations, )
+solver.terminationParameters = (numberOfEvaluationToStop = 75000, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareIthObjective)
@@ -42,8 +41,8 @@ endTime = Dates.now()
 
 foundSolutions = solver.foundSolutions
 
-printObjectivesToCSVFile("FUN.csv", foundSolutions)
+printObjectivesToCSVFile("FUN.csv", [foundSolutions[1]])
+printVariablesToCSVFile("VAR.csv", [foundSolutions[1]])
 
-println("GA result: ", length(foundSolutions))
-println("Best found solution: ", foundSolutions[1].objectives[1])
+println("Best solution found: ", foundSolutions[1].objectives[1])
 println("Computing time: ", (endTime - startingTime))
