@@ -83,68 +83,56 @@ function polynomialMutation(solution::ContinuousSolution, parameters)::Continuou
 end
 
 # Crossover operators
-function blxAlphaCrossover(parent1::Vector{T}, parent2::Vector{T}, parameters)::Vector{Vector{T}} where {T <: Real}
+function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
   probability::Real = parameters.probability
   alpha::Real = parameters.alpha
   bounds = parameters.bounds
 
-  child1 = deepcopy(parent1)
-  child2 = deepcopy(parent2)
+  child1 = copySolution(parent1)
+  child2 = copySolution(parent2)
 
   if rand() < probability
-    for i in range(1,length(parent1))
-      minValue = min(parent1[i], parent2[i])
-      maxValue = max(parent1[i], parent2[i])
+    for i in range(1,length(parent1.variables))
+      minValue = min(parent1.variables[i], parent2.variables[i])
+      maxValue = max(parent1.variables[i], parent2.variables[i])
       range = maxValue - minValue
 
       minRange = minValue - range * alpha
       maxRange = maxValue + range * alpha
 
       random = rand()
-      child1[i] = minRange + random * (maxRange - minRange)
+      child1.variables[i] = minRange + random * (maxRange - minRange)
       random = rand()
-      child2[i] = minRange + random * (maxRange - minRange)
+      child2.variables[i] = minRange + random * (maxRange - minRange)
     end
   end
   
-  child1 = restrict(child1, bounds)
-  child2 = restrict(child2, bounds)
+  child1.variables = restrict(child1.variables, bounds)
+  child2.variables = restrict(child2.variables, bounds)
 
   return [child1, child2]
 end
 
-function blxAlphaCrossover(solution1::ContinuousSolution, solution2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
-  child1 = copySolution(solution1)
-  child2 = copySolution(solution2)
-
-  child1.variables, child2.variables = blxAlphaCrossover(child1.variables, child2.variables, parameters)
-
-  return [child1, child2]
-end
-
-function singlePointCrossover(x::BitVector, y::BitVector, parameters::NamedTuple)::Vector{BitVector}
-  @assert length(x) == length(y) "The length of the two vectors to recombine is not equal"
+function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
+  @assert length(parent1.variables) == length(parent2.variables) "The length of the two binary solutions to recombine is not equal"
 
   probability::Real = parameters.probability
-  child1 = deepcopy(x)
-  child2 = deepcopy(y)
 
+  child1 = copySolution(parent1)
+  child2 = copySolution(parent2)
+
+  x = child1.variables
+  y = child2.variables
   if rand() < parameters.probability
     cuttingPoint = rand(1:length(x))
 
-    tmp = child1.bits[cuttingPoint:end] 
-    child1.bits[cuttingPoint:end] = child2.bits[cuttingPoint:end]
-    child2.bits[cuttingPoint:end] = tmp
+    tmp = x.bits[cuttingPoint:end] 
+    x.bits[cuttingPoint:end] = y.bits[cuttingPoint:end]
+    y.bits[cuttingPoint:end] = tmp
   end
 
-  return [child1, child2]
-end
-
-function singlePointCrossover(solution1::BinarySolution, solution2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
-  child1 = copySolution(solution1)
-  child2 = copySolution(solution2)
-
-  child1.variables, child2.variables = singlePointCrossover(child1.variables, child2.variables, parameters)
+  child1.variables = x
+  child2.variables = y
 
   return [child1, child2]
 end
