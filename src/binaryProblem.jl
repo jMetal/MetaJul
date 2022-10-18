@@ -88,9 +88,3 @@ function oneZeroMax(numberOfBits::Int)
   return problem
 end
 
-problem = oneZeroMax(5)
-println(problem)
-
-binarySolution = createSolution(problem)
-println(binarySolution)
-println(evaluate(binarySolution, problem))
