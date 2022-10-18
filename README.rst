@@ -38,4 +38,5 @@ TODO list (open issues):
 * Improve documentation
 * Optimize the code to improve efficiency (the running time of NSGA-II is similar to the Java implementation included in jMetal).
 * By default, objective functions are assumed to be minimized, so their values have to be multiplied by -1 in case of maximization. Revise this issue.
-* NSGA-II does not solve problem ZDT4 when stopping at 25000 evaluations
+* NSGA-II does not solve problem ZDT4 when stopping at 25000 evaluations.
+* Unconstrained problems are not still considered.
