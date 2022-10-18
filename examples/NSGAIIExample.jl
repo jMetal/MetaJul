@@ -10,7 +10,7 @@ using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
-problem = kursaweProblem()
+problem = zdt4Problem()
 
 solver::NSGAII = NSGAII()
 solver.problem = problem
@@ -31,8 +31,13 @@ solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingA
 solver.mutation = mutation = polynomialMutation
 solver.mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds)
 
+"""
 solver.crossover = blxAlphaCrossover
 solver.crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds)
+"""
+
+solver.crossover = sbxCrossover
+solver.crossoverParameters = (probability = 1.0, distributionIndex = 20.0, bounds=problem.bounds)
 
 startingTime = Dates.now()
 optimize(solver)
@@ -46,6 +51,6 @@ variablesFileName = "VAR.csv"
 println("Objectives stored in file ", objectivesFileName)
 printObjectivesToCSVFile(objectivesFileName, foundSolutions)
 
-println("Variavbles stored in file ", variablesFileName)
+println("Variables stored in file ", variablesFileName)
 printVariablesToCSVFile(variablesFileName, foundSolutions)
 println("Computing time: ", (endTime - startingTime))
