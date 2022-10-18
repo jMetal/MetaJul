@@ -38,9 +38,9 @@ function toString(bitVector::BitVector)::String
     string = ""
     for i in bitVector.bits
         if i
-            string = string * '0'
-        else
             string = string * '1'
+        else
+            string = string * '0'
         end
     end
    return string
