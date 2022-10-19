@@ -29,14 +29,6 @@ The ``examples`` folder contains:
 * NSGA-II algorithm configured from a generic evolutionary template
 * NSGA-II algorithm configured from the NSGA-II template
 
-Some notebooks with examples can be found in the ``notebooks`` folder.
+Some Jupyter notebooks with examples can be found in the ``notebooks`` folder.
 
-
-TODO list (open issues):
-
-* Revise the implementation to make the code more Julia compliant.
-* Improve documentation
-* Optimize the code to improve efficiency (the running time of NSGA-II is similar to the Java implementation included in jMetal).
-* By default, objective functions are assumed to be minimized, so their values have to be multiplied by -1 in case of maximization. Revise this issue.
-* NSGA-II does not solve problem ZDT4 when stopping at 25000 evaluations.
-* Unconstrained problems are not still considered.
+The next steps to carry out are enumerated in the `open issues page <https://github.com/jMetal/MetaJul/issues>`_ of the project.

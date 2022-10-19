@@ -62,3 +62,27 @@ function contain(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <:
 
   return result
 end
+
+
+
+struct CrowdingDistanceArchive{T} <: Archive where {T <: Solution}
+  solutions::Array{T}
+  capacity::Int
+end
+
+function isFull(archive::CrowdingDistanceArchive)
+  return length(archive.solutions) == archive.capacity
+end
+
+function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T <: Solution}
+  push!(archive, solution)
+  if ifFull(archive)
+    computeCrowdingDistanceEstimator!(archive.solutions)
+    sort!(archive.solutions, lt=((x,y) -> compareCrowdingDistance(x,y) < 0))
+
+    
+  end
+  
+  return true
+end
+
