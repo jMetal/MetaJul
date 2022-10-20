@@ -106,6 +106,7 @@ function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:
     solutionIsAdded = add!(archive.internalNonDominatedArchive, solution)
 
     if solutionIsAdded && isFull(archive)
+        println("HERE")
         computeCrowdingDistanceEstimator!(archive.internalNonDominatedArchive.solutions)
         sort!(getSolutions(archive), lt=((x, y) -> compareCrowdingDistance(x, y) < 0))
 
