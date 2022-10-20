@@ -188,7 +188,7 @@ end
 
 ############################
 
-function addASolutionTwoAFullArchiveRemovesASolution()
+function addASolutionToAFullArchiveRemovesASolution()
     archiveCapacity = 2
     crowdingDistanceArchive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
     solution1 = createContinuousSolution([2.0, 0.0, 0.0])
@@ -202,7 +202,37 @@ function addASolutionTwoAFullArchiveRemovesASolution()
     return length(crowdingDistanceArchive) == archiveCapacity
 end
 
+function addASolutionToAFullArchiveRemovesTheSolutionWithTheLowestCrowdingDistance()
+    archiveCapacity = 2
+    crowdingDistanceArchive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    solution1 = createContinuousSolution([2.0, 0.0])
+    solution2 = createContinuousSolution([1.0, 1.0])
+    solution3 = createContinuousSolution([0.0, 2.0])
+
+    add!(crowdingDistanceArchive, solution1)
+    solution2IsAdded = add!(crowdingDistanceArchive, solution2)
+    add!(crowdingDistanceArchive, solution3)
+    
+    return contain(crowdingDistanceArchive, solution2) == false
+end
+
+function addASolutionWithALowCrowdingDistanceToAFullArchiveRemovesThatSolution()
+    archiveCapacity = 2
+    crowdingDistanceArchive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    solution1 = createContinuousSolution([2.0, 0.0])
+    solution2 = createContinuousSolution([0.0, 2.0])
+    solution3 = createContinuousSolution([1.0, 1.0])
+
+    add!(crowdingDistanceArchive, solution1)
+    add!(crowdingDistanceArchive, solution2)
+    solution3IsAdded = add!(crowdingDistanceArchive, solution3)
+    
+    return !solution3IsAdded
+end
+
 
 @testset "Tests for adding solutions to a full crowding distance archive" begin
-    @test addASolutionTwoAFullArchiveRemovesASolution()
+    @test addASolutionToAFullArchiveRemovesASolution()
+    @test addASolutionToAFullArchiveRemovesTheSolutionWithTheLowestCrowdingDistance()
+    @test addASolutionWithALowCrowdingDistanceToAFullArchiveRemovesThatSolution()
 end

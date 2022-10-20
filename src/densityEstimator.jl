@@ -103,15 +103,15 @@ function computeCrowdingDistanceEstimator!(archive::CrowdingDistanceArchive{T}) 
 end
 
 function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:Solution}
+    archiveIsFull = isFull(archive)
     solutionIsAdded = add!(archive.internalNonDominatedArchive, solution)
 
-    if solutionIsAdded && isFull(archive)
-        println("HERE")
-        computeCrowdingDistanceEstimator!(archive.internalNonDominatedArchive.solutions)
+    if solutionIsAdded && archiveIsFull
+        computeCrowdingDistanceEstimator!(getSolutions(archive))
         sort!(getSolutions(archive), lt=((x, y) -> compareCrowdingDistance(x, y) < 0))
 
-        solutionToDelete = pop!(getSolutions(archive))
-        if solutionToDelete == solution
+        deletedSolution = pop!(getSolutions(archive))
+        if deletedSolution == solution
             solutionIsAdded = false
         end
     end
