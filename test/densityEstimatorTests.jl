@@ -12,7 +12,7 @@ function computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToThe
 
     computeCrowdingDistanceEstimator!(solutions)
 
-    return getCrowdingDistance(solutions[1]) == typemax(Float64)
+    return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
 end
 
 function computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
@@ -20,8 +20,8 @@ function computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToT
 
     computeCrowdingDistanceEstimator!(solutions)
 
-    return getCrowdingDistance(solutions[1]) == typemax(Float64)
-    return getCrowdingDistance(solutions[2]) == typemax(Float64)
+    return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
+    return getCrowdingDistance(solutions[2]) == maxCrowdingDistanceValue()
 end
 
 function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsTheRightValues()
@@ -32,14 +32,14 @@ function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsT
 
     computeCrowdingDistanceEstimator!(solutions)
 
-    return getCrowdingDistance(solutions[1])== typemax(Float64)
+    return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
     return getCrowdingDistance(solutions[2]) == 2.0
-    return getCrowdingDistance(solutions[3]) == typemax(Float64)
+    return getCrowdingDistance(solutions[3]) == maxCrowdingDistanceValue()
 end
 
-@testset "Crowding distance estimator test cases" begin    
+@testset "Crowding distance estimator test cases" begin
     @test_throws "The solution list is empty" computingTheCrowdingDistanceRaisesAnExceptionIfTheSolutionListIsEmpty()
-    
+
     @test computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
     @test computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
     @test computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsTheRightValues()
@@ -75,9 +75,134 @@ function compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance
     return compareCrowdingDistance(solution1, solution2) == 1
 end
 
-@testset "Ranking comparators tests" begin    
+@testset "Ranking comparators tests" begin
     @test compareTwoSolutionsWithEqualCrowdingDistanceReturnsZero()
 
     @test compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasAHigherCrowdingDistance()
     @test compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance()
+end
+
+
+#########################################################################
+# Test cases for crowding distance archive
+#########################################################################
+function addASolutionToAnEmtpyCrowdingDistanceArchiveMakesItsLengthToBeOne()
+    solution = createContinuousSolution(3)
+
+    archiveCapacity = 10
+    archive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    add!(archive, solution)
+
+    return length(archive) == 1 && capacity(archive) == archiveCapacity
+end
+
+
+function addASolutionToAnEmtpyCrowdingDistanceArchiveEffectivelyAddTheSolution()
+    solution = createContinuousSolution(3)
+
+    archiveCapacity = 10
+    archive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    add!(archive, solution)
+
+    return contain(archive, solution) && capacity(archive) == archiveCapacity
+end
+
+function addASolutionToAnEmtpyCrowdingDistanceArchiveArchiveMakesItNonEmpty()
+    solution = createContinuousSolution(3)
+
+    archiveCapacity = 10
+    archive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    add!(archive, solution)
+
+    return isEmpty(archive) == false && capacity(archive) == archiveCapacity
+end
+
+function addASolutionToAnEmtpyCrowdingDistanceArchiveMakesTheArchiveToContainIt()
+    solution = createContinuousSolution(3)
+
+    archiveCapacity = 10
+    archive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    add!(archive, solution)
+
+    return isequal(solution, getSolutions(archive)[1]) && capacity(archive) == archiveCapacity
+end
+
+
+emptyCrowdingDistanceArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+
+@testset "Empty non-dominated archive tests" begin
+    @test length(emptyCrowdingDistanceArchive) == 0
+    @test isEmpty(emptyCrowdingDistanceArchive)
+    @test !isFull(emptyCrowdingDistanceArchive)
+    @test capacity(emptyCrowdingDistanceArchive) == 10
+
+    @test addASolutionToAnEmtpyCrowdingDistanceArchiveMakesItsLengthToBeOne()
+    @test addASolutionToAnEmtpyCrowdingDistanceArchiveEffectivelyAddTheSolution()
+    @test addASolutionToAnEmtpyCrowdingDistanceArchiveArchiveMakesItNonEmpty()
+    @test addASolutionToAnEmtpyCrowdingDistanceArchiveMakesTheArchiveToContainIt()
+end
+
+############################
+
+function computingTheCrowdingDistanceOfAnArchiveWithASolutionMakesTheSolutionToHaveTheHighestDistanceValue()
+    crowdingDistanceArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+    solution = createContinuousSolution(5)
+
+    add!(crowdingDistanceArchive, solution)
+    computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+    return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[1]) == maxCrowdingDistanceValue()
+end
+
+function computingTheCrowdingDistanceOfAnArchiveWithTwoSolutionsMakesThemToHaveTheHighestDistanceValue()
+    crowdingDistanceArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+    solution1 = createContinuousSolution(5)
+    solution2 = createContinuousSolution(5)
+
+    add!(crowdingDistanceArchive, solution1)
+    add!(crowdingDistanceArchive, solution2)
+    computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+    return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[1]) == maxCrowdingDistanceValue()
+    return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[2]) == maxCrowdingDistanceValue()
+end
+
+function computingTheCrowdingDistanceOfAnArchiveWithTheeSolutionsAssignTheHighestDistanceValueToTheExtremeSolutions()
+    crowdingDistanceArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+    solution1 = createContinuousSolution([2.0, 0.0, 0.0])
+    solution2 = createContinuousSolution([1.0, 1.0, 1.0])
+    solution3 = createContinuousSolution([0.0, 0.0, 2.0])
+
+    add!(crowdingDistanceArchive, solution1)
+    add!(crowdingDistanceArchive, solution2)
+    add!(crowdingDistanceArchive, solution3)
+    computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+    return getCrowdingDistance(solution1) == maxCrowdingDistanceValue()
+    return getCrowdingDistance(solution2) == maxCrowdingDistanceValue()
+    return getCrowdingDistance(solution3) != maxCrowdingDistanceValue()
+end
+
+@testset "Tests for computing the crowding distance of the archive solutions" begin
+    @test computingTheCrowdingDistanceOfAnArchiveWithASolutionMakesTheSolutionToHaveTheHighestDistanceValue()
+    @test computingTheCrowdingDistanceOfAnArchiveWithTwoSolutionsMakesThemToHaveTheHighestDistanceValue()
+    @test computingTheCrowdingDistanceOfAnArchiveWithTheeSolutionsAssignTheHighestDistanceValueToTheExtremeSolutions()
+end
+
+############################
+
+function addASolutionTwoAFullArchiveRemovesASolution()
+    archiveCapacity = 2
+    crowdingDistanceArchive = CrowdingDistanceArchive(archiveCapacity, ContinuousSolution{Float64})
+    solution1 = createContinuousSolution([2.0, 0.0, 0.0])
+    solution2 = createContinuousSolution([1.0, 1.0, 1.0])
+    solution3 = createContinuousSolution([0.0, 0.0, 2.0])
+
+    add!(crowdingDistanceArchive, solution1)
+    add!(crowdingDistanceArchive, solution2)
+    add!(crowdingDistanceArchive, solution3)
+    
+    return length(crowdingDistanceArchive) == archiveCapacity
+end
+
+
+@testset "Tests for adding solutions to a full crowding distance archive" begin
+    @test addASolutionTwoAFullArchiveRemovesASolution()
 end

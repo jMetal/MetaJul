@@ -2,6 +2,8 @@
 include("../src/archive.jl")
 
 #########################################################################
+# Test cases for non-dominated archive
+#########################################################################
 
 function addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
   solution = createContinuousSolution(3)
@@ -15,10 +17,10 @@ end
 function addASolutionToAnEmtpyArchiveEffectivelyAddTheSolution()
   solution = createContinuousSolution(3)
 
-  emptyArchive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add!(emptyArchive, solution)
+  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  add!(archive, solution)
 
-  return contain(emptyArchive, solution)
+  return contain(archive, solution) && getSolutions(archive)[1] == solution
 end
 
 function addASolutionToAnEmtpyArchiveMakesItNonEmpty()
@@ -30,16 +32,8 @@ function addASolutionToAnEmtpyArchiveMakesItNonEmpty()
   return isEmpty(archive) == false
 end
 
-function addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
-  solution = createContinuousSolution(3)
 
-  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
-  add!(archive, solution)
-
-  return isequal(solution, archive.solutions[1])
-end
-
-emptyArchive = NonDominatedArchive([])
+emptyArchive = NonDominatedArchive(ContinuousSolution{Float64})
 
 @testset "Empty non-dominated archive tests" begin    
   @test length(emptyArchive) == 0
@@ -48,7 +42,6 @@ emptyArchive = NonDominatedArchive([])
   @test addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
   @test addASolutionToAnEmtpyArchiveEffectivelyAddTheSolution()
   @test addASolutionToAnEmtpyArchiveMakesItNonEmpty()
-  @test addASolutionToAnEmtpyArchiveMakesTheArchiveToContainIt()
 end
 
 #########################################################################
@@ -174,7 +167,6 @@ archiveWithASolution = NonDominatedArchive([createContinuousSolution(5)])
   @test addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
   @test addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength()
   @test addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhichIsReplacedByTheDominatingOne()
-
 end
 
 #########################################################################
@@ -284,5 +276,4 @@ end
 @testset "Archive with six solution tests" begin    
   @test addWeakDominatedSolutionsInAnArchiveWorkProperly()
 end
-
 

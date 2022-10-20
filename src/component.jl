@@ -70,6 +70,7 @@ function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T},
   return jointVector[1:length(x)]
 end
 
+"""
 function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
   jointVector = vcat(x,y)
   
@@ -95,4 +96,4 @@ function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{
 
   return resultSolutions
 end
-
+"""

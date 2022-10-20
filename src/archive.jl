@@ -8,16 +8,26 @@ abstract type Archive end
 """
   struct containing an unbounded archive of non-dominated solutions
 """
-struct NonDominatedArchive{T} <: Archive where {T <: Solution}
+
+
+struct NonDominatedArchive{T <: Solution} <: Archive
   solutions::Array{T}
 end
 
-function isEmpty(archive::Archive)::Bool
-    return length(archive.solutions) == 0
+function NonDominatedArchive(T::Type{<: Solution})
+  return NonDominatedArchive(T[])
 end
 
 function Base.length(archive::Archive)::Int
   return length(archive.solutions)
+end
+
+function isEmpty(archive::Archive)::Bool
+  return length(archive) == 0
+end
+
+function getSolutions(archive::Archive)
+  return archive.solutions
 end
 
 function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function = compareForDominance)::Bool where {T <: Solution}
@@ -63,26 +73,4 @@ function contain(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <:
   return result
 end
 
-
-
-struct CrowdingDistanceArchive{T} <: Archive where {T <: Solution}
-  solutions::Array{T}
-  capacity::Int
-end
-
-function isFull(archive::CrowdingDistanceArchive)
-  return length(archive.solutions) == archive.capacity
-end
-
-function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T <: Solution}
-  push!(archive, solution)
-  if ifFull(archive)
-    computeCrowdingDistanceEstimator!(archive.solutions)
-    sort!(archive.solutions, lt=((x,y) -> compareCrowdingDistance(x,y) < 0))
-
-    
-  end
-  
-  return true
-end
 
