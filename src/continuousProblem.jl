@@ -82,27 +82,27 @@ end
 
 ### Single objective problems
 function schafferProblem()
-  schaffer = ContinuousProblem{Real}("Schaffer")
+  schaffer = ContinuousProblem{Float64}("Schaffer")
 
   f = x -> x[1] * x[1]
   g = x -> (x[1] - 2.0) * (x[1] - 2.0)
 
   addObjective(schaffer, f)
   addObjective(schaffer, g)
-  addVariable(schaffer, Bounds{Real}(-1000.0, 1000.0))
+  addVariable(schaffer, Bounds{Float64}(-1000.0, 1000.0))
 
   return schaffer
 end
 
 function sphereProblem(numberOfVariables::Int)
-  sphere = ContinuousProblem{Real}("Sphere")
+  sphere = ContinuousProblem{Float64}("Sphere")
 
   f = x -> sum([v * v for v in x])
 
   addObjective(sphere, f)
 
   for i in 1:numberOfVariables
-    addVariable(sphere, Bounds{Real}(-5.12, 5.12))
+    addVariable(sphere, Bounds{Float64}(-5.12, 5.12))
   end
 
   return sphere
@@ -110,11 +110,11 @@ end
 
 #### Multi-Objective problems
 function fonsecaProblem()
-  fonseca = ContinuousProblem{Real}("Fonseca")
+  fonseca = ContinuousProblem{Float64}("Fonseca")
 
   numberOfVariables = 3
   for _ in 1:numberOfVariables
-    addVariable(fonseca, Bounds{Real}(-4.0, 4.0))
+    addVariable(fonseca, Bounds{Float64}(-4.0, 4.0))
   end
 
 
@@ -142,10 +142,10 @@ function fonsecaProblem()
 end
 
 function kursaweProblem(numberOfVariables::Int=3)
-  kursawe = ContinuousProblem{Real}("Kursawe")
+  kursawe = ContinuousProblem{Float64}("Kursawe")
 
   for _ in 1:numberOfVariables
-    addVariable(kursawe, Bounds{Real}(-5.0, 5.0))
+    addVariable(kursawe, Bounds{Float64}(-5.0, 5.0))
   end
 
 
@@ -180,13 +180,13 @@ end
 # ZDT benchmark
 
 function zdt1Problem(numberOfVariables::Int=30)
-  zdt1 = ContinuousProblem{Real}("ZDT1")
+  zdt1 = ContinuousProblem{Float64}("ZDT1")
 
   for _ in 1:numberOfVariables
-    addVariable(zdt1, Bounds{Real}(0.0, 1.0))
+    addVariable(zdt1, Bounds{Float64}(0.0, 1.0))
   end
 
-  function evalG(x::Vector{Real})
+  function evalG(x::Vector{Float64})
     g = sum(x[2:length(x)])
     return g * 9.0 / (length(x) - 1) + 1.0
   end
@@ -206,13 +206,13 @@ function zdt1Problem(numberOfVariables::Int=30)
 end
 
 function zdt2Problem(numberOfVariables::Int=30)
-  zdt2 = ContinuousProblem{Real}("ZDT2")
+  zdt2 = ContinuousProblem{Float64}("ZDT2")
 
   for _ in 1:numberOfVariables
-    addVariable(zdt2, Bounds{Real}(0.0, 1.0))
+    addVariable(zdt2, Bounds{Float64}(0.0, 1.0))
   end
 
-  function evalG(x::Vector{Real})
+  function evalG(x::Vector{Float64})
     g = sum(x[2:length(x)])
     return g * 9.0 / (length(x) - 1) + 1.0
   end
@@ -232,18 +232,18 @@ function zdt2Problem(numberOfVariables::Int=30)
 end
 
 function zdt3Problem(numberOfVariables::Int=30)
-  zdt3 = ContinuousProblem{Real}("ZDT3")
+  zdt3 = ContinuousProblem{Float64}("ZDT3")
 
   for _ in 1:numberOfVariables
-    addVariable(zdt3, Bounds{Real}(0.0, 1.0))
+    addVariable(zdt3, Bounds{Float64}(0.0, 1.0))
   end
 
-  function evalG(x::Vector{Real})
+  function evalG(x::Vector{Float64})
     g = sum(x[2:length(x)])
     return g * 9.0 / (length(x) - 1) + 1.0
   end
 
-  function evalH(v::Real, g::Real)
+  function evalH(v::Float64, g::Float64)
     return 1.0 - sqrt(v/g) - (v/g)*sin(10.0 * pi * v)
   end
 
@@ -263,20 +263,20 @@ end
 
 
 function zdt4Problem(numberOfVariables::Int=10)
-  zdt4 = ContinuousProblem{Real}("ZDT4")
+  zdt4 = ContinuousProblem{Float64}("ZDT4")
 
-  addVariable(zdt4, Bounds{Real}(0.0, 1.0))
+  addVariable(zdt4, Bounds{Float64}(0.0, 1.0))
   for _ in range(2, numberOfVariables)
-    addVariable(zdt4, Bounds{Real}(-5.0, 5.0))
+    addVariable(zdt4, Bounds{Float64}(-5.0, 5.0))
   end
 
-  function evalG(x::Vector{Real})
+  function evalG(x::Vector{Float64})
     g = 1.0 +10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
 
     return g 
   end
 
-  function evalH(v::Real, g::Real)
+  function evalH(v::Real, g::Float64)
     return 1.0 - sqrt(v/g)
   end
 

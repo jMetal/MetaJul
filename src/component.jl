@@ -19,6 +19,16 @@ function sequentialEvaluation(solutions::Vector{Solution}, parameters::NamedTupl
   return [evaluate(solution, problem) for solution in solutions]
 end
 
+function sequentialEvaluationWithArchive(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution} 
+  archive = parameters.archive
+  problem::Problem = parameters.problem
+  for solution in solutions
+    evaluate(solution, problem) 
+    add!(archive, solution)
+  end
+  return solutions
+end
+
 ## Termination components
 function terminationByEvaluations(algorithmAttributes::Dict, parameters::NamedTuple)::Bool
   return get(algorithmAttributes, "EVALUATIONS",0) >= parameters.numberOfEvaluationToStop
