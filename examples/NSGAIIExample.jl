@@ -23,7 +23,7 @@ solver.evaluation = sequentialEvaluation
 solver.evaluationParameters = (problem = solver.problem, )
 
 solver.termination = terminationByEvaluations
-solver.terminationParameters = (numberOfEvaluationToStop = 75000, )
+solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
