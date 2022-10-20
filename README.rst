@@ -18,6 +18,7 @@ Current features:
 
 * Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
 * Algorithms: local search, evolutionary algorithm, NSGA-II
+* Archives: unbounded non-dominated archive, bounded crowding distance archive
 
 The ``examples`` folder contains:
 
@@ -28,6 +29,7 @@ The ``examples`` folder contains:
 * Single objective genetic algorithm solving problem Sphere
 * NSGA-II algorithm configured from a generic evolutionary template
 * NSGA-II algorithm configured from the NSGA-II template
+* NSGA-II algorithm using a bounded crowding distance archive
 
 Jupyter notebooks with examples can be found in the ``notebooks`` folder.
 

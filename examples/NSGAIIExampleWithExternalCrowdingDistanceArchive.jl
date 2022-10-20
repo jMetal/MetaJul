@@ -19,7 +19,7 @@ solver.populationSize = 100
 solver.solutionsCreation = defaultSolutionsCreation
 solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize)
 
-externalArchive = CrowdingDistanceArchive(100, ContinuousSolution{Float64})
+externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
 solver.evaluation = sequentialEvaluationWithArchive
 solver.evaluationParameters = (problem = solver.problem, archive = externalArchive)
 
