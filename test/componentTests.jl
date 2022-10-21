@@ -3,6 +3,63 @@ include("../src/densityEstimator.jl")
 include("../src/ranking.jl")
 include("../src/component.jl")
 
+###############################
+# Selection unit tests
+###############################
+
+function randomSelectionWithReplacementReturnAListOfOnesIfTheSolutionListSizeIsOne()
+    solutions = [createContinuousSolution(3)]
+
+    selectionParameters = (matingPoolSize = 5, withReplacement=true)
+    return [solutions[1] for i in 1:5] == randomMatingPoolSelection(solutions, selectionParameters)
+end
+
+function randomSelectionWithReplacementReturnAListWithTheMatingPoolSize()
+    solutionListSize = 10
+    solutions = [createContinuousSolution(3) for _ in 1:solutionListSize]
+
+    selectionParameters = (matingPoolSize=5, withReplacement=true)
+    selectedSolutions = randomMatingPoolSelection(solutions, selectionParameters)
+    
+    return length(selectedSolutions) == 5
+end
+
+@testset "Random mating pool with replacement tests" begin  
+    @test randomSelectionWithReplacementReturnAListOfOnesIfTheSolutionListSizeIsOne()
+    @test randomSelectionWithReplacementReturnAListWithTheMatingPoolSize()
+end  
+
+function randomSelectionWithoutReplacementRaisesAnExceptionIfTheMatingPoolSizeIsHigherThanTheSolutionListSize()
+    solutionListSize = 10
+    matingPoolSize = 11
+    solutions = [createContinuousSolution(3) for _ in 1:solutionListSize]
+
+    selectionParameters = (matingPoolSize = matingPoolSize, withReplacement=false)
+    randomMatingPoolSelection(solutions, selectionParameters)
+end
+
+# Case 1: population size = 10, matingPool = 10
+function randomSelectionWithoutReplacementReturnsAPermutationCase1()
+    solutionListSize = 10
+    matingPoolSize = 10
+    solutions = [createContinuousSolution(3) for _ in 1:solutionListSize]
+
+    selectionParameters = (matingPoolSize = matingPoolSize, withReplacement=false)
+    selectedSolutions = randomMatingPoolSelection(solutions, selectionParameters)
+
+    return  all(i -> solutions[i] in selectedSolutions, [_ for _ in range(1,solutionListSize)])
+end
+
+# Case 2: population size = 10, matingPool = 4
+
+@testset "Random mating pool without replacement tests" begin  
+    @test_throws "The mating pool size 11 is higher than the population size 10"  randomSelectionWithoutReplacementRaisesAnExceptionIfTheMatingPoolSizeIsHigherThanTheSolutionListSize()
+
+    @test randomSelectionWithoutReplacementReturnsAPermutationCase1()
+end  
+
+###############################
+
 function compareTwoSolutionsWithDifferentRankingIgnoreTheCrowdingDistance()
     solution1 = createContinuousSolution(3)
     setRank(solution1, 2)

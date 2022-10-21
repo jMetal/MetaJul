@@ -4,6 +4,7 @@ include("operator.jl")
 include("densityEstimator.jl")
 
 using Base.Iterators
+using Random
 
 ## Solution creation components
 
@@ -38,6 +39,21 @@ end
 function binaryTournamentMatingPoolSelection(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
   matingPoolSize::Int = parameters.matingPoolSize
   return [binaryTournamentSelection(solutions, (comparator = parameters.comparator,)) for _ in range(1,matingPoolSize)]
+end
+
+function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)::Vector{T} where {T <: Solution}
+  matingPoolSize::Int = parameters.matingPoolSize
+  withReplacement::Bool = parameters.withReplacement
+  if withReplacement
+    result = [solutions[rand(1:length(solutions))] for _ in range(1,matingPoolSize)]
+
+    return result
+  else
+    @assert matingPoolSize <= length(solutions) string("The mating pool size ", matingPoolSize, " is higher than the population size ", length(solutions))
+    result = [solutions[i] for i in randperm(length(solutions))[1:matingPoolSize]]
+    
+    return result
+  end
 end
 
 ## Variation components

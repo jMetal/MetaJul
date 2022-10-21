@@ -20,6 +20,6 @@ include("densityEstimatorTests.jl")
 include("archiveTests.jl")
 include("comparatorTests.jl")
 include("rankingTests.jl")
-include("componentTests.jl")
+
 
 
