@@ -176,9 +176,9 @@ function kursaweProblem(numberOfVariables::Int=3)
   return kursawe
 end
 
-################### 
+####################### 
 # ZDT benchmark
-
+#######################
 function zdt1Problem(numberOfVariables::Int=30)
   zdt1 = ContinuousProblem{Float64}("ZDT1")
 
@@ -398,3 +398,163 @@ function evaluate(solution::ContinuousSolution{Float64}, problem::ZDT6)::Continu
 end
 
 
+####################### 
+# DTLZ benchmark
+#######################
+
+struct DTLZ1 <: AbstractContinuousProblem{Float64}
+  bounds::Vector{Bounds{Float64}}
+  numberOfObjectives::Int
+  name::String
+end
+
+function dtlz1Problem(numberOfVariables::Int=7, numberOfObjectives::Int=3)
+  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
+
+  return DTLZ1(bounds,numberOfObjectives,"DTLZ1")
+end
+
+function numberOfVariables(problem::DTLZ1)
+  return length(problem.bounds)
+end
+
+function numberOfObjectives(problem::DTLZ1)
+  return problem.numberOfObjectives
+end
+
+function numberOfConstraints(problem::DTLZ1)
+  return 0
+end
+
+function evaluate(solution::ContinuousSolution{Float64}, problem::DTLZ1)::ContinuousSolution{Float64}
+  x = solution.variables
+  @assert length(x) == numberOfVariables(problem) "The number of variables of the solution to be evaluated is not correct"
+
+  k = numberOfVariables(problem) - numberOfObjectives(problem) + 1
+  #println("x: " , solution.variables)
+
+  g = sum([(x[i]-0.5)*(x[i]-0.5) - cos(20.0 * pi * (x[i]-0.5)) for i in range((numberOfVariables(problem)-k+1),numberOfVariables(problem))])
+
+  #println("G: ",g)
+  g = 100 * (k + g)
+  #println("G: ",g)
+
+  f = [(1.0 + g) * 0.5 for _ in 1:numberOfObjectives(problem)]
+ 
+  #f = [0.5*x[1]*x[2]*(1 + g), 0.5*(1 -x[1])*(1 + g)]
+
+  #println("G: ", g)
+  #println("F: ", f)
+
+
+  """
+    M = 3
+    n = 7
+    k = 5
+
+    f1 = 
+    f2 = 
+    f3 =
+
+    i = 1
+      j = 1     
+         f1 = x1 x2 (M - 1 = 3 - 1 = 2) 
+
+    i = 2
+      j = 1
+          f2 = x1
+          aux = 1?
+    i = 3
+          aux = 0?
+      
+
+    f1 = 0.5 x1 x2
+    f2 = 0.5 x1 (1 - x2) aux = 2
+    f3 = 0.5 (1 - x1) aux = 1
+
+  """
+  for i in 1:numberOfObjectives(problem)
+    #println("i: ",i)
+    for j in 1:(numberOfObjectives(problem) - i)
+      #println("  j: ",j)
+      f[i] *= x[j]
+      #println("F[",i,"] = ", f[i])
+    end
+    if i != 1
+      aux = numberOfObjectives(problem) - i + 1
+      #println("AUX: ", aux)
+      f[i] *= 1 - x[aux]
+      #println("F[",i,"] = ", f[i])
+    end
+  end
+  
+  solution.objectives = f
+
+  return solution
+end
+
+struct DTLZ2 <: AbstractContinuousProblem{Float64}
+  bounds::Vector{Bounds{Float64}}
+  numberOfObjectives::Int
+  name::String
+end
+
+function dtlz2Problem(numberOfVariables::Int=12, numberOfObjectives::Int=3)
+  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
+
+  return DTLZ1(bounds,numberOfObjectives,"DTLZ2")
+end
+
+function numberOfVariables(problem::DTLZ2)
+  return length(problem.bounds)
+end
+
+function numberOfObjectives(problem::DTLZ2)
+  return problem.numberOfObjectives
+end
+
+function numberOfConstraints(problem::DTLZ2)
+  return 0
+end
+
+function evaluate(solution::ContinuousSolution{Float64}, problem::DTLZ2)::ContinuousSolution{Float64}
+  x = solution.variables
+  @assert length(x) == numberOfVariables(problem) "The number of variables of the solution to be evaluated is not correct"
+
+  k = numberOfVariables(problem) - numberOfObjectives(problem) + 1
+
+  g = sum([^(x[i]-0.5,2) for i in range((numberOfVariables(problem)-k+1),numberOfVariables(problem))])
+
+  f = [(1.0 + g) for _ in 1:numberOfObjectives(problem)]
+
+  #println("G: ", g)
+  #println("F: ", f)
+
+  for i in 1:numberOfObjectives(problem)
+    for j in 1:(numberOfObjectives(problem) - i)
+      f[i] *= cos(x[j] * 0.5 * pi)
+      #println("F[",i,"] = ", f[i])
+    end
+    #println("----")
+    if i != 1
+      aux = numberOfObjectives(problem) - i + 1
+      #println("AUX: ", aux)
+      f[i] *= sin(x[aux]*0.5*pi)
+      #println("F[",i,"] = ", f[i])
+    end
+  end
+
+  solution.objectives = f
+
+  return solution
+end
+
+"""
+problem = dtlz1Problem()
+solution = createSolution(problem)
+solution.variables = [0.5 for i in 1:numberOfVariables(problem)]
+
+println(solution)
+evaluate(solution, problem)
+println(solution)
+"""

@@ -113,13 +113,26 @@ function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolut
   return [child1, child2]
 end
 
+struct BLXAlphaCrossover <: CrossoverOperator
+  parameters::NamedTuple{(:probability, :alpha, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
+  numberOfRequiredParents::Int
+  numberOfProducedChildren::Int
+  compute::Function
+end
+
+function BLXAlphaCrossover(parameters::NamedTuple)
+  return BLXAlphaCrossover(parameters, 2, 2, blxAlphaCrossover)
+end
+
 
 """
     sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
 
 Simulated binary crossover operator
 """
+
 function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
+  println("START sbxCrossover")
   EPSILON = 1.0e-14
   probability::Real = parameters.probability
   distributionIndex::Real = parameters.distributionIndex
@@ -187,9 +200,34 @@ function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, 
       end
     end
   end
+  println("END sbxCrossover")
 
   return [child1, child2]
 end
+
+
+struct SBXCrossover <: CrossoverOperator
+  parameters::NamedTuple{(:probability, :distributionIndex, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
+  numberOfRequiredParents::Int
+  numberOfProducedChildren::Int
+  compute::Function
+end
+
+function SBXCrossover(parameters::NamedTuple)
+  return SBXCrossover(parameters, 2, 2, sbxCrossover)
+end
+
+"""
+sol1 = ContinuousSolution{Float64}([1.0, 2.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+sol2 = ContinuousSolution{Float64}([2.0, 3.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+
+crossoverParameters = (probability = 1.0, alpha = 20.0, bounds =[Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+crossover = BLXAlphaCrossover(crossoverParameters)
+println("Crossover: " , crossover)
+
+childs = crossover.compute(sol1, sol2, crossover.parameters)
+println("CHILDS: ", childs)
+"""
 
 function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
   @assert length(parent1.variables) == length(parent2.variables) "The length of the two binary solutions to recombine is not equal"
@@ -215,6 +253,16 @@ function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, 
   return [child1, child2]
 end
 
+struct SPXCrossover <: CrossoverOperator
+  parameters::NamedTuple{(:probability, )} 
+  numberOfRequiredParents::Int
+  numberOfProducedChildren::Int
+  compute::Function
+end
+
+function SPXCrossover(parameters::NamedTuple)
+  return SBXCrossover(parameters, 2, 2, singlePointCrossover)
+end
 
 # Selection operators
 function randomSelection(x::Vector, parameters=[])

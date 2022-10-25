@@ -96,30 +96,3 @@ function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T},
   return jointVector[1:length(x)]
 end
 
-"""
-function rankingAndDensityEstimatorReplacementv2(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
-  jointVector = vcat(x,y)
-  
-  ranking = computeRanking(jointVector)
-
-  resultSolutions = []
-  remainingSolutions = length(x)
-  currentRank = 1 
-  while (remainingSolutions > 0)
-    computeCrowdingDistanceEstimator!(getSubFront(ranking, currentRank))
-    currentRankLength = length(getSubFront(ranking, currentRank))
-
-    if currentRankLength <= remainingSolutions
-      resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank))
-      remainingSolutions -= currentRankLength
-      currentRank += 1
-    else
-      sort!(getSubFront(ranking, currentRank), lt=((x,y) -> parameters.comparator(x,y) <= 0))
-      resultSolutions = vcat(resultSolutions, getSubFront(ranking, currentRank)[1:remainingSolutions])
-      remainingSolutions = 0
-    end
-  end
-
-  return resultSolutions
-end
-"""
