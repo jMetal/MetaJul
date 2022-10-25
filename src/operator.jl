@@ -22,7 +22,7 @@ function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
 end
 
 struct BitFlipMutation <: MutationOperator
-  parameters::NamedTuple{(:probability, ),(Tuple{Float64,)} 
+  parameters::NamedTuple{(:probability, ),Tuple{Float64}} 
   compute::Function
 end
 
@@ -50,13 +50,13 @@ function uniformMutation(solution::ContinuousSolution, parameters)::ContinuousSo
   return solution
 end
 
-struct BitFlipMutation <: MutationOperator
-  parameters::NamedTuple{(:probability, )} 
+struct UniformMutation <: MutationOperator
+  parameters::NamedTuple{(:probability, :perturbation, :bounds),Tuple{Float64, Float64, Vector{Bounds{Float64}}}}
   compute::Function
 end
 
-function BitFlipMutation(parameters::NamedTuple)
-  return BitFlipMutation(parameters, bitFlipMutation)
+function UniformMutation(parameters::NamedTuple)
+  return UniformMutation(parameters, uniformMutation)
 end
 
 function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
@@ -97,6 +97,15 @@ end
 function polynomialMutation(solution::ContinuousSolution, parameters)::ContinuousSolution
   solution.variables = polynomialMutation(solution.variables, parameters)
   return solution
+end
+
+struct PolinomialMutation <: MutationOperator
+  parameters::NamedTuple{(:probability, :distributionIndex, :bounds),Tuple{Float64, Float64,Vector{Bounds{Float64}}}} 
+  compute::Function
+end
+
+function PolinomialMutation(parameters::NamedTuple)
+  return PolinomialMutation(parameters, polynomialMutation)
 end
 
 # Crossover operators
