@@ -21,6 +21,15 @@ function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
   return solution
 end
 
+struct BitFlipMutation <: MutationOperator
+  parameters::NamedTuple{(:probability, ),(Tuple{Float64,)} 
+  compute::Function
+end
+
+function BitFlipMutation(parameters::NamedTuple)
+  return BitFlipMutation(parameters, bitFlipMutation)
+end
+
 
 function uniformMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
   probability::Real = parameters.probability
@@ -41,6 +50,14 @@ function uniformMutation(solution::ContinuousSolution, parameters)::ContinuousSo
   return solution
 end
 
+struct BitFlipMutation <: MutationOperator
+  parameters::NamedTuple{(:probability, )} 
+  compute::Function
+end
+
+function BitFlipMutation(parameters::NamedTuple)
+  return BitFlipMutation(parameters, bitFlipMutation)
+end
 
 function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
   probability::Real = parameters.probability
