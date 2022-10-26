@@ -24,11 +24,16 @@ end
 struct BitFlipMutation <: MutationOperator
   parameters::NamedTuple{(:probability, ),Tuple{Float64}} 
   compute::Function
+  function BitFlipMutation(mutationParameters)
+    new(mutationParameters, bitFlipMutation)
+  end
 end
 
+"""
 function BitFlipMutation(parameters::NamedTuple)
   return BitFlipMutation(parameters, bitFlipMutation)
 end
+"""
 
 
 function uniformMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
@@ -53,11 +58,16 @@ end
 struct UniformMutation <: MutationOperator
   parameters::NamedTuple{(:probability, :perturbation, :bounds),Tuple{Float64, Float64, Vector{Bounds{Float64}}}}
   compute::Function
+  function UniformMutation(mutationParameters)
+    new(mutationParameters, uniformMutation)
+  end
 end
 
+"""
 function UniformMutation(parameters::NamedTuple)
   return UniformMutation(parameters, uniformMutation)
 end
+"""
 
 function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
   probability::Real = parameters.probability
@@ -99,14 +109,19 @@ function polynomialMutation(solution::ContinuousSolution, parameters)::Continuou
   return solution
 end
 
-struct PolinomialMutation <: MutationOperator
+struct PolinomialMutation <: CrossoverOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds),Tuple{Float64, Float64,Vector{Bounds{Float64}}}} 
   compute::Function
+  function PolinomialMutation(crossoverParameters)
+    new(crossoverParameters, polynomialMutation)
+  end
 end
 
+"""
 function PolinomialMutation(parameters::NamedTuple)
   return PolinomialMutation(parameters, polynomialMutation)
 end
+"""
 
 # Crossover operators
 function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
@@ -144,12 +159,16 @@ struct BLXAlphaCrossover <: CrossoverOperator
   numberOfRequiredParents::Int
   numberOfProducedChildren::Int
   compute::Function
+  function BLXAlphaCrossover(crossoverParameters)
+    new(crossoverParameters, 2, 2, sbxCrossover)
+  end
 end
 
+"""
 function BLXAlphaCrossover(parameters::NamedTuple)
   return BLXAlphaCrossover(parameters, 2, 2, blxAlphaCrossover)
 end
-
+"""
 
 """
     sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
@@ -235,20 +254,23 @@ end
 struct SBXCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
   numberOfRequiredParents::Int
-  numberOfProducedChildren::Int
+  numberOfDescendant::Int
   compute::Function
+  function SBXCrossover(crossoverParameters)
+    new(crossoverParameters, 2, 2, sbxCrossover)
+  end
 end
 
-function SBXCrossover(parameters::NamedTuple)
-  return SBXCrossover(parameters, 2, 2, sbxCrossover)
-end
+#function SBXCrossover(parameters::NamedTuple)
+#  return SBXCrossover(parameters, 2, 2, sbxCrossover)
+#end
 
 """
 sol1 = ContinuousSolution{Float64}([1.0, 2.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
 sol2 = ContinuousSolution{Float64}([2.0, 3.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
 
-crossoverParameters = (probability = 1.0, alpha = 20.0, bounds =[Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-crossover = BLXAlphaCrossover(crossoverParameters)
+crossoverParameters = (probability = 1.0, distributionIndex = 20.0, bounds =[Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+crossover = SBXCrossover(crossoverParameters)
 println("Crossover: " , crossover)
 
 childs = crossover.compute(sol1, sol2, crossover.parameters)
