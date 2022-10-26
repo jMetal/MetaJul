@@ -306,11 +306,16 @@ struct SPXCrossover <: CrossoverOperator
   numberOfRequiredParents::Int
   numberOfProducedChildren::Int
   compute::Function
+  function SPXCrossover(crossoverParameters)
+    new(crossoverParameters, 2, 2, singlePointCrossover)
+  end
 end
 
+"""
 function SPXCrossover(parameters::NamedTuple)
   return SBXCrossover(parameters, 2, 2, singlePointCrossover)
 end
+"""
 
 # Selection operators
 function randomSelection(x::Vector, parameters=[])

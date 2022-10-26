@@ -6,3 +6,4 @@ abstract type Problem{T} end
 abstract type Operator end
 abstract type MutationOperator <: Operator end
 abstract type CrossoverOperator <: Operator end
+abstract type SelectionOperator <: Operator end
