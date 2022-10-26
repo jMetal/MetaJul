@@ -4,6 +4,11 @@ include("comparator.jl")
 include("ranking.jl")
 
 # Mutation operators
+
+function getMutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
+  return mutationOperator.parameters.probability
+end
+
 function bitFlipMutation(x::BitVector, parameters)::BitVector
   probability::Real = parameters.probability
   for i in 1:length(x)
@@ -16,14 +21,14 @@ function bitFlipMutation(x::BitVector, parameters)::BitVector
   return x
 end
 
-function bitFlipMutation(solution::BinarySolution, parameters)::BinarySolution
+function bitFlipMutation(solution::BinarySolution, parameters::NamedTuple)::BinarySolution
   solution.variables = bitFlipMutation(solution.variables, parameters)
   return solution
 end
 
 struct BitFlipMutation <: MutationOperator
   parameters::NamedTuple{(:probability, ),Tuple{Float64}} 
-  compute::Function
+  execute::Function
   function BitFlipMutation(mutationParameters)
     new(mutationParameters, bitFlipMutation)
   end
@@ -35,8 +40,7 @@ function BitFlipMutation(parameters::NamedTuple)
 end
 """
 
-
-function uniformMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
+function uniformMutation(x::Vector{T}, parameters::NamedTuple)::Vector{T} where {T<:Real}
   probability::Real = parameters.probability
   perturbation::Real = parameters.perturbation
   bounds = parameters.bounds
@@ -50,17 +54,21 @@ function uniformMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
   return x
 end
 
-function uniformMutation(solution::ContinuousSolution, parameters)::ContinuousSolution
+function uniformMutation(solution::ContinuousSolution, parameters::NamedTuple)::ContinuousSolution
   solution.variables = uniformMutation(solution.variables, parameters)
   return solution
 end
 
 struct UniformMutation <: MutationOperator
   parameters::NamedTuple{(:probability, :perturbation, :bounds),Tuple{Float64, Float64, Vector{Bounds{Float64}}}}
-  compute::Function
+  execute::Function
   function UniformMutation(mutationParameters)
     new(mutationParameters, uniformMutation)
   end
+end
+
+function getPerturbation(mutation::UniformMutation)
+  return mutation.parameters.perturbation
 end
 
 """
@@ -109,12 +117,16 @@ function polynomialMutation(solution::ContinuousSolution, parameters)::Continuou
   return solution
 end
 
-struct PolinomialMutation <: CrossoverOperator
+struct PolynomialMutation <: MutationOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds),Tuple{Float64, Float64,Vector{Bounds{Float64}}}} 
-  compute::Function
-  function PolinomialMutation(crossoverParameters)
+  execute::Function
+  function PolynomialMutation(crossoverParameters)
     new(crossoverParameters, polynomialMutation)
   end
+end
+
+function getDistributionIndex(mutation::PolynomialMutation)
+  return mutation.parameters.distributionIndex
 end
 
 """
@@ -157,7 +169,7 @@ end
 struct BLXAlphaCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability, :alpha, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
   numberOfRequiredParents::Int
-  numberOfProducedChildren::Int
+  numberOfDescendants::Int
   compute::Function
   function BLXAlphaCrossover(crossoverParameters)
     new(crossoverParameters, 2, 2, sbxCrossover)
@@ -254,7 +266,7 @@ end
 struct SBXCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
   numberOfRequiredParents::Int
-  numberOfDescendant::Int
+  numberOfDescendants::Int
   compute::Function
   function SBXCrossover(crossoverParameters)
     new(crossoverParameters, 2, 2, sbxCrossover)
@@ -304,7 +316,7 @@ end
 struct SPXCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability,),Tuple{Float64}} 
   numberOfRequiredParents::Int
-  numberOfProducedChildren::Int
+  numberOfDescendants::Int
   compute::Function
   function SPXCrossover(crossoverParameters)
     new(crossoverParameters, 2, 2, singlePointCrossover)

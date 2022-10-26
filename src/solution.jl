@@ -98,7 +98,7 @@ function copySolution(solution::BinarySolution)::BinarySolution
 end
 
 function Base.isequal(solution1::BinarySolution, solution2::BinarySolution)::Bool
-    return Base.isequal(solution1.variables, solution2.variables)
+    return Base.isequal(solution1.variables.bits, solution2.variables.bits)
 end
 
 function Base.length(solution::BinarySolution)::Int
