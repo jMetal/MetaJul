@@ -302,7 +302,7 @@ function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, 
 end
 
 struct SPXCrossover <: CrossoverOperator
-  parameters::NamedTuple{(:probability, )} 
+  parameters::NamedTuple{(:probability,),Tuple{Float64}} 
   numberOfRequiredParents::Int
   numberOfProducedChildren::Int
   compute::Function
@@ -322,6 +322,15 @@ function randomSelection(x::Vector, parameters=[])
   return x[rand(1:length(x))]
 end
 
+struct RandomSelection <: SelectionOperator
+  parameters::NamedTuple
+  compute::Function
+  function RandomSelection(parameters)
+    new(parameters, randomSelection)
+  end
+end
+
+
 function binaryTournamentSelection(x::Vector{Solution}, parameters::NamedTuple)
   comparator = parameters.comparator
   index1 = rand(1:length(x))
@@ -334,6 +343,14 @@ function binaryTournamentSelection(x::Vector{Solution}, parameters::NamedTuple)
   end
 
   return result
+end
+
+struct BinaryTournamentSelection <: SelectionOperator
+  parameters::NamedTuple{(:comparator,), Tuple{Function}}
+  compute::Function
+  function BinaryTournamentSelection(parameters)
+    new(parameters, binaryTournamentSelection)
+  end
 end
 
 # Replacement operators
