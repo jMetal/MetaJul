@@ -136,6 +136,10 @@ end
 """
 
 # Crossover operators
+function getCrossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+  return crossoverOperator.parameters.probability
+end
+
 function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
   probability::Real = parameters.probability
   alpha::Real = parameters.alpha
@@ -170,9 +174,9 @@ struct BLXAlphaCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability, :alpha, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
   numberOfRequiredParents::Int
   numberOfDescendants::Int
-  compute::Function
+  execute::Function
   function BLXAlphaCrossover(crossoverParameters)
-    new(crossoverParameters, 2, 2, sbxCrossover)
+    new(crossoverParameters, 2, 2, blxAlphaCrossover)
   end
 end
 
@@ -189,7 +193,6 @@ Simulated binary crossover operator
 """
 
 function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
-  println("START sbxCrossover")
   EPSILON = 1.0e-14
   probability::Real = parameters.probability
   distributionIndex::Real = parameters.distributionIndex
@@ -198,7 +201,7 @@ function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, 
   child1 = copySolution(parent1)
   child2 = copySolution(parent2)
 
-  if rand() <= probability
+  if rand() <= probability  
     for i in range(1, length(parent1.variables))
       x1 = parent1.variables[i]
       x2 = parent2.variables[i]
@@ -257,7 +260,6 @@ function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, 
       end
     end
   end
-  println("END sbxCrossover")
 
   return [child1, child2]
 end
@@ -267,7 +269,7 @@ struct SBXCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
   numberOfRequiredParents::Int
   numberOfDescendants::Int
-  compute::Function
+  execute::Function
   function SBXCrossover(crossoverParameters)
     new(crossoverParameters, 2, 2, sbxCrossover)
   end
@@ -313,12 +315,12 @@ function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, 
   return [child1, child2]
 end
 
-struct SPXCrossover <: CrossoverOperator
+struct SinglePointCrossover <: CrossoverOperator
   parameters::NamedTuple{(:probability,),Tuple{Float64}} 
   numberOfRequiredParents::Int
   numberOfDescendants::Int
-  compute::Function
-  function SPXCrossover(crossoverParameters)
+  execute::Function
+  function SinglePointCrossover(crossoverParameters)
     new(crossoverParameters, 2, 2, singlePointCrossover)
   end
 end
