@@ -109,7 +109,6 @@ function singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIn
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
-
 @testset "Single point crossover tests" begin
   @test getCrossoverProbability(SinglePointCrossover((probability=0.1,))) == 0.1
   @test SinglePointCrossover((probability=0.1,)).numberOfRequiredParents == 2
