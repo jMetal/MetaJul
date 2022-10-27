@@ -21,7 +21,7 @@ solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolution
 
 externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
 solver.evaluation = sequentialEvaluationWithArchive
-solver.evaluationParameters = (problem = solver.problem, archive = externalArchive)
+solver.evaluationParameters = (archive = externalArchive, problem = solver.problem)
 
 solver.termination = terminationByEvaluations
 solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
@@ -29,16 +29,13 @@ solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
 
-solver.mutation = mutation = polynomialMutation
-solver.mutationParameters = (probability=1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds=problem.bounds)
+solver.mutation = PolynomialMutation((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
 """
-solver.crossover = blxAlphaCrossover
-solver.crossoverParameters = (probability = 0.9, alpha = 0.5, bounds=problem.bounds)
+solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
 
-solver.crossover = sbxCrossover
-solver.crossoverParameters = (probability = 1.0, distributionIndex = 20.0, bounds=problem.bounds)
+solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
 startingTime = Dates.now()
 optimize(solver)

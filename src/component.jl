@@ -8,19 +8,19 @@ using Random
 
 ## Solution creation components
 
-function defaultSolutionsCreation(parameters::NamedTuple)::Vector{Solution}
+function defaultSolutionsCreation(parameters::NamedTuple{(:problem, :numberOfSolutionsToCreate), Tuple{P, Int}})::Vector{Solution} where {P <: Problem}
   problem = parameters.problem
   numberOfSolutionsToCreate = parameters.numberOfSolutionsToCreate
   [createSolution(problem) for _ in range(1, numberOfSolutionsToCreate)]
 end
 
 ## Evaluation components
-function sequentialEvaluation(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution} 
+function sequentialEvaluation(solutions::Vector{Solution}, parameters::NamedTuple{(:problem, ), Tuple{P}})::Vector{Solution} where {P <: Problem}
   problem::Problem = parameters.problem
   return [evaluate(solution, problem) for solution in solutions]
 end
 
-function sequentialEvaluationWithArchive(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution} 
+function sequentialEvaluationWithArchive(solutions::Vector{Solution}, parameters::NamedTuple{(:archive, :problem), Tuple{A, P}})::Vector{Solution} where {A <: Archive, P <: Problem}
   archive = parameters.archive
   problem::Problem = parameters.problem
   for solution in solutions
@@ -57,12 +57,16 @@ function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)
 end
 
 ## Variation components
-function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
+function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple{(:offspringPopulationSize, :mutation, :crossover), Tuple{Int, M, C}})::Vector{Solution} where {M <: MutationOperator, C <: CrossoverOperator}
   parents = collect(zip(matingPool[1:2:end], matingPool[2:2:end]))
 
-  crossedSolutions = [parameters.crossover(parent[1], parent[2], parameters.crossoverParameters) for parent in parents]
+  crossover = parameters.crossover
+  mutation = parameters.mutation
+  offspringPopulationSize = parameters.offspringPopulationSize
+
+  crossedSolutions = [crossover.execute(parent[1], parent[2], crossover.parameters) for parent in parents]
   solutionsToMutate = collect(flatten(crossedSolutions))
-  offpring = [parameters.mutation(solutionsToMutate[i], parameters.mutationParameters) for i in range(1, parameters.offspringPopulationSize)]
+  offpring = [mutation.execute(solutionsToMutate[i], mutation.parameters) for i in range(1, offspringPopulationSize)]
 
   return offpring
 end

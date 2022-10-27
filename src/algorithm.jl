@@ -109,10 +109,8 @@ mutable struct NSGAII <: Metaheuristic
   termination::Function
   selection::Function
 
-  mutation::Function
-  mutationParameters::NamedTuple
-  crossover::Function
-  crossoverParameters::NamedTuple
+  mutation::MutationOperator
+  crossover::CrossoverOperator
 
   solutionsCreationParameters::NamedTuple
   evaluationParameters::NamedTuple
@@ -141,8 +139,8 @@ function NSGAII(nsgaII::NSGAII)
   solver.selectionParameters = nsgaII.selectionParameters
 
   solver.variation = crossoverAndMutationVariation
-  solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation, mutationParameters = nsgaII.mutationParameters,
-  crossover = nsgaII.crossover, crossoverParameters = nsgaII.crossoverParameters)
+  solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation,
+  crossover = nsgaII.crossover)
 
   solver.replacement = rankingAndDensityEstimatorReplacement
   solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )
