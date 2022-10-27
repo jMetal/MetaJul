@@ -110,10 +110,11 @@ function singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIn
 end
 
 
-
 @testset "Single point crossover tests" begin
   @test getCrossoverProbability(SinglePointCrossover((probability=0.1,))) == 0.1
-
+  @test SinglePointCrossover((probability=0.1,)).numberOfRequiredParents == 2
+  @test SinglePointCrossover((probability=0.1,)).numberOfDescendants == 2
+   
   @test singlePointCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
 end
@@ -146,6 +147,9 @@ end
 
 @testset "SBX crossover tests" begin
   @test getCrossoverProbability(SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
+  @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).parameters.distributionIndex == 20.0
+  @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).numberOfDescendants == 2
+  @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).numberOfRequiredParents == 2
 
   @test sbxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
@@ -179,6 +183,8 @@ end
 
 @testset "BLX-alpha crossover tests" begin
   @test getCrossoverProbability(BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[]))) == 0.12
+  @test BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[])).numberOfDescendants == 2
+  @test BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[])).numberOfRequiredParents == 2
 
   @test blxAlphaCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
