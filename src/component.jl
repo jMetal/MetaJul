@@ -80,29 +80,18 @@ struct CrossoverAndMutationVariation <: Variation
 
   variate::Function
   function CrossoverAndMutationVariation(parameters)
+    offspringPopulationSize = parameters.offspringPopulationSize
+    crossover = parameters.crossover
 
-    """
-    this.matingPoolSize = offspringPopulationSize *
-    crossover.getNumberOfRequiredParents() / crossover.getNumberOfGeneratedChildren();
+    matingPoolSize = offspringPopulationSize * numberOfRequiredParents(crossover) / numberOfDescendants(crossover)
 
-    int remainder = matingPoolSize % crossover.getNumberOfRequiredParents();
-    if (remainder != 0) {
-      matingPoolSize += remainder;
-    }
-    """
+    remainder = matingPoolSize % numberOfRequiredParents(crossover)
+    if remainder != 0 
+      matingPoolSize += remainder
+    end
+
     return new(parameters, matingPoolSize)
-
   end
-
-  """
-  parameters::NamedTuple{(:probability,),Tuple{Float64}} 
-  numberOfRequiredParents::Int
-  numberOfDescendants::Int
-  execute::Function
-  function SinglePointCrossover(crossoverParameters)
-    new(crossoverParameters, 2, 2, singlePointCrossover)
-  end
-  """
 end
 
 

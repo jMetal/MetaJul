@@ -136,8 +136,16 @@ end
 """
 
 # Crossover operators
-function getCrossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+function crossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
   return crossoverOperator.parameters.probability
+end
+
+function numberOfRequiredParents(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+  return crossoverOperator.numberOfRequiredParents
+end
+
+function numberOfDescendants(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+  return crossoverOperator.numberOfDescendants
 end
 
 function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}

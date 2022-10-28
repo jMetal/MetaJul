@@ -58,7 +58,9 @@ end
     @test randomSelectionWithoutReplacementReturnsAPermutationCase1()
 end  
 
-###############################
+####################################################
+# Compare ranking and crowding distance unit tests
+####################################################
 
 function compareTwoSolutionsWithDifferentRankingIgnoreTheCrowdingDistance()
     solution1 = createContinuousSolution(3)
@@ -115,7 +117,9 @@ end
     @test compareTwoSolutionsWithEqualRankingConsiderTheCrowdingDistanceCase3()
 end
 
-###############################
+#######################################################
+# Ranking and density estimator replacement unit tests
+#######################################################
 
 """
 Case 1: o = offspring, x = population
@@ -341,4 +345,33 @@ end
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase7()
+end
+
+#######################################################
+# Crossover and mutation variation unit tests
+#######################################################
+
+function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOf100()
+    mutation = UniformMutation((probability=0.01, perturbation=0.5, bounds=[]))
+    crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=[]))
+    variation = CrossoverAndMutationVariation((offspringPopulationSize = 100, mutation = mutation, crossover = crossover))
+
+    expectedMatingPoolSize = 100
+
+    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover
+end
+
+function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
+    mutation = UniformMutation((probability=0.01, perturbation=0.5, bounds=[]))
+    crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=[]))
+    variation = CrossoverAndMutationVariation((offspringPopulationSize = 1, mutation = mutation, crossover = crossover))
+
+    expectedMatingPoolSize = 2
+
+    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover
+end
+
+@testset "Ranking and crowdingDistance replacement tests" begin    
+    @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOf100()
+    @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
 end
