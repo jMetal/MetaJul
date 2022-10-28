@@ -47,7 +47,7 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
 
   foundSolutions::Vector
 
-  solutionsCreation::Function
+  solutionsCreation::SolutionsCreation
   evaluation::Function
   termination::Function
   selection::Function
@@ -64,7 +64,7 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
 end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
-  population = ea.solutionsCreation(ea.solutionsCreationParameters)
+  population = ea.solutionsCreation.create(ea.solutionsCreation.parameters)
   population = ea.evaluation(population, ea.evaluationParameters)
 
   evaluations = length(population)
@@ -103,7 +103,7 @@ mutable struct NSGAII <: Metaheuristic
 
   foundSolutions::Vector
 
-  solutionsCreation::Function
+  solutionsCreation::SolutionsCreation
   evaluation::Function
   termination::Function
   selection::Function
@@ -126,7 +126,6 @@ function NSGAII(nsgaII::NSGAII)
   solver.offspringPopulationSize = nsgaII.populationSize
 
   solver.solutionsCreation = nsgaII.solutionsCreation
-  solver.solutionsCreationParameters = nsgaII.solutionsCreationParameters
 
   solver.evaluation = nsgaII.evaluation
   solver.evaluationParameters = nsgaII.evaluationParameters

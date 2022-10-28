@@ -16,8 +16,7 @@ solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
-solver.solutionsCreation = defaultSolutionsCreation
-solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize)
+solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
 solver.evaluation = sequentialEvaluation
 solver.evaluationParameters = (problem = solver.problem, )

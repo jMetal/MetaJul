@@ -8,10 +8,19 @@ using Random
 
 ## Solution creation components
 
-function defaultSolutionsCreation(parameters::NamedTuple{(:problem, :numberOfSolutionsToCreate), Tuple{P, Int}})::Vector{Solution} where {P <: Problem}
+function defaultSolutionsCreation(parameters::NamedTuple{(:problem, :numberOfSolutionsToCreate), Tuple{Problem, Int64}})::Vector{Solution} 
   problem = parameters.problem
   numberOfSolutionsToCreate = parameters.numberOfSolutionsToCreate
   [createSolution(problem) for _ in range(1, numberOfSolutionsToCreate)]
+end
+
+struct DefaultSolutionsCreation <: SolutionsCreation
+  parameters::NamedTuple{(:problem, :numberOfSolutionsToCreate), Tuple{Problem, Int64}} 
+  create::Function
+
+  function DefaultSolutionsCreation(parameters)
+    return new(parameters, defaultSolutionsCreation)
+  end
 end
 
 ## Evaluation components

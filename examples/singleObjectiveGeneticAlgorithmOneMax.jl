@@ -16,8 +16,7 @@ solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
-solver.solutionsCreation = defaultSolutionsCreation
-solver.solutionsCreationParameters = (problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize)
+solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
 solver.evaluation = sequentialEvaluation
 solver.evaluationParameters = (problem = solver.problem, )
@@ -27,10 +26,6 @@ solver.terminationParameters = (numberOfEvaluationToStop = 40000, )
 
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
-
-solver.variation = crossoverAndMutationVariation
-solver.variationParameters = (offspringPopulationSize = 100, mutation = bitFlipMutation, mutationParameters = (probability=1.0/numberOfVariables(problem),),
-crossover = singlePointCrossover, crossoverParameters = (probability = 0.9, ))
 
 mutation = BitFlipMutation((probability=1.0/numberOfVariables(problem),))
 crossover = SinglePointCrossover((probability=1.0,))

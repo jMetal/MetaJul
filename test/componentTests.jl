@@ -1,6 +1,7 @@
 include("../src/solution.jl")
 include("../src/densityEstimator.jl")
 include("../src/ranking.jl")
+include("../src/continuousProblem.jl")
 include("../src/component.jl")
 
 ###############################
@@ -348,6 +349,33 @@ end
 end
 
 #######################################################
+# Solutions creation unit tests
+#######################################################
+
+function defaultSolutionsCreationIsCorrectlyInitialized()
+    problem = zdt1Problem()
+
+    solutionsCreation = DefaultSolutionsCreation((problem = problem, numberOfSolutionsToCreate = 25))
+
+    return solutionsCreation.parameters.problem == problem && solutionsCreation.parameters.numberOfSolutionsToCreate == 25 && solutionsCreation.create == defaultSolutionsCreation
+end
+
+function defaultSolutionsCreationCreatesTheNumberOfIndicatedSolutions()
+    problem::ContinuousProblem = zdt1Problem()
+
+    solutionsCreation = DefaultSolutionsCreation((problem = problem, numberOfSolutionsToCreate = 25))
+    solutions = solutionsCreation.create(solutionsCreation.parameters)
+
+    return length(solutions) == 25
+end
+
+
+@testset "Solutions creation tests" begin    
+    @test defaultSolutionsCreationIsCorrectlyInitialized()
+    @test defaultSolutionsCreationCreatesTheNumberOfIndicatedSolutions()
+end
+
+#######################################################
 # Crossover and mutation variation unit tests
 #######################################################
 
@@ -358,7 +386,7 @@ function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulat
 
     expectedMatingPoolSize = 100
 
-    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover
+    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover && variation.variate == crossoverAndMutationVariation
 end
 
 function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
@@ -368,10 +396,10 @@ function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulat
 
     expectedMatingPoolSize = 2
 
-    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover
+    return expectedMatingPoolSize == variation.matingPoolSize && mutation == variation.parameters.mutation && crossover == variation.parameters.crossover && variation.variate == crossoverAndMutationVariation
 end
 
-@testset "Ranking and crowdingDistance replacement tests" begin    
+@testset "Crossover and mutation variation tests" begin    
     @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOf100()
     @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
 end
