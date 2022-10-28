@@ -51,14 +51,13 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   evaluation::Function
   termination::Function
   selection::Function
-  variation::Function
+  variation::Variation
   replacement::Function
 
   solutionsCreationParameters::NamedTuple
   evaluationParameters::NamedTuple
   terminationParameters::NamedTuple
   selectionParameters::NamedTuple
-  variationParameters::NamedTuple
   replacementParameters::NamedTuple
 
   EvolutionaryAlgorithm() = new()
@@ -74,7 +73,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   while !ea.termination(eaStatus, ea.terminationParameters)
     matingPool = ea.selection(population, ea.selectionParameters)
     
-    offspringPopulation = ea.variation(population, matingPool, ea.variationParameters)
+    offspringPopulation = ea.variation.variate(population, matingPool, ea.variation.parameters)
     offspringPopulation = ea.evaluation(offspringPopulation, ea.evaluationParameters)
 
     population = ea.replacement(population, offspringPopulation, ea.replacementParameters)
@@ -138,9 +137,8 @@ function NSGAII(nsgaII::NSGAII)
   solver.selection = nsgaII.selection
   solver.selectionParameters = nsgaII.selectionParameters
 
-  solver.variation = crossoverAndMutationVariation
-  solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation,
-  crossover = nsgaII.crossover)
+  solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation,
+  crossover = nsgaII.crossover))
 
   solver.replacement = rankingAndDensityEstimatorReplacement
   solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )

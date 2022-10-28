@@ -28,14 +28,13 @@ solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
 
-solver.variation = crossoverAndMutationVariation
 mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 """
-solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
+crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
 crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
-solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = mutation, crossover = crossover)
+solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, mutation = mutation, crossover = crossover))
 
 solver.replacement = rankingAndDensityEstimatorReplacement
 solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )

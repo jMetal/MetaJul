@@ -32,11 +32,10 @@ solver.variation = crossoverAndMutationVariation
 solver.variationParameters = (offspringPopulationSize = 100, mutation = bitFlipMutation, mutationParameters = (probability=1.0/numberOfVariables(problem),),
 crossover = singlePointCrossover, crossoverParameters = (probability = 0.9, ))
 
-solver.variation = crossoverAndMutationVariation
 mutation = BitFlipMutation((probability=1.0/numberOfVariables(problem),))
 crossover = SinglePointCrossover((probability=1.0,))
 
-solver.variationParameters = (offspringPopulationSize = solver.offspringPopulationSize, mutation = mutation, crossover = crossover)
+solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, mutation = mutation, crossover = crossover))
 
 solver.replacement = muPlusLambdaReplacement
 solver.replacementParameters = (comparator = compareIthObjective, )
