@@ -57,6 +57,9 @@ function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)
 end
 
 ## Variation components
+abstract type Component end
+abstract type Variation <: Component end
+
 function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple{(:offspringPopulationSize, :mutation, :crossover), Tuple{Int, M, C}})::Vector{Solution} where {M <: MutationOperator, C <: CrossoverOperator}
   parents = collect(zip(matingPool[1:2:end], matingPool[2:2:end]))
 
@@ -70,6 +73,38 @@ function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::
 
   return offpring
 end
+
+struct CrossoverAndMutationVariation <: Variation
+  parameters::NamedTuple{(:offspringPopulationSize, :mutation, :crossover), Tuple{Int, MutationOperator, CrossoverOperator}}
+  matingPoolSize::Int
+
+  variate::Function
+  function CrossoverAndMutationVariation(parameters)
+
+    """
+    this.matingPoolSize = offspringPopulationSize *
+    crossover.getNumberOfRequiredParents() / crossover.getNumberOfGeneratedChildren();
+
+    int remainder = matingPoolSize % crossover.getNumberOfRequiredParents();
+    if (remainder != 0) {
+      matingPoolSize += remainder;
+    }
+    """
+    return new(parameters, matingPoolSize)
+
+  end
+
+  """
+  parameters::NamedTuple{(:probability,),Tuple{Float64}} 
+  numberOfRequiredParents::Int
+  numberOfDescendants::Int
+  execute::Function
+  function SinglePointCrossover(crossoverParameters)
+    new(crossoverParameters, 2, 2, singlePointCrossover)
+  end
+  """
+end
+
 
 ## Replacement components
 function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)
