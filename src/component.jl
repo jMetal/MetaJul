@@ -57,7 +57,7 @@ function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)
 end
 
 ## Variation components
-function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple{(:offspringPopulationSize, :mutation, :crossover), Tuple{Int, M, C}})::Vector{Solution} where {M <: MutationOperator, C <: CrossoverOperator}
+function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::Vector{Solution}, parameters::NamedTuple{(:offspringPopulationSize, :crossover, :mutation), Tuple{Int, C, M}})::Vector{Solution} where {C <: CrossoverOperator, M <: MutationOperator}
   parents = collect(zip(matingPool[1:2:end], matingPool[2:2:end]))
 
   crossover = parameters.crossover
@@ -72,7 +72,7 @@ function crossoverAndMutationVariation(solutions::Vector{Solution}, matingPool::
 end
 
 struct CrossoverAndMutationVariation <: Variation
-  parameters::NamedTuple{(:offspringPopulationSize, :mutation, :crossover), Tuple{Int, MutationOperator, CrossoverOperator}}
+  parameters::NamedTuple{(:offspringPopulationSize, :crossover, :mutation), Tuple{Int, CrossoverOperator, MutationOperator}}
   matingPoolSize::Int
 
   variate::Function

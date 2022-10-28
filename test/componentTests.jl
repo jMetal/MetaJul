@@ -354,7 +354,7 @@ end
 function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOf100()
     mutation = UniformMutation((probability=0.01, perturbation=0.5, bounds=[]))
     crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=[]))
-    variation = CrossoverAndMutationVariation((offspringPopulationSize = 100, mutation = mutation, crossover = crossover))
+    variation = CrossoverAndMutationVariation((offspringPopulationSize = 100, crossover = crossover, mutation = mutation))
 
     expectedMatingPoolSize = 100
 
@@ -364,7 +364,7 @@ end
 function CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
     mutation = UniformMutation((probability=0.01, perturbation=0.5, bounds=[]))
     crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=[]))
-    variation = CrossoverAndMutationVariation((offspringPopulationSize = 1, mutation = mutation, crossover = crossover))
+    variation = CrossoverAndMutationVariation((offspringPopulationSize = 1, crossover = crossover, mutation = mutation))
 
     expectedMatingPoolSize = 2
 

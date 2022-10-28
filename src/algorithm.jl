@@ -137,8 +137,7 @@ function NSGAII(nsgaII::NSGAII)
   solver.selection = nsgaII.selection
   solver.selectionParameters = nsgaII.selectionParameters
 
-  solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, mutation = nsgaII.mutation,
-  crossover = nsgaII.crossover))
+  solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = nsgaII.crossover, mutation = nsgaII.mutation))
 
   solver.replacement = rankingAndDensityEstimatorReplacement
   solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )

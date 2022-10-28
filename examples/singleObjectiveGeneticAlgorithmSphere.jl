@@ -33,7 +33,7 @@ mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distr
 solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
 crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
-solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, mutation = mutation, crossover = crossover))
+solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
 
 solver.replacement = solver.replacement = muPlusLambdaReplacement
 solver.replacementParameters = (comparator = compareIthObjective, )
