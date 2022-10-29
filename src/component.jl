@@ -24,12 +24,21 @@ struct DefaultSolutionsCreation <: SolutionsCreation
 end
 
 ## Evaluation components
-function sequentialEvaluation(solutions::Vector{Solution}, parameters::NamedTuple{(:problem, ), Tuple{P}})::Vector{Solution} where {P <: Problem}
+function sequentialEvaluation(solutions::Vector{S}, parameters::NamedTuple{(:problem, ), Tuple{P}})::Vector{Solution} where {S <: Solution, P <: Problem}
   problem::Problem = parameters.problem
   return [evaluate(solution, problem) for solution in solutions]
 end
 
-function sequentialEvaluationWithArchive(solutions::Vector{Solution}, parameters::NamedTuple{(:archive, :problem), Tuple{A, P}})::Vector{Solution} where {A <: Archive, P <: Problem}
+struct SequentialEvaluation <: Evaluation
+  parameters::NamedTuple{(:problem, ), Tuple{Problem}} 
+
+  evaluate::Function
+  function SequentialEvaluation(parameters)
+    return new(parameters, sequentialEvaluation)
+  end
+end
+
+function sequentialEvaluationWithArchive(solutions::Vector{S}, parameters::NamedTuple{(:archive, :problem), Tuple{A, P}})::Vector{S} where {S <: Solution, A <: Archive, P <:Problem}
   archive = parameters.archive
   problem::Problem = parameters.problem
   for solution in solutions
@@ -37,6 +46,15 @@ function sequentialEvaluationWithArchive(solutions::Vector{Solution}, parameters
     add!(archive, solution)
   end
   return solutions
+end
+
+struct SequentialEvaluationWithArchive <: Evaluation
+  parameters::NamedTuple{(:archive, :problem), Tuple{Archive, Problem}} 
+
+  evaluate::Function
+  function SequentialEvaluationWithArchive(parameters)
+    return new(parameters, sequentialEvaluationWithArchive)
+  end
 end
 
 ## Termination components

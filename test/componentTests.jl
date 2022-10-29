@@ -353,7 +353,7 @@ end
 #######################################################
 
 function defaultSolutionsCreationIsCorrectlyInitialized()
-    problem = zdt1Problem()
+    problem = ContinuousProblem{Real}([],[],[],"")
 
     solutionsCreation = DefaultSolutionsCreation((problem = problem, numberOfSolutionsToCreate = 25))
 
@@ -361,7 +361,7 @@ function defaultSolutionsCreationIsCorrectlyInitialized()
 end
 
 function defaultSolutionsCreationCreatesTheNumberOfIndicatedSolutions()
-    problem::ContinuousProblem = zdt1Problem()
+    problem::ContinuousProblem = ContinuousProblem{Real}([],[],[],"")
 
     solutionsCreation = DefaultSolutionsCreation((problem = problem, numberOfSolutionsToCreate = 25))
     solutions = solutionsCreation.create(solutionsCreation.parameters)
@@ -373,6 +373,89 @@ end
 @testset "Solutions creation tests" begin    
     @test defaultSolutionsCreationIsCorrectlyInitialized()
     @test defaultSolutionsCreationCreatesTheNumberOfIndicatedSolutions()
+end
+
+#######################################################
+# Evaluation unit tests
+#######################################################
+
+function sequentialEvaluationIsCorrectlyInitialized()
+    problem = ContinuousProblem{Real}([],[],[],"")
+
+    evaluation = SequentialEvaluation((problem = problem,))
+
+    return evaluation.evaluate == sequentialEvaluation && problem == problem
+end
+
+function sequentialEvaluationEvaluatesTheSolutions()
+    problem = ContinuousProblem{Real}([],[],[],"")
+    addObjective(problem, x -> 2)
+    addVariable(problem, Bounds{Real}(1, 3))
+
+    numberOfSolutions = 3
+    solutions = [createSolution(problem)]
+    push!(solutions, createSolution(problem))
+    push!(solutions, createSolution(problem))
+
+    evaluation = SequentialEvaluation((problem = problem,))
+    evaluatedSolutions = evaluation.evaluate(solutions, evaluation.parameters)
+
+    return length(evaluatedSolutions) == numberOfSolutions && 
+    evaluatedSolutions[1].objectives[1] == 2 && 
+    evaluatedSolutions[2].objectives[1] == 2
+end
+
+function sequentialEvaluationWithArchiveIsCorrectlyInitialized()
+    problem = ContinuousProblem{Real}([],[],[],"")
+    externalArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+
+    evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = problem))
+
+    return evaluation.evaluate == sequentialEvaluationWithArchive && evaluation.parameters.problem == problem 
+end
+
+function sequentialEvaluationWithArchiveEvaluatesTheSolutions()
+    problem = ContinuousProblem{Float64}([],[],[],"")
+    addObjective(problem, x -> 2)
+    addVariable(problem, Bounds{Float64}(1, 3))
+
+    numberOfSolutions = 3
+    solutions = [createSolution(problem)]
+    push!(solutions, createSolution(problem))
+    push!(solutions, createSolution(problem))
+
+    externalArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+    evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = problem))
+    evaluatedSolutions = evaluation.evaluate(solutions, evaluation.parameters)
+
+    return length(evaluatedSolutions) == numberOfSolutions && 
+    evaluatedSolutions[1].objectives[1] == 2 && 
+    evaluatedSolutions[2].objectives[1] == 2
+end
+
+function sequentialEvaluationWithArchiveAddsTheSolutionsToTheArchiveEvaluatesTheSolutions()
+    problem = ContinuousProblem{Float64}([],[],[],"")
+    addObjective(problem, x -> x[1] * 0.5)
+    addVariable(problem, Bounds{Float64}(1, 3))
+
+    solutions = [createSolution(problem)]
+    push!(solutions, createSolution(problem))
+    push!(solutions, createSolution(problem))
+
+    externalArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
+    evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = problem))
+    evaluation.evaluate(solutions, evaluation.parameters)
+
+    return length(externalArchive) >= 1
+end
+
+@testset "Sequential evaluation tests" begin    
+    @test sequentialEvaluationIsCorrectlyInitialized()
+    @test sequentialEvaluationEvaluatesTheSolutions()
+
+    @test sequentialEvaluationWithArchiveIsCorrectlyInitialized() 
+    @test sequentialEvaluationWithArchiveEvaluatesTheSolutions() 
+    @test sequentialEvaluationWithArchiveAddsTheSolutionsToTheArchiveEvaluatesTheSolutions() 
 end
 
 #######################################################

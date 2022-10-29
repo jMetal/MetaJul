@@ -2,9 +2,6 @@ include("core.jl")
 include("solution.jl")
 include("comparator.jl")
 
-abstract type Archive end
-
-
 """
   struct containing an unbounded archive of non-dominated solutions
 """

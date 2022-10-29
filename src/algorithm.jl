@@ -48,14 +48,12 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   foundSolutions::Vector
 
   solutionsCreation::SolutionsCreation
-  evaluation::Function
+  evaluation::Evaluation
   termination::Function
   selection::Function
   variation::Variation
   replacement::Function
 
-  solutionsCreationParameters::NamedTuple
-  evaluationParameters::NamedTuple
   terminationParameters::NamedTuple
   selectionParameters::NamedTuple
   replacementParameters::NamedTuple
@@ -65,7 +63,7 @@ end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   population = ea.solutionsCreation.create(ea.solutionsCreation.parameters)
-  population = ea.evaluation(population, ea.evaluationParameters)
+  population = ea.evaluation.evaluate(population, ea.evaluation.parameters)
 
   evaluations = length(population)
   eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population)
@@ -74,7 +72,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     matingPool = ea.selection(population, ea.selectionParameters)
     
     offspringPopulation = ea.variation.variate(population, matingPool, ea.variation.parameters)
-    offspringPopulation = ea.evaluation(offspringPopulation, ea.evaluationParameters)
+    offspringPopulation = ea.evaluation.evaluate(offspringPopulation, ea.evaluation.parameters)
 
     population = ea.replacement(population, offspringPopulation, ea.replacementParameters)
 
@@ -104,7 +102,7 @@ mutable struct NSGAII <: Metaheuristic
   foundSolutions::Vector
 
   solutionsCreation::SolutionsCreation
-  evaluation::Function
+  evaluation::Evaluation
   termination::Function
   selection::Function
 
@@ -112,7 +110,6 @@ mutable struct NSGAII <: Metaheuristic
   crossover::CrossoverOperator
 
   solutionsCreationParameters::NamedTuple
-  evaluationParameters::NamedTuple
   terminationParameters::NamedTuple
   selectionParameters::NamedTuple
 
@@ -126,9 +123,7 @@ function NSGAII(nsgaII::NSGAII)
   solver.offspringPopulationSize = nsgaII.populationSize
 
   solver.solutionsCreation = nsgaII.solutionsCreation
-
   solver.evaluation = nsgaII.evaluation
-  solver.evaluationParameters = nsgaII.evaluationParameters
 
   solver.termination = nsgaII.termination
   solver.terminationParameters = nsgaII.terminationParameters

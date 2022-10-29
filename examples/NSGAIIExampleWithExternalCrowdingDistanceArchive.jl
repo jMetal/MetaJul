@@ -19,8 +19,7 @@ solver.populationSize = 100
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
 externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
-solver.evaluation = sequentialEvaluationWithArchive
-solver.evaluationParameters = (archive = externalArchive, problem = solver.problem)
+solver.evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = solver.problem))
 
 solver.termination = terminationByEvaluations
 solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
@@ -28,7 +27,7 @@ solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 solver.selection = solver.selection = binaryTournamentMatingPoolSelection
 solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
 
-solver.mutation = PolynomialMutation((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
+solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 
 """
 solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))

@@ -18,8 +18,7 @@ solver.populationSize = 100
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
-solver.evaluation = sequentialEvaluation
-solver.evaluationParameters = (problem = solver.problem, )
+solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 
 solver.termination = terminationByEvaluations
 solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
