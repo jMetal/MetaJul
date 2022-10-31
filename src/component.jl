@@ -63,9 +63,19 @@ function terminationByEvaluations(algorithmAttributes::Dict, parameters::NamedTu
 end
 
 ## Selection components
-function binaryTournamentMatingPoolSelection(solutions::Vector{Solution}, parameters::NamedTuple)::Vector{Solution}
+function binaryTournamentMatingPoolSelection(solutions::Vector{S}, parameters::NamedTuple{(:matingPoolSize, :comparator), Tuple{Int, Function}})::Vector{S} where {S <: Solution}
   matingPoolSize::Int = parameters.matingPoolSize
-  return [binaryTournamentSelection(solutions, (comparator = parameters.comparator,)) for _ in range(1,matingPoolSize)]
+  selectionOperator = BinaryTournamentSelectionOperator((comparator = parameters.comparator,))
+  return [selectionOperator.compute(solutions, selectionOperator.parameters) for _ in range(1,matingPoolSize)]
+end
+
+struct BinaryTournamentSelection <: Selection
+  parameters::NamedTuple{(:matingPoolSize, :comparator), Tuple{Int, Function}} 
+
+  select::Function
+  function BinaryTournamentSelection(parameters)
+    return new(parameters, binaryTournamentMatingPoolSelection)
+  end
 end
 
 function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)::Vector{T} where {T <: Solution}
@@ -80,6 +90,15 @@ function randomMatingPoolSelection(solutions::Vector{T}, parameters::NamedTuple)
     result = [solutions[i] for i in randperm(length(solutions))[1:matingPoolSize]]
     
     return result
+  end
+end
+
+struct RandomSelection <: Selection
+  parameters::NamedTuple{(:matingPoolSize, :withReplacement), Tuple{Int, Bool}} 
+
+  select::Function
+  function RandomSelection(parameters)
+    return new(parameters, randomMatingPoolSelection)
   end
 end
 

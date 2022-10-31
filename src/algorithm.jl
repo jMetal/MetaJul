@@ -50,7 +50,7 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   solutionsCreation::SolutionsCreation
   evaluation::Evaluation
   termination::Function
-  selection::Function
+  selection::Selection
   variation::Variation
   replacement::Function
 
@@ -69,7 +69,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population)
 
   while !ea.termination(eaStatus, ea.terminationParameters)
-    matingPool = ea.selection(population, ea.selectionParameters)
+    matingPool = ea.selection.select(population, ea.selection.parameters)
     
     offspringPopulation = ea.variation.variate(population, matingPool, ea.variation.parameters)
     offspringPopulation = ea.evaluation.evaluate(offspringPopulation, ea.evaluation.parameters)
@@ -104,7 +104,7 @@ mutable struct NSGAII <: Metaheuristic
   solutionsCreation::SolutionsCreation
   evaluation::Evaluation
   termination::Function
-  selection::Function
+  selection::Selection
 
   mutation::MutationOperator
   crossover::CrossoverOperator
@@ -129,7 +129,6 @@ function NSGAII(nsgaII::NSGAII)
   solver.terminationParameters = nsgaII.terminationParameters
 
   solver.selection = nsgaII.selection
-  solver.selectionParameters = nsgaII.selectionParameters
 
   solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = nsgaII.crossover, mutation = nsgaII.mutation))
 

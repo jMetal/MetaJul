@@ -23,12 +23,10 @@ solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 solver.termination = terminationByEvaluations
 solver.terminationParameters = (numberOfEvaluationToStop = 40000, )
 
-solver.selection = solver.selection = binaryTournamentMatingPoolSelection
-solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
+solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareIthObjective))
 
 mutation = BitFlipMutation((probability=1.0/numberOfVariables(problem),))
 crossover = SinglePointCrossover((probability=1.0,))
-
 solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
 
 solver.replacement = muPlusLambdaReplacement

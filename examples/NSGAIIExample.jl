@@ -23,8 +23,7 @@ solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 solver.termination = terminationByEvaluations
 solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
 
-solver.selection = solver.selection = binaryTournamentMatingPoolSelection
-solver.selectionParameters = (matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance)
+solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance))
 
 solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 

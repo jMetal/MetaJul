@@ -48,7 +48,6 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAl
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end
 
-
 @testset "Uniform mutation tests" begin
   @test getMutationProbability(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.054
   @test getPerturbation(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.5

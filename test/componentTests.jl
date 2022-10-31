@@ -459,6 +459,105 @@ end
 end
 
 #######################################################
+# Selection unit tests
+#######################################################
+
+function binaryTournamentSelectionIsCorrectlyInitialized()
+    selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareIthObjective))
+
+    return selection.parameters.matingPoolSize == 100 && selection.parameters.comparator == compareIthObjective && selection.select == binaryTournamentMatingPoolSelection
+end
+
+"""
+Case A: population size = 2; mating poolSize = 1
+"""
+function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseA()
+    solution1 = createContinuousSolution([1.0])
+    solution2 = createContinuousSolution([2.0])
+    solutions = [solution1, solution2]
+    selection = BinaryTournamentSelection((matingPoolSize = 1, comparator = compareIthObjective))
+
+    matingPool = selection.select(solutions, selection.parameters)
+    return (length(matingPool) == 1)
+end
+
+"""
+Case B: population size = 2; mating poolSize = 2
+"""
+function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseB()
+    solution1 = createContinuousSolution([1.0])
+    solution2 = createContinuousSolution([2.0])
+    solutions = [solution1, solution2]
+    selection = BinaryTournamentSelection((matingPoolSize = 2, comparator = compareIthObjective))
+
+    matingPool = selection.select(solutions, selection.parameters)
+    return (length(matingPool) == 2)
+end
+
+"""
+Case C: population size = 2; mating poolSize = 4
+"""
+function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseC()
+    solution1 = createContinuousSolution([1.0])
+    solution2 = createContinuousSolution([2.0])
+    solutions = [solution1, solution2]
+    selection = BinaryTournamentSelection((matingPoolSize = 4, comparator = compareIthObjective))
+
+    matingPool = selection.select(solutions, selection.parameters)
+    return (length(matingPool) == 4)
+end
+
+function randomSelectionIsCorrectlyInitialized()
+    selection = RandomSelection((matingPoolSize = 100, withReplacement = true))
+
+    return selection.parameters.matingPoolSize == 100 && selection.select == randomMatingPoolSelection
+end
+
+function randomSelectionReturnTheNumberOfRequiredSolutions()
+    solution1 = createContinuousSolution([1.0])
+    solution2 = createContinuousSolution([2.0])
+    solutions = [solution1, solution2]
+
+    selection = RandomSelection((matingPoolSize = 10, withReplacement = true))
+    matingPool = selection.select(solutions, selection.parameters)
+
+    return length(matingPool) == 10 
+end
+
+function randomSelectionAppliedToAListWithASolutionReturnsThatSolution()
+    solutions = [createContinuousSolution([1.0])]
+
+    selection = RandomSelection((matingPoolSize = 4, withReplacement = true))
+    matingPool = selection.select(solutions, selection.parameters)
+
+    return selection.parameters.matingPoolSize == 4 && matingPool[1].objectives[1] == 1.0 && matingPool[4].objectives[1] == 1.0
+end
+
+function randomSelectionWithoutReplacementReturnsTheListOfSolutionsIfItsSizeIsEqualToTheMatingPoolSize()
+    solution1 = createContinuousSolution([1.0])
+    solution2 = createContinuousSolution([2.0])
+    solution3 = createContinuousSolution([5.0])
+    solution4 = createContinuousSolution([3.0])
+    solutions = [solution1, solution2, solution3, solution4]
+
+    selection = RandomSelection((matingPoolSize = 4, withReplacement = false))
+    matingPool = selection.select(solutions, selection.parameters)
+    return length(matingPool) == 4 && all(solution -> solution in matingPool, solutions)
+end
+
+@testset "Selection tests" begin    
+    @test binaryTournamentSelectionIsCorrectlyInitialized()
+    @test binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseA()
+    @test binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseB()
+    @test binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSizeCaseC()
+
+    @test randomSelectionIsCorrectlyInitialized()
+    @test randomSelectionReturnTheNumberOfRequiredSolutions()
+    @test randomSelectionAppliedToAListWithASolutionReturnsThatSolution()
+    @test randomSelectionWithoutReplacementReturnsTheListOfSolutionsIfItsSizeIsEqualToTheMatingPoolSize()
+end
+
+#######################################################
 # Crossover and mutation variation unit tests
 #######################################################
 
