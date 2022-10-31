@@ -23,7 +23,7 @@ function mutateABinarySolutionWithProbabilityOneFlipsAllTheBits()
 end
 
 @testset "BitFlip mutation tests" begin
-  @test getMutationProbability(BitFlipMutation((probability=0.01,))) == 0.01
+  @test mutationProbability(BitFlipMutation((probability=0.01,))) == 0.01
   @test mutateABinarySolutionWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateABinarySolutionWithProbabilityOneFlipsAllTheBits()
 end
@@ -49,7 +49,7 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAl
 end
 
 @testset "Uniform mutation tests" begin
-  @test getMutationProbability(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.054
+  @test mutationProbability(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.054
   @test getPerturbation(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.5
   @test mutateAContinuousSolutionWithUniformMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
@@ -77,7 +77,7 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChange
 end
 
 @testset "Polynomial mutation tests" begin
-  @test getMutationProbability(PolynomialMutation((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
+  @test mutationProbability(PolynomialMutation((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
   @test getDistributionIndex(PolynomialMutation((probability=0.054, distributionIndex=10.0, bounds=[]))) == 10.0
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
@@ -109,7 +109,7 @@ function singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIn
 end
 
 @testset "Single point crossover tests" begin
-  @test getCrossoverProbability(SinglePointCrossover((probability=0.1,))) == 0.1
+  @test crossoverProbability(SinglePointCrossover((probability=0.1,))) == 0.1
   @test SinglePointCrossover((probability=0.1,)).numberOfRequiredParents == 2
   @test SinglePointCrossover((probability=0.1,)).numberOfDescendants == 2
    
@@ -144,7 +144,7 @@ function sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheRetur
 end
 
 @testset "SBX crossover tests" begin
-  @test getCrossoverProbability(SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
+  @test crossoverProbability(SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
   @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).parameters.distributionIndex == 20.0
   @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).numberOfDescendants == 2
   @test SBXCrossover((probability=0.054, distributionIndex=20.0, bounds=[])).numberOfRequiredParents == 2
@@ -180,7 +180,7 @@ function blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesInthe
 end
 
 @testset "BLX-alpha crossover tests" begin
-  @test getCrossoverProbability(BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[]))) == 0.12
+  @test crossoverProbability(BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[]))) == 0.12
   @test BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[])).numberOfDescendants == 2
   @test BLXAlphaCrossover((probability=0.12, alpha=0.5, bounds=[])).numberOfRequiredParents == 2
 

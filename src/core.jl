@@ -13,5 +13,6 @@ abstract type SolutionsCreation <: Component end
 abstract type Evaluation <: Component end
 abstract type Selection <: Component end
 abstract type Variation <: Component end
+abstract type Replacement <: Component end
 
 abstract type Archive end

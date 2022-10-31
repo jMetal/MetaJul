@@ -5,7 +5,7 @@ include("ranking.jl")
 
 # Mutation operators
 
-function getMutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
+function mutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
   return mutationOperator.parameters.probability
 end
 
