@@ -33,8 +33,7 @@ crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=proble
 
 solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
 
-solver.replacement = rankingAndDensityEstimatorReplacement
-solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )
+solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
 
 startingTime = Dates.now()
 optimize(solver)

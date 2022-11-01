@@ -52,11 +52,9 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   termination::Function
   selection::Selection
   variation::Variation
-  replacement::Function
+  replacement::Replacement
 
   terminationParameters::NamedTuple
-  selectionParameters::NamedTuple
-  replacementParameters::NamedTuple
 
   EvolutionaryAlgorithm() = new()
 end
@@ -74,7 +72,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     offspringPopulation = ea.variation.variate(population, matingPool, ea.variation.parameters)
     offspringPopulation = ea.evaluation.evaluate(offspringPopulation, ea.evaluation.parameters)
 
-    population = ea.replacement(population, offspringPopulation, ea.replacementParameters)
+    population = ea.replacement.replace(population, offspringPopulation, ea.replacement.parameters)
 
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
@@ -132,8 +130,7 @@ function NSGAII(nsgaII::NSGAII)
 
   solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = nsgaII.crossover, mutation = nsgaII.mutation))
 
-  solver.replacement = rankingAndDensityEstimatorReplacement
-  solver.replacementParameters = (comparator = compareRankingAndCrowdingDistance, )
+  solver.replacement = solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
 
   return evolutionaryAlgorithm(solver)
 end

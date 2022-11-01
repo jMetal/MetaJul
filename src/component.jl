@@ -139,12 +139,20 @@ end
 
 
 ## Replacement components
-function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple)
+function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple{(:comparator,), Tuple{Function}})
   jointVector = vcat(x,y)
   sort!(jointVector, lt=((a,b) -> parameters.comparator(a,b) <= 0))
   return jointVector[1:length(x)]
 end
 
+struct MuPlusLambdaReplacement <: Replacement
+  parameters::NamedTuple{(:comparator, ), Tuple{Function}}
+
+  replace::Function
+  function MuPlusLambdaReplacement(parameters)
+    return new(parameters, muPlusLambdaReplacement)
+  end
+end
 
 function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
   result = compareRanking(x, y)
@@ -155,7 +163,7 @@ function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
 end
 
 function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, 
-  parameters::NamedTuple)::Vector{T} where {T <: Solution}
+  parameters::NamedTuple{(:comparator,), Tuple{F}})::Vector{T} where {T <: Solution, F <: Function}
   jointVector = vcat(x,y)
   
   ranking = computeRanking(jointVector)
@@ -165,5 +173,14 @@ function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T},
 
   sort!(jointVector, lt=((x,y) -> parameters.comparator(x,y) < 0))
   return jointVector[1:length(x)]
+end
+
+struct RankingAndDensityEstimatorReplacement <: Replacement
+  parameters::NamedTuple{(:comparator,), Tuple{Function}}
+
+  replace::Function
+  function RankingAndDensityEstimatorReplacement(parameters)
+    return new(parameters, rankingAndDensityEstimatorReplacement)
+  end
 end
 

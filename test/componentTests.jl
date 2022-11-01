@@ -585,3 +585,25 @@ end
     @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOf100()
     @test CrossoverAndMutationVariationIsCorrectlyInitializedWithOffspringPopulationSizeOfOne()
 end
+
+#######################################################
+# Replacement unit tests
+#######################################################
+
+function MuPlusLambdaReplacementIsCorrectlyInitialized()
+    replacement = MuPlusLambdaReplacement((comparator = compareElementAt, ))
+
+    return replacement.parameters.comparator == compareElementAt
+end
+
+function RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
+    replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
+
+    return replacement.parameters.comparator == compareRankingAndCrowdingDistance
+end
+
+@testset "Replacement tests" begin    
+    @test MuPlusLambdaReplacementIsCorrectlyInitialized()
+
+    @test RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
+end

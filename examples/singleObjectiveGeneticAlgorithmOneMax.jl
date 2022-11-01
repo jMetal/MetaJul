@@ -29,8 +29,7 @@ mutation = BitFlipMutation((probability=1.0/numberOfVariables(problem),))
 crossover = SinglePointCrossover((probability=1.0,))
 solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
 
-solver.replacement = muPlusLambdaReplacement
-solver.replacementParameters = (comparator = compareIthObjective, )
+solver.replacement = MuPlusLambdaReplacement((comparator = compareIthObjective, ))
 
 startingTime = Dates.now()
 optimize(solver)
