@@ -23,5 +23,4 @@ include("rankingTests.jl")
 include("utilTests.jl")
 include("solutionTests.jl")
 include("operatorTests.jl")
-
 include("componentTests.jl")

@@ -21,8 +21,7 @@ solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, n
 externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
 solver.evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = solver.problem))
 
-solver.termination = terminationByEvaluations
-solver.terminationParameters = (numberOfEvaluationToStop = 25000, )
+solver.termination = TerminationByEvaluations((numberOfEvaluationToStop = 25000, ))
 
 solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance))
 

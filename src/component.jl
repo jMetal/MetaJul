@@ -62,6 +62,15 @@ function terminationByEvaluations(algorithmAttributes::Dict, parameters::NamedTu
   return get(algorithmAttributes, "EVALUATIONS",0) >= parameters.numberOfEvaluationToStop
 end
 
+struct TerminationByEvaluations <: Termination
+  parameters::NamedTuple{(:numberOfEvaluationToStop,), Tuple{Int}} 
+
+  isMet::Function
+  function TerminationByEvaluations(parameters)
+    return new(parameters, terminationByEvaluations)
+  end
+end
+
 ## Selection components
 function binaryTournamentMatingPoolSelection(solutions::Vector{S}, parameters::NamedTuple{(:matingPoolSize, :comparator), Tuple{Int, Function}})::Vector{S} where {S <: Solution}
   matingPoolSize::Int = parameters.matingPoolSize

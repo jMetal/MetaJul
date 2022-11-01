@@ -20,8 +20,8 @@ solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, n
 
 solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 
-solver.termination = terminationByEvaluations
-solver.terminationParameters = (numberOfEvaluationToStop = 500000, )
+solver.termination = TerminationByEvaluations((numberOfEvaluationToStop = 500000, ))
+
 
 solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareIthObjective))
 
