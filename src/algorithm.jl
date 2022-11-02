@@ -99,41 +99,35 @@ mutable struct NSGAII <: Metaheuristic
 
   foundSolutions::Vector
 
-  solutionsCreation::SolutionsCreation
-  evaluation::Evaluation
   termination::Termination
-  selection::Selection
-
   mutation::MutationOperator
   crossover::CrossoverOperator
-
-  solutionsCreationParameters::NamedTuple
-  terminationParameters::NamedTuple
-  selectionParameters::NamedTuple
 
   NSGAII() = new()
 end
 
-function NSGAII(nsgaII::NSGAII) 
+function nsgaII(nsgaII::NSGAII) 
   solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
   solver.problem = nsgaII.problem
   solver.populationSize = nsgaII.populationSize
   solver.offspringPopulationSize = nsgaII.populationSize
 
-  solver.solutionsCreation = nsgaII.solutionsCreation
-  solver.evaluation = nsgaII.evaluation
-  solver.termination = nsgaII.termination
-  solver.selection = nsgaII.selection
+  solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
+  solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
+
+  solver.termination = nsgaII.termination
   solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = nsgaII.crossover, mutation = nsgaII.mutation))
 
   solver.replacement = solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
+
+  solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareRankingAndCrowdingDistance))
 
   return evolutionaryAlgorithm(solver)
 end
 
 function optimize(algorithm::NSGAII)
-  algorithm.foundSolutions = NSGAII(algorithm)
+  algorithm.foundSolutions = nsgaII(algorithm)
   
   return Nothing
 end

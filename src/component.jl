@@ -59,11 +59,11 @@ end
 
 ## Termination components
 function terminationByEvaluations(algorithmAttributes::Dict, parameters::NamedTuple)::Bool
-  return get(algorithmAttributes, "EVALUATIONS",0) >= parameters.numberOfEvaluationToStop
+  return get(algorithmAttributes, "EVALUATIONS",0) >= parameters.numberOfEvaluationsToStop
 end
 
 struct TerminationByEvaluations <: Termination
-  parameters::NamedTuple{(:numberOfEvaluationToStop,), Tuple{Int}} 
+  parameters::NamedTuple{(:numberOfEvaluationsToStop,), Tuple{Int}} 
 
   isMet::Function
   function TerminationByEvaluations(parameters)

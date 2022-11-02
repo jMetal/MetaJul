@@ -12,26 +12,29 @@ using Dates
 
 problem = zdt1Problem()
 
-solver::NSGAII = NSGAII()
+solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.problem = problem
 solver.populationSize = 100
+solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
 externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
 solver.evaluation = SequentialEvaluationWithArchive((archive = externalArchive, problem = solver.problem))
 
-solver.termination = TerminationByEvaluations((numberOfEvaluationToStop = 25000, ))
+solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
 
-solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance))
-
-solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
-
+mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 """
-solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
+crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
+crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
-solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
+solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
+
+solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareRankingAndCrowdingDistance))
+
+solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
 
 startingTime = Dates.now()
 optimize(solver)
@@ -45,6 +48,6 @@ variablesFileName = "VAR.csv"
 println("Objectives stored in file ", objectivesFileName)
 printObjectivesToCSVFile(objectivesFileName, foundSolutions)
 
-println("Variables stored in file ", variablesFileName)
+println("Variavbles stored in file ", variablesFileName)
 printVariablesToCSVFile(variablesFileName, foundSolutions)
 println("Computing time: ", (endTime - startingTime))

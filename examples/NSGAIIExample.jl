@@ -16,13 +16,7 @@ solver::NSGAII = NSGAII()
 solver.problem = problem
 solver.populationSize = 100
 
-solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
-
-solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
-
-solver.termination = TerminationByEvaluations((numberOfEvaluationToStop = 25000, ))
-
-solver.selection = BinaryTournamentSelection((matingPoolSize = 100, comparator = compareRankingAndCrowdingDistance))
+solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
 
 solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 

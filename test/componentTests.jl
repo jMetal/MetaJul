@@ -590,7 +590,7 @@ end
 # Replacement unit tests
 #######################################################
 
-function MuPlusLambdaReplacementIsCorrectlyInitialized()
+function muPlusLambdaReplacementIsCorrectlyInitialized()
     replacement = MuPlusLambdaReplacement((comparator = compareElementAt, ))
 
     return replacement.parameters.comparator == compareElementAt
@@ -603,7 +603,41 @@ function RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
 end
 
 @testset "Replacement tests" begin    
-    @test MuPlusLambdaReplacementIsCorrectlyInitialized()
+    @test muPlusLambdaReplacementIsCorrectlyInitialized()
 
     @test RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
+end
+
+#######################################################
+# Termination unit tests
+#######################################################
+
+function terminationByEvaluationsIsCorrectlyInitialized()
+    termination = TerminationByEvaluations((numberOfEvaluationsToStop = 5000, ))
+
+    return 5000 == termination.parameters.numberOfEvaluationsToStop
+end
+
+function terminationByEvaluationsReturnsTrueIfTheStoppingConditionIsMet()
+    termination = TerminationByEvaluations((numberOfEvaluationsToStop = 5000, ))
+
+    algorithmAttributes = Dict()
+    algorithmAttributes["EVALUATIONS"] = 5000 
+
+    return termination.isMet(algorithmAttributes, termination.parameters)
+end
+
+function terminationByEvaluationsReturnsTrueIfTheStoppingConditionIsNotMet()
+    termination = TerminationByEvaluations((numberOfEvaluationsToStop = 5001, ))
+
+    algorithmAttributes = Dict()
+    algorithmAttributes["EVALUATIONS"] = 5000 
+    
+    return !termination.isMet(algorithmAttributes, termination.parameters)
+end
+
+@testset "Termination tests" begin   
+    @test terminationByEvaluationsIsCorrectlyInitialized() 
+    @test terminationByEvaluationsReturnsTrueIfTheStoppingConditionIsMet() 
+    @test terminationByEvaluationsReturnsTrueIfTheStoppingConditionIsNotMet() 
 end
