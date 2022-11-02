@@ -41,6 +41,7 @@ end
 #################################
 
 mutable struct EvolutionaryAlgorithm <: Metaheuristic
+  name::String
   problem::Problem
   populationSize::Int
   offspringPopulationSize::Int
@@ -89,6 +90,10 @@ function optimize(algorithm::EvolutionaryAlgorithm)
   return Nothing
 end
 
+function name(algorithm::EvolutionaryAlgorithm)
+  return algorithm.name
+end
+
 
 #################################
 
@@ -103,11 +108,17 @@ mutable struct NSGAII <: Metaheuristic
   mutation::MutationOperator
   crossover::CrossoverOperator
 
+  solver::EvolutionaryAlgorithm
+
   NSGAII() = new()
 end
 
 function nsgaII(nsgaII::NSGAII) 
-  solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
+  solver = EvolutionaryAlgorithm()
+  nsgaII.solver = solver
+  
+  solver.name = "NSGA-II"
+
   solver.problem = nsgaII.problem
   solver.populationSize = nsgaII.populationSize
   solver.offspringPopulationSize = nsgaII.populationSize
@@ -132,3 +143,7 @@ function optimize(algorithm::NSGAII)
   return Nothing
 end
 
+
+function name(algorithm::NSGAII)
+  return name(algorithm.solver)
+end

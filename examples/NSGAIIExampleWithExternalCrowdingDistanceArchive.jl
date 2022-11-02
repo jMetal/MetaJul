@@ -13,6 +13,7 @@ using Dates
 problem = zdt1Problem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
+solver.name = "NSGA-II"
 solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
@@ -44,6 +45,8 @@ foundSolutions = getSolutions(externalArchive)
 
 objectivesFileName = "FUN.csv"
 variablesFileName = "VAR.csv"
+
+println("Algorithm: ", name(solver))
 
 println("Objectives stored in file ", objectivesFileName)
 printObjectivesToCSVFile(objectivesFileName, foundSolutions)

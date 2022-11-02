@@ -19,12 +19,11 @@ solver.populationSize = 100
 solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
 
 solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
+solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
 """
 solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
-
-solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
 startingTime = Dates.now()
 optimize(solver)
@@ -34,6 +33,8 @@ foundSolutions = solver.foundSolutions
 
 objectivesFileName = "FUN.csv"
 variablesFileName = "VAR.csv"
+
+println("Algorithm: ", name(solver))
 
 println("Objectives stored in file ", objectivesFileName)
 printObjectivesToCSVFile(objectivesFileName, foundSolutions)
