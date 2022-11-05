@@ -1,5 +1,6 @@
 include("core.jl")
 include("solution.jl")
+include("observer.jl")
 
 abstract type Metaheuristic end
 
@@ -55,9 +56,17 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
   variation::Variation
   replacement::Replacement
 
-  terminationParameters::NamedTuple
+  observable::Observable
 
-  EvolutionaryAlgorithm() = new()
+  function EvolutionaryAlgorithm() 
+    x = new()
+    x.observable = Observable("EA observable")
+    return return x
+  end
+end
+
+function getObservable(algorithm::EvolutionaryAlgorithm)
+  return algorithm.observable
 end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
@@ -66,6 +75,8 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
 
   evaluations = length(population)
   eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population)
+
+  notify(ea.observable, eaStatus)
 
   while !ea.termination.isMet(eaStatus, ea.termination.parameters)
     matingPool = ea.selection.select(population, ea.selection.parameters)
@@ -78,6 +89,8 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
     eaStatus["POPULATION"] = population
+
+    notify(ea.observable, eaStatus)
   end
 
   foundSolutions = population
@@ -110,12 +123,15 @@ mutable struct NSGAII <: Metaheuristic
 
   solver::EvolutionaryAlgorithm
 
-  NSGAII() = new()
+  function NSGAII() 
+    algorithm = new()
+    algorithm.solver = EvolutionaryAlgorithm()
+    return algorithm
+  end
 end
 
 function nsgaII(nsgaII::NSGAII) 
-  solver = EvolutionaryAlgorithm()
-  nsgaII.solver = solver
+  solver = nsgaII.solver 
   
   solver.name = "NSGA-II"
 
@@ -143,7 +159,10 @@ function optimize(algorithm::NSGAII)
   return Nothing
 end
 
+function name(nsgaII::NSGAII)
+  return name(nsgaII.solver)
+end
 
-function name(algorithm::NSGAII)
-  return name(algorithm.solver)
+function getObservable(nsgaII::NSGAII)
+  return getObservable(nsgaII.solver)
 end
