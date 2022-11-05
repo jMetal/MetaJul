@@ -35,40 +35,20 @@ function update(observer::EvaluationObserver, data::Dict)
   end
 end
 
-"""
-ejemploObservable = Observable("Ejemplo de observable")
-evalObserver = EvaluationObserver(5)
-
-register!(ejemploObservable, evalObserver)
-
-println("Observable: ", ejemploObservable)
-println("Observador: ", evalObserver)
-
-for i in 1:20
-  data = Dict("EVALUATIONS" => i)
-  #update(evalObserver, data)
-  notify(ejemploObservable, data)
+struct FitnessObserver <: Observer
+  frequency::Int
 end
-"""
 
-"""
-private Integer frequency ;
-
-public void update(Observable<Map<String, Object>> observable, Map<String, Object> data) {
-  Integer evaluations = (Integer)data.get("EVALUATIONS") ;
-
-  if (evaluations!=null) {
-    if (evaluations % frequency == 0) {
-      System.out.println("Evaluations: " + evaluations);
-    }
-  } else {
-    JMetalLogger.logger.warning(getClass().getName()+
-        ": The algorithm has not registered yet any info related to the EVALUATIONS key");
-  }
-}
-
-"""
-#   public void update(Observable<Map<String, Object>> observable, Map<String, Object> data) {
+function update(observer::FitnessObserver, data::Dict)
+  evaluations = data["EVALUATIONS"]
+  population = data["POPULATION"]
+  if mod(evaluations, observer.frequency) == 0
+    #  sort!(getSolutions(archive), lt=((x, y) -> compareCrowdingDistance(x, y) < 0))
+    sort!(population, lt=((x,y) -> x.objectives[1] < y.objectives[1]))
+    fitness = population[1].objectives[1]
+    println("Evaluations: ", evaluations, ". Fitness: ", fitness)
+  end
+end
 
 
 """

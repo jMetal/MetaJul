@@ -31,7 +31,8 @@ solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.
 
 solver.replacement = MuPlusLambdaReplacement((comparator = compareIthObjective, ))
 
-observer = EvaluationObserver(4000)
+#observer = EvaluationObserver(4000)
+observer = FitnessObserver(500)
 register!(getObservable(solver), observer)
 
 startingTime = Dates.now()
