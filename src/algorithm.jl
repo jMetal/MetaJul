@@ -60,6 +60,7 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
 
   function EvolutionaryAlgorithm() 
     x = new()
+    x.name = "EA"
     x.observable = Observable("EA observable")
     return return x
   end
@@ -126,6 +127,7 @@ mutable struct NSGAII <: Metaheuristic
   function NSGAII() 
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
+    algorithm.solver.name = "NSGA-II"
     return algorithm
   end
 end
@@ -133,8 +135,6 @@ end
 function nsgaII(nsgaII::NSGAII) 
   solver = nsgaII.solver 
   
-  solver.name = "NSGA-II"
-
   solver.problem = nsgaII.problem
   solver.populationSize = nsgaII.populationSize
   solver.offspringPopulationSize = nsgaII.populationSize

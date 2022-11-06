@@ -12,7 +12,7 @@ using Dates
 problem = oneMax(512)
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
-solver.name = "GA"
+solver.name = "Genetic Algorithm"
 solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100

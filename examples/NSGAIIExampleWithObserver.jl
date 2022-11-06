@@ -25,7 +25,7 @@ solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds
 solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
 
-observer = EvaluationObserver(4000)
+observer = EvaluationObserver(500)
 register!(getObservable(solver), observer)
 
 startingTime = Dates.now()
