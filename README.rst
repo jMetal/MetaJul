@@ -19,6 +19,7 @@ Current features:
 * Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
 * Algorithms: local search, evolutionary algorithm, NSGA-II
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
+* Observers: `EvaluationObserver`, `FitnessObserver`. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
 The ``examples`` folder contains:
 
@@ -27,9 +28,11 @@ The ``examples`` folder contains:
 * Local search algorithm using bit blip mutation to solve the OneMax problem
 * Single objective genetic algorithm solving problem OneMax
 * Single objective genetic algorithm solving problem Sphere
-* NSGA-II algorithm configured from a generic evolutionary template
+* Single objective genetic algorithm printing the current fitness during the running using a `FitnessObserver`.
+* NSGA-II algorithm configured from a generic evolutionary algorithmm template
 * NSGA-II algorithm configured from the NSGA-II template
 * NSGA-II algorithm using a bounded crowding distance archive
+* NSGA-II using an observer (`EvaluationObserver`) that prints the number of evaluations 
 
 Jupyter notebooks with examples can be found in the ``notebooks`` folder.
 
