@@ -19,7 +19,7 @@ Current features:
 * Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
 * Algorithms: local search, evolutionary algorithm, NSGA-II
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
-* Observers: `EvaluationObserver`, `FitnessObserver`. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
+* Observers: ``EvaluationObserver``, ``FitnessObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
 The ``examples`` folder contains:
 
