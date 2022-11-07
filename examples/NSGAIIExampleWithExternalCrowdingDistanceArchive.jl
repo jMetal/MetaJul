@@ -8,7 +8,7 @@ include("../src/utils.jl")
 
 using Dates
 
-# NSGA-II algorithm example configured from the NSGA-II template
+# NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.
 
 problem = zdt1Problem()
 
