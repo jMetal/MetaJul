@@ -2,7 +2,7 @@ include("core.jl")
 include("solution.jl")
 include("observer.jl")
 
-abstract type Metaheuristic end
+using Dates
 
 ###################################
 
@@ -71,11 +71,13 @@ function getObservable(algorithm::EvolutionaryAlgorithm)
 end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
+  startingTime = Dates.now()
+
   population = ea.solutionsCreation.create(ea.solutionsCreation.parameters)
   population = ea.evaluation.evaluate(population, ea.evaluation.parameters)
 
   evaluations = length(population)
-  eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population)
+  eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
 
   notify(ea.observable, eaStatus)
 
@@ -90,6 +92,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     evaluations += length(offspringPopulation)
     eaStatus["EVALUATIONS"] = evaluations
     eaStatus["POPULATION"] = population
+    eaStatus["COMPUTING_TIME"] = Dates.now() - startingTime
 
     notify(ea.observable, eaStatus)
   end

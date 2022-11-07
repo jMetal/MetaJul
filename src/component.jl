@@ -71,6 +71,19 @@ struct TerminationByEvaluations <: Termination
   end
 end
 
+function terminationByComputingTime(algorithmAttributes::Dict, parameters::NamedTuple)::Bool
+  return get(algorithmAttributes, "COMPUTING_TIME",0) >= parameters.computingTime
+end
+
+struct TerminationByComputingTime <: Termination
+  parameters::NamedTuple
+
+  isMet::Function
+  function TerminationByComputingTime(parameters)
+    return new(parameters, terminationByComputingTime)
+  end
+end
+
 ## Selection components
 function binaryTournamentMatingPoolSelection(solutions::Vector{S}, parameters::NamedTuple{(:matingPoolSize, :comparator), Tuple{Int, Function}})::Vector{S} where {S <: Solution}
   matingPoolSize::Int = parameters.matingPoolSize

@@ -21,7 +21,7 @@ Current features:
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
 * Observers: ``EvaluationObserver``, ``FitnessObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
-The ``examples`` folder contains:
+The ``examples`` folder contains, among others:
 
 * Local search algorithm using uniform mutation to solve the Sphere problem
 * Local search algorithm using polynomial mutation to solve the Sphere problem
