@@ -347,13 +347,12 @@ end
 
 struct ZDT6 <: AbstractContinuousProblem{Float64}
   bounds::Vector{Bounds{Float64}}
-  name::String
 end
 
 function zdt6Problem(numberOfVariables::Int=10)
   bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
 
-  return ZDT6(bounds,"ZDT6")
+  return ZDT6(bounds)
 end
 
 function numberOfVariables(problem::ZDT6)
@@ -366,6 +365,10 @@ end
 
 function numberOfConstraints(problem::ZDT6)
   return 0
+end
+
+function name(problem::ZDT6)
+  return "ZDT6"
 end
 
 function evaluate(solution::ContinuousSolution{Float64}, problem::ZDT6)::ContinuousSolution{Float64}
