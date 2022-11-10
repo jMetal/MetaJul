@@ -66,6 +66,7 @@ function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T}
   end
 
   #solution.objectives = [f(solution.variables) for f in problem.objectives]
+  #map!(x -> problem.objectives[x](solution.variables), solution.objectives, [_ for _ in 1:length(problem.objectives)])
 
   for i in 1:length(problem.constraints)
     solution.constraints[i] = problem.constraints[i](solution.variables)
