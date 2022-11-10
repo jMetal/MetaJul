@@ -58,6 +58,8 @@ mutable struct EvolutionaryAlgorithm <: Metaheuristic
 
   observable::Observable
 
+  status::Dict
+
   function EvolutionaryAlgorithm() 
     x = new()
     x.name = "EA"
@@ -77,11 +79,11 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   population = ea.evaluation.evaluate(population, ea.evaluation.parameters)
 
   evaluations = length(population)
-  eaStatus = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
+  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
 
-  notify(ea.observable, eaStatus)
+  notify(ea.observable, ea.status)
 
-  while !ea.termination.isMet(eaStatus, ea.termination.parameters)
+  while !ea.termination.isMet(ea.status, ea.termination.parameters)
     matingPool = ea.selection.select(population, ea.selection.parameters)
     
     offspringPopulation = ea.variation.variate(population, matingPool, ea.variation.parameters)
@@ -90,11 +92,11 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     population = ea.replacement.replace(population, offspringPopulation, ea.replacement.parameters)
 
     evaluations += length(offspringPopulation)
-    eaStatus["EVALUATIONS"] = evaluations
-    eaStatus["POPULATION"] = population
-    eaStatus["COMPUTING_TIME"] = Dates.now() - startingTime
+    ea.status["EVALUATIONS"] = evaluations
+    ea.status["POPULATION"] = population
+    ea.status["COMPUTING_TIME"] = Dates.now() - startingTime
 
-    notify(ea.observable, eaStatus)
+    notify(ea.observable, ea.status)
   end
 
   foundSolutions = population

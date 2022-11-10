@@ -2,7 +2,6 @@
 
 abstract type Solution end
 abstract type Problem{T} end
-
 abstract type Metaheuristic end
 
 abstract type Operator end
