@@ -3,7 +3,7 @@ include("core.jl")
 include("bounds.jl")
 
 
-mutable struct ContinuousSolution{T <: Number} <: Solution 
+mutable struct ContinuousSolution{T<:Number} <: Solution
     variables::Array{T}
     objectives::Array{Real}
     constraints::Array{Real}
@@ -26,7 +26,7 @@ function Base.isequal(solution1::ContinuousSolution, solution2::ContinuousSoluti
 end
 
 ###########################################################
-struct BitVector 
+struct BitVector
     bits::Vector{Bool}
 end
 
@@ -43,7 +43,7 @@ function toString(bitVector::BitVector)::String
             string = string * '0'
         end
     end
-   return string
+    return string
 end
 
 function initBitVector(zeroAndOneString::String)::BitVector
@@ -61,7 +61,7 @@ end
 
 function initBitVector(length::Integer)::BitVector
     bits::Vector{Bool} = []
-    for i in range(1,length) 
+    for i in range(1, length)
         if rand() < 0.5
             push!(bits, false)
         else
@@ -74,8 +74,8 @@ end
 
 function bitFlip(bitVector::BitVector, index::Int)::BitVector
     if bitVector.bits[index]
-         bitVector.bits[index] = false
-    else 
+        bitVector.bits[index] = false
+    else
         bitVector.bits[index] = true
     end
     return bitVector
@@ -109,11 +109,14 @@ end
 # Constraint handling functions
 ###########################################################
 
-function overallConstraintViolationDegree(solution::S) where {S <:Solution}
+function overallConstraintViolationDegree(solution::S) where {S<:Solution}
     return sum(filter(x -> x < 0.0, solution.constraints))
-  end
-  
-  function numberOfViolatedConstraints(solution::S) where {S <:Solution}
+end
+
+function numberOfViolatedConstraints(solution::S) where {S<:Solution}
     return length(filter(x -> x < 0.0, solution.constraints))
-  end
-  
+end
+
+function isFeasible(solution::S) where {S<:Solution}
+    return numberOfViolatedConstraints(solution) == 0
+end
