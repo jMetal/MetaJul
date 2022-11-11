@@ -79,18 +79,22 @@ function compareForOverallConstraintViolationDegree(solution1::Solution, solutio
   constraintViolationSolution2 = overallConstraintViolationDegree(solution2)
 
   result = 0 
-  if constraintViolationSolution1 < constraintViolationSolution2
+  if constraintViolationSolution1 == 0.0 && constraintViolationSolution2 < 0.0
     result = -1
-  elseif constraintViolationSolution1 > constraintViolationSolution2
+  elseif constraintViolationSolution1 < 0.0 && constraintViolationSolution2 == 0.0
     result = 1
+  elseif constraintViolationSolution1 < constraintViolationSolution2
+    result = 1
+  elseif constraintViolationSolution1 > constraintViolationSolution2
+    result = -1
   end
 
   return result
 end
 
 function compareForConstraintsAndDominance(solution1::Solution, solution2::Solution)::Int
-  result = 0
-  if (compareForOverallConstraintViolationDegree(solution1, solution2) == 0)
+  result = compareForOverallConstraintViolationDegree(solution1, solution2)
+  if result == 0
     result = compareForDominance(solution1, solution2)
   end
 
