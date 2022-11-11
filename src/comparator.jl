@@ -1,5 +1,6 @@
 include("core.jl")
-include("constraintHandling.jl")
+include("solution.jl")
+
 
 """
     compareElementAt(x, y)
@@ -68,11 +69,12 @@ function compareForDominance(solution1::Solution, solution2::Solution)::Int
   return compareForDominance(solution1.objectives, solution2.objectives)
 end
 
+
 function compareIthObjective(solution1::Solution, solution2::Solution, index::Int=1)::Int
   return compareElementAt(solution1.objectives, solution2.objectives, index)
 end
 
-function compareForOverallConstraintViolationDegree((solution1::Solution, solution2::Solution)::Int)
+function compareForOverallConstraintViolationDegree(solution1::Solution, solution2::Solution)::Int
   constraintViolationSolution1 = overallConstraintViolationDegree(solution1)
   constraintViolationSolution2 = overallConstraintViolationDegree(solution2)
 
@@ -86,3 +88,11 @@ function compareForOverallConstraintViolationDegree((solution1::Solution, soluti
   return result
 end
 
+function compareForConstraintsAndDominance(solution1::Solution, solution2::Solution)::Int
+  result = 0
+  if (compareForOverallConstraintViolationDegree(solution1, solution2) == 0)
+    result = compareForDominance(solution1, solution2)
+  end
+
+  return result ;
+end

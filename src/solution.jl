@@ -104,3 +104,16 @@ end
 function Base.length(solution::BinarySolution)::Int
     return length(solution.bits)
 end
+
+###########################################################
+# Constraint handling functions
+###########################################################
+
+function overallConstraintViolationDegree(solution::S) where {S <:Solution}
+    return sum(filter(x -> x < 0.0, solution.constraints))
+  end
+  
+  function numberOfViolatedConstraints(solution::S) where {S <:Solution}
+    return length(filter(x -> x < 0.0, solution.constraints))
+  end
+  
