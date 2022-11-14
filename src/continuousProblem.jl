@@ -295,57 +295,6 @@ function zdt4Problem(numberOfVariables::Int=10)
   return zdt4
 end
 
-"""
-
-struct ZDT4 <: AbstractContinuousProblem{Float64}
-  bounds::Vector{Bounds{Float64}}
-  name::String
-end
-
-function zdt4Problem(numberOfVariables::Int = 10)
-  bounds = vcat([Bounds{Float64}(0.0, 1.0)], [Bounds{Float64}(-5.0, 5.0) for _ in range(2, numberOfVariables)])
-
-  return ZDT4(bounds,"ZDT4")
-end
-
-function numberOfVariables(problem::ZDT4)
-  return length(problem.bounds)
-end
-
-function numberOfObjectives(problem::ZDT4)
-  return 2
-end
-
-function numberOfConstraints(problem::ZDT4)
-  return 0
-end
-
-function evaluate(solution::ContinuousSolution{Float64}, problem::ZDT4)::ContinuousSolution{Float64}
-  x = solution.variables
-  @assert length(x) == numberOfVariables(problem) "The number of variables of the solution to be evaluated is not correct"
-
-  function evalG(x::Vector{Float64})
-    g = sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
-
-    return g + 1.0 +10.0 * (length(x) - 1)
-  end
-
-  function evalH(v::Float64, g::Float64)
-    return 1.0 - sqrt(v/g)
-  end
-
-  f1 = x[1]
-  g = evalG(x)
-  h = evalH(x[1], g)
-
-  f2 = g * h
- 
-  solution.objectives = [f1, f2]
-
-  return solution
-end
-"""
-
 struct ZDT6 <: AbstractContinuousProblem{Float64}
   bounds::Vector{Bounds{Float64}}
 end
