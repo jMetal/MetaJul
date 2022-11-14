@@ -15,6 +15,7 @@ Current features:
   
      - Single-objective problems: continuous (Sphere), binary (OneMax)
      - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark)
+     - Constrained: Srinivas, ConstrEx
 
 * Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
 * Algorithms: local search, evolutionary algorithm, NSGA-II
@@ -29,9 +30,11 @@ The ``examples`` folder contains, among others:
 * Single objective genetic algorithm solving problem OneMax
 * Single objective genetic algorithm solving problem Sphere
 * Single objective genetic algorithm printing the current fitness during the running using a `FitnessObserver`.
-* NSGA-II algorithm configured from a generic evolutionary algorithmm template
-* NSGA-II algorithm configured from the NSGA-II template
-* NSGA-II algorithm using a bounded crowding distance archive
+* NSGA-II configured from a generic evolutionary algorithmm template
+* NSGA-II configured from the NSGA-II template
+* NSGA-II using a bounded crowding distance archive
+* NSGA-II using a bounded crowding distance archive
+* NSGA-II solving a constrained problem
 * NSGA-II using an observer (`EvaluationObserver`) that prints the number of evaluations 
 
 Jupyter notebooks with examples can be found in the ``notebooks`` folder.
