@@ -70,7 +70,7 @@ struct CrowdingDistanceArchive{T<:Solution} <: Archive
 end
 
 function CrowdingDistanceArchive(capacity::Int, T::Type{<:Solution})
-    return CrowdingDistanceArchive(capacity, NonDominatedArchive(T[]))
+    return CrowdingDistanceArchive(capacity, NonDominatedArchive(T))
 end
 
 function Base.length(archive::CrowdingDistanceArchive)::Int

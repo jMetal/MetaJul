@@ -8,7 +8,7 @@ include("../src/archive.jl")
 function addASolutionToAnEmtpyArchiveMakesItsLengthToBeOne()
   solution = createContinuousSolution(3)
 
-  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
   add!(archive, solution)
 
   return length(archive) == 1
@@ -17,7 +17,7 @@ end
 function addASolutionToAnEmtpyArchiveEffectivelyAddTheSolution()
   solution = createContinuousSolution(3)
 
-  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
   add!(archive, solution)
 
   return contain(archive, solution) && getSolutions(archive)[1] == solution
@@ -26,7 +26,7 @@ end
 function addASolutionToAnEmtpyArchiveMakesItNonEmpty()
   solution = createContinuousSolution(3)
 
-  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
   add!(archive, solution)
 
   return isEmpty(archive) == false
@@ -53,7 +53,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionReturnsTrue()
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   
   return add!(archive, nonDominatedSolution)
 end
@@ -65,7 +65,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionContainsBothSolutions()
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, nonDominatedSolution)
   
   return contain(archive, solution) && contain(archive, nonDominatedSolution)
@@ -79,7 +79,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionIncreasesItsLengthByOne
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, nonDominatedSolution)
 
   return length(archive) == 2
@@ -92,7 +92,7 @@ function addADominatedSolutionToAnArchiveWithASolutionReturnFalse()
   dominatedSolution = createContinuousSolution(3)
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, dominatedSolution)
 
   return !add!(archive, dominatedSolution)
@@ -106,7 +106,7 @@ function addADominatedSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength(
   dominatedSolution = createContinuousSolution(3)
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, dominatedSolution)
 
   return length(archive) == 1
@@ -120,7 +120,7 @@ function addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   
   return add!(archive, dominatingSolution)
 end
@@ -132,7 +132,7 @@ function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, dominatingSolution)
 
   return length(archive) == 1
@@ -145,14 +145,15 @@ function addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhic
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution])
+  archive = NonDominatedArchive([solution], compareForDominance)
   add!(archive, dominatingSolution)
 
   return contain(archive, dominatingSolution) && !contain(archive, solution)
 end
 
 
-archiveWithASolution = NonDominatedArchive([createContinuousSolution(5)])
+archiveWithASolution = NonDominatedArchive(ContinuousSolution{Float64})
+add!(archiveWithASolution, createContinuousSolution(3))
 @testset "Archive with a solution tests" begin    
   @test length(archiveWithASolution) == 1
   @test !isEmpty(archiveWithASolution)
@@ -176,7 +177,9 @@ function addADominantSolutionInAnArchiveOfSizeTwoDiscardTheExistingOfSolutions()
   solution2 = createContinuousSolution(3)
   solution2.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution1, solution2])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
+  add!(archive, solution1)
+  add!(archive, solution2)
 
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [1.0, 1.0, 1.0]
@@ -192,7 +195,9 @@ function addADominatedSolutionInAnArchiveOfSizeTwoReturnFalse()
   solution2 = createContinuousSolution(3)
   solution2.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution1, solution2])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
+  add!(archive, solution1)
+  add!(archive, solution2)
 
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [2.0, 3.0, 5.0]
@@ -208,7 +213,9 @@ function addASolutionInAnArchiveOfSizeTwoDominatingTheFirstOneDiscardThisOne()
   solution2 = createContinuousSolution(3)
   solution2.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution1, solution2])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
+  add!(archive, solution1)
+  add!(archive, solution2)
 
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [1.0, 2.0, 2.0]
@@ -224,7 +231,9 @@ function addADuplicatedSolutionsInAnArchiveOfSizeTwoReturnsFalse()
   solution2 = createContinuousSolution(3)
   solution2.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution1, solution2])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
+  add!(archive, solution1)
+  add!(archive, solution2)
 
   existingSolution1 = createContinuousSolution(3)
   existingSolution1.objectives = [1.0, 2.0, 3.0]
@@ -262,7 +271,7 @@ function addWeakDominatedSolutionsInAnArchiveWorkProperly()
   solution5 = createContinuousSolution([5.0, 2.0])
   solution6 = createContinuousSolution([6.0, 1.0])
 
-  archive = NonDominatedArchive{ContinuousSolution{Float64}}([])
+  archive = NonDominatedArchive(ContinuousSolution{Float64})
   add!(archive, solution1)
   add!(archive, solution2)
   add!(archive, solution3)

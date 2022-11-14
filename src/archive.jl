@@ -9,10 +9,11 @@ include("comparator.jl")
 
 struct NonDominatedArchive{T <: Solution} <: Archive
   solutions::Array{T}
+  comparator::Function
 end
 
 function NonDominatedArchive(T::Type{<: Solution})
-  return NonDominatedArchive(T[])
+  return NonDominatedArchive{T}(T[], compareForDominance)
 end
 
 function Base.length(archive::Archive)::Int
@@ -27,7 +28,8 @@ function getSolutions(archive::Archive)
   return archive.solutions
 end
 
-function add!(archive::NonDominatedArchive{T}, solution::T, comparator::Function = compareForConstraintsAndDominance)::Bool where {T <: Solution}
+function add!(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <: Solution}
+    comparator = archive.comparator
     solutionIsInserted = false
     if isEmpty(archive)
         push!(archive.solutions, solution)
