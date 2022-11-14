@@ -129,10 +129,14 @@ mutable struct NSGAII <: Metaheuristic
 
   solver::EvolutionaryAlgorithm
 
+  dominanceComparator::Function
+
   function NSGAII() 
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
+
+    algorithm.dominanceComparator = compareForDominance
     return algorithm
   end
 end
@@ -151,7 +155,7 @@ function nsgaII(nsgaII::NSGAII)
   solver.termination = nsgaII.termination
   solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = nsgaII.crossover, mutation = nsgaII.mutation))
 
-  solver.replacement = solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
+  solver.replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = nsgaII.dominanceComparator, ))
 
   solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareRankingAndCrowdingDistance))
 

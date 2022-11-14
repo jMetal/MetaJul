@@ -185,20 +185,22 @@ function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
 end
 
 function rankingAndDensityEstimatorReplacement(x::Vector{T}, y::Vector{T}, 
-  parameters::NamedTuple{(:comparator,), Tuple{F}})::Vector{T} where {T <: Solution, F <: Function}
+  parameters::NamedTuple{(:dominanceComparator,), Tuple{Function}})::Vector{T} where {T <: Solution}
   jointVector = vcat(x,y)
   
-  ranking = computeRanking(jointVector)
+  ranking = Ranking{T}(parameters.dominanceComparator)
+  computeRanking!(ranking, jointVector)
+
   for rank in ranking.rank
     computeCrowdingDistanceEstimator!(rank)
   end
 
-  sort!(jointVector, lt=((x,y) -> parameters.comparator(x,y) < 0))
+  sort!(jointVector, lt=((x,y) -> compareRankingAndCrowdingDistance(x,y) < 0))
   return jointVector[1:length(x)]
 end
 
 struct RankingAndDensityEstimatorReplacement <: Replacement
-  parameters::NamedTuple{(:comparator,), Tuple{Function}}
+  parameters::NamedTuple{(:dominanceComparator,), Tuple{Function}}
 
   replace::Function
   function RankingAndDensityEstimatorReplacement(parameters)

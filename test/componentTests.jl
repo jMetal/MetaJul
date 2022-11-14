@@ -136,8 +136,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+    
     return length(resultPopulation) == 1 &&
     getRank(solution1) == 1 && getRank(solution2) == 1 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) ==  typemax(Float64)
 end
@@ -156,8 +157,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase2()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 1 && isequal(solution1, resultPopulation[1]) &&
     getRank(solution1) == 1 && getRank(solution2) == 2 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) ==  typemax(Float64)
 end
@@ -180,8 +182,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase3()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 2 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 1 && 
@@ -212,8 +215,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase4()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 2 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 2 && 
@@ -244,8 +248,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     population = [solution1, solution4]
     offspringPopulation = [solution2, solution3]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 2 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 1 && 
@@ -280,8 +285,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     population = [solution1, solution2, solution5]
     offspringPopulation = [solution3, solution4, solution6]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 3 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 1 && 
@@ -319,8 +325,9 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     offspringPopulation = [solution1, solution2, solution5]
     population = [solution3, solution4, solution6]
 
-    resultPopulation = rankingAndDensityEstimatorReplacement(population, offspringPopulation, (comparator = compareRankingAndCrowdingDistance,))
-
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+    resultPopulation = replacement.replace(population, offspringPopulation, replacement.parameters)
+ 
     return length(resultPopulation) == 3 &&
     getRank(solution1) == 1 && 
     getRank(solution2) == 2 && 
@@ -597,9 +604,9 @@ function muPlusLambdaReplacementIsCorrectlyInitialized()
 end
 
 function RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
-    replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
+    replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
 
-    return replacement.parameters.comparator == compareRankingAndCrowdingDistance
+    return replacement.parameters.dominanceComparator == compareForDominance
 end
 
 @testset "Replacement tests" begin    

@@ -21,6 +21,8 @@ solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000
 solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
+solver.dominanceComparator = compareForConstraintsAndDominance
+
 startingTime = Dates.now()
 optimize(solver)
 endTime = Dates.now()

@@ -13,7 +13,6 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)])
 end
 
-
 include("boundsTests.jl")
 include("continuousProblemTests.jl")
 include("densityEstimatorTests.jl")

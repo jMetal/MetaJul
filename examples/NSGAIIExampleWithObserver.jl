@@ -21,9 +21,7 @@ solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000
 solver.mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 solver.crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
 
-"""
-solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
-"""
+solver.dominanceComparator = compareForDominance
 
 observer = EvaluationObserver(500)
 register!(getObservable(solver), observer)

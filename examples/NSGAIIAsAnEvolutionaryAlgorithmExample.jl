@@ -34,7 +34,7 @@ solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solv
 
 solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareRankingAndCrowdingDistance))
 
-solver.replacement = RankingAndDensityEstimatorReplacement((comparator = compareRankingAndCrowdingDistance, ))
+solver.replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
 
 startingTime = Dates.now()
 optimize(solver)
