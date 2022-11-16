@@ -17,7 +17,7 @@ Current features:
      - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark)
      - Constrained: Srinivas, ConstrEx
 
-* Operators: uniform mutation, polynomial mutation, BLX-alpha crossover, simulated binary crossover (SBX), random selection, binary tournament selection
+* Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
 * Algorithms: local search, evolutionary algorithm, NSGA-II
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
 * Observers: ``EvaluationObserver``, ``FitnessObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
