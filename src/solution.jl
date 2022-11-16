@@ -2,6 +2,9 @@
 include("core.jl")
 include("bounds.jl")
 
+###########################################################
+# Continuous solutions
+###########################################################
 
 mutable struct ContinuousSolution{T<:Number} <: Solution
     variables::Array{T}
@@ -26,6 +29,9 @@ function Base.isequal(solution1::ContinuousSolution, solution2::ContinuousSoluti
 end
 
 ###########################################################
+# Binary solutions
+###########################################################
+
 struct BitVector
     bits::Vector{Bool}
 end

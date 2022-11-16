@@ -176,6 +176,25 @@ struct MuPlusLambdaReplacement <: Replacement
   end
 end
 
+function muCommaLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple{(:comparator,), Tuple{Function}})
+  @assert length(x) >= length(y) "The length of the x vector is lower than the length of the y vector"
+
+  resultVector = Vector(y)
+  sort!(resultVector, lt=((a,b) -> parameters.comparator(a,b) <= 0))
+
+  return resultVector[1:length(x)]
+end
+
+struct MuCommaLambdaReplacement <: Replacement
+  parameters::NamedTuple{(:comparator, ), Tuple{Function}}
+
+  replace::Function
+  function MuCommaLambdaReplacement(parameters)
+    return new(parameters, muCommaLambdaReplacement)
+  end
+end
+
+
 function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
   result = compareRanking(x, y)
   if (result == 0)

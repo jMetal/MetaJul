@@ -375,29 +375,3 @@ struct BinaryTournamentSelectionOperator <: SelectionOperator
   end
 end
 
-# Replacement operators
-
-"""
-    muPlusLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
-
-TBW
-"""
-function muPlusLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
-  jointVector = vcat(x, y)
-  sort!(jointVector, lt=comparator)
-  return jointVector[1:length(x)]
-end
-
-"""
-    muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
-
-TBW
-"""
-function muCommaLambdaReplacement(x::Vector, y::Vector, comparator::Function=isless)
-  @assert length(x) >= length(y) "The length of the x vector is lower than the length of the y vector"
-
-  resultVector = Vector(y)
-  sort!(resultVector, lt=comparator)
-
-  return resultVector[1:length(x)]
-end
