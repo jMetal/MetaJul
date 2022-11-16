@@ -4,8 +4,6 @@ include("archive.jl")
 
 # Struct and methods to implement the non-dominated ranking sorting method
 
-using Test
-
 mutable struct Ranking{T <: Solution}
     rank::Vector{Vector{T}}
     dominanceComparator::Function

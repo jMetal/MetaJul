@@ -7,7 +7,6 @@ using Base.Iterators
 using Random
 
 ## Solution creation components
-
 function defaultSolutionsCreation(parameters::NamedTuple{(:problem, :numberOfSolutionsToCreate), Tuple{Problem, Int64}})::Vector{Solution} 
   problem = parameters.problem
   numberOfSolutionsToCreate = parameters.numberOfSolutionsToCreate
