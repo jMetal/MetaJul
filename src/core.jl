@@ -1,4 +1,4 @@
-# Core structs
+# Core types
 
 abstract type Solution end
 abstract type Problem{T} end
