@@ -6,7 +6,7 @@ using Dates
 
 ###################################
 
-mutable struct LocalSearch <: Metaheuristic
+mutable struct LocalSearch <: Algorithm
   startingSolution::Solution
   problem::Problem
   numberOfIterations::Int
@@ -41,7 +41,7 @@ end
 
 #################################
 
-mutable struct EvolutionaryAlgorithm <: Metaheuristic
+mutable struct EvolutionaryAlgorithm <: Algorithm
   name::String
   problem::Problem
   populationSize::Int
@@ -116,7 +116,7 @@ end
 
 #################################
 
-mutable struct NSGAII <: Metaheuristic
+mutable struct NSGAII <: Algorithm
   problem::Problem
   populationSize::Int
   numberOfEvaluations::Int

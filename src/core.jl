@@ -2,7 +2,7 @@
 
 abstract type Solution end
 abstract type Problem{T} end
-abstract type Metaheuristic end
+abstract type Algorithm end
 
 abstract type Operator end
 abstract type MutationOperator <: Operator end
