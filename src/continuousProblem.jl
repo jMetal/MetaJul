@@ -272,9 +272,17 @@ function zdt4Problem(numberOfVariables::Int=10)
   end
 
   function evalG(x::Vector{Float64})
-    g = 1.0 +10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
+    g = 0.0
 
-    return g 
+    for i in 2:length(x)
+      g += x[i]^2 - 10.0 * cos(4.0 * π * x[i])
+    end
+
+    #g = 1.0 +10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
+
+    constant = 1.0 + 10.0 * (length(x) - 1)
+
+    return g + constant
   end
 
   function evalH(v::Real, g::Float64)
@@ -446,68 +454,49 @@ function evaluate(solution::ContinuousSolution{Float64}, problem::DTLZ1)::Contin
   return solution
 end
 
-struct DTLZ2 <: AbstractContinuousProblem{Float64}
-  bounds::Vector{Bounds{Float64}}
-  numberOfObjectives::Int
-  name::String
-end
+function UF1Problem(numberOfVariables::Int = 30)
+  uf1 = ContinuousProblem{Float64}("UF1")
 
-function dtlz2Problem(numberOfVariables::Int=12, numberOfObjectives::Int=3)
-  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
-
-  return DTLZ1(bounds,numberOfObjectives,"DTLZ2")
-end
-
-function numberOfVariables(problem::DTLZ2)
-  return length(problem.bounds)
-end
-
-function numberOfObjectives(problem::DTLZ2)
-  return problem.numberOfObjectives
-end
-
-function numberOfConstraints(problem::DTLZ2)
-  return 0
-end
-
-function evaluate(solution::ContinuousSolution{Float64}, problem::DTLZ2)::ContinuousSolution{Float64}
-  x = solution.variables
-  @assert length(x) == numberOfVariables(problem) "The number of variables of the solution to be evaluated is not correct"
-
-  k = numberOfVariables(problem) - numberOfObjectives(problem) + 1
-
-  g = sum([^(x[i]-0.5,2) for i in range((numberOfVariables(problem)-k+1),numberOfVariables(problem))])
-
-  f = [(1.0 + g) for _ in 1:numberOfObjectives(problem)]
-
-  #println("G: ", g)
-  #println("F: ", f)
-
-  for i in 1:numberOfObjectives(problem)
-    for j in 1:(numberOfObjectives(problem) - i)
-      f[i] *= cos(x[j] * 0.5 * pi)
-      #println("F[",i,"] = ", f[i])
-    end
-    #println("----")
-    if i != 1
-      aux = numberOfObjectives(problem) - i + 1
-      #println("AUX: ", aux)
-      f[i] *= sin(x[aux]*0.5*pi)
-      #println("F[",i,"] = ", f[i])
-    end
+  # Setting the variable bounds
+  addVariable(uf1, Bounds{Float64}(0.0, 1.0))  # For the first variable
+  for _ in 2:numberOfVariables
+    addVariable(uf1, Bounds{Float64}(-1.0, 1.0))
   end
 
-  solution.objectives = f
+  # Objective functions
+  f1 = x -> begin
+    sum1 = 0.0
+    count1 = 0
+    for j in 2:numberOfVariables
+      yj = x[j] - sin(6.0 * π * x[1] + j * π / numberOfVariables)
+      yj *= yj
+      if j % 2 != 0
+        sum1 += yj
+        count1 += 1
+      end
+    end
+    return x[1] + 2.0 * sum1 / count1
+  end
 
-  return solution
+  f2 = x -> begin
+    sum2 = 0.0
+    count2 = 0
+    for j in 2:numberOfVariables
+      yj = x[j] - sin(6.0 * π * x[1] + j * π / numberOfVariables)
+      yj *= yj
+      if j % 2 == 0
+        sum2 += yj
+        count2 += 1
+      end
+    end
+    return 1.0 - sqrt(x[1]) + 2.0 * sum2 / count2
+  end
+
+  addObjective(uf1, f1)
+  addObjective(uf1, f2)
+
+  return uf1
 end
 
-"""
-problem = dtlz1Problem()
-solution = createSolution(problem)
-solution.variables = [0.5 for i in 1:numberOfVariables(problem)]
 
-println(solution)
-evaluate(solution, problem)
-println(solution)
-"""
+

@@ -10,13 +10,13 @@ using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.
 
-problem = zdt2Problem()
+problem = zdt4Problem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
 solver.problem = problem
 solver.populationSize = 100
-solver.offspringPopulationSize = 100
+solver.offspringPopulationSize = 1
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 

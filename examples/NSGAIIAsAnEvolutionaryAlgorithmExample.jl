@@ -9,14 +9,14 @@ include("../src/utils.jl")
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
-problem = zdt1Problem()
+problem = zdt4Problem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
 
 solver.problem = problem
 solver.populationSize = 100
-solver.offspringPopulationSize = 100
+solver.offspringPopulationSize = 1
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
@@ -28,7 +28,7 @@ mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distr
 """
 crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """
-crossover = SBXCrossover((probability=1.0, distributionIndex=20.0, bounds=problem.bounds))
+crossover = SBXCrossover((probability=0.9, distributionIndex=20.0, bounds=problem.bounds))
 
 solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
 
@@ -37,10 +37,11 @@ solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.
 solver.replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
 
 startingTime = Dates.now()
-optimize(solver)
+#optimize(solver)
+foundSolutions = evolutionaryAlgorithm(solver)
 endTime = Dates.now()
 
-foundSolutions = solver.foundSolutions
+#foundSolutions = solver.foundSolutions
 
 objectivesFileName = "FUN.csv"
 variablesFileName = "VAR.csv"

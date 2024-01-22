@@ -32,38 +32,31 @@ Compare two numerics vectors `x` and `y` according to the dominance relationship
 function compareForDominance(x::Vector{T}, y::Vector{T})::Int where {T<:Number}
   @assert length(x) == length(y) "The vectors have a different length"
 
-  """
-  x==y && return 0
+  bestIsSolution1 = false
+  bestIsSolution2 = false
 
-  all(t->(t[1]≤t[2]), zip(x, y)) && return -1
-  all(t->(t[1]≤t[2]), zip(y, x)) && return  1
-  return 0
-
-  """
-  bestIsSolution1 = 0
-  bestIsSolution2 = 0
-  result = 0
-
-  for i in 1:length(x)
-    if x[i] != y[i]
+  @inbounds for i in 1:length(x)
       if x[i] < y[i]
-        y[i]
-        bestIsSolution1 = 1
+          bestIsSolution1 = true
+      elseif x[i] > y[i]
+          bestIsSolution2 = true
       end
-      if x[i] > y[i]
-        bestIsSolution2 = 1
+
+      # Early exit if both flags are true
+      if bestIsSolution1 && bestIsSolution2
+          return 0
       end
-    end
   end
 
-  if bestIsSolution1 > bestIsSolution2
-    result = -1
-  elseif bestIsSolution1 < bestIsSolution2
-    result = 1
+  if bestIsSolution1
+      return -1
+  elseif bestIsSolution2
+      return 1
+  else
+      return 0
   end
-
-  return result
 end
+
 
 function compareForDominance(solution1::Solution, solution2::Solution)::Int
   return compareForDominance(solution1.objectives, solution2.objectives)
