@@ -108,7 +108,7 @@ function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
       x[i] = y
     end
   end
-  x = randomRestrict(x, bounds)
+  x = restrict(x, bounds)
   return x
 end
 

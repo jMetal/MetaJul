@@ -9,22 +9,25 @@ include("../src/utils.jl")
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
-problem = zdt4Problem()
+problem = zdt1Problem(100)
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
 
 solver.problem = problem
 solver.populationSize = 100
-solver.offspringPopulationSize = 1
+solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
 solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 
-solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
+solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 200000, ))
 
 mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
+
+#mutation = UniformMutation((probability=1.0/numberOfVariables(problem), perturbation=20.0, bounds=problem.bounds))
+
 """
 crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
 """

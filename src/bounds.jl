@@ -16,7 +16,7 @@ function createBounds(lowerBounds::Vector{T}, upperBounds::Vector{T}) where {T <
 
 end
 
-function restrict(value::Number, bounds::Bounds)::Number
+function restrict(value::T, bounds::Bounds{T}) where {T <: Number}
     result = value
     if (value < bounds.lowerBound)
         result = bounds.lowerBound 
@@ -25,6 +25,7 @@ function restrict(value::Number, bounds::Bounds)::Number
     end
     return result 
 end
+
 
 function restrict(values::Vector{T}, bounds::Vector{Bounds{T}}) where {T <: Number}
     for i in 1:length(values)

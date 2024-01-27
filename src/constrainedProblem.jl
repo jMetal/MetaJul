@@ -93,7 +93,7 @@ function tanakaProblem()
   return tanaka
 end
 
-function ozyczka2Problem()
+function osyczka2Problem()
   osyczka2 = ContinuousProblem{Float64}("Osyczka2")
 
   # Setting the variable bounds

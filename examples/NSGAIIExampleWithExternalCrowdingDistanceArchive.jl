@@ -16,7 +16,7 @@ solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
 solver.problem = problem
 solver.populationSize = 100
-solver.offspringPopulationSize = 1
+solver.offspringPopulationSize = 100
 
 solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
 
