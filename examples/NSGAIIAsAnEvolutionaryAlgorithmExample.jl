@@ -9,7 +9,7 @@ include("../src/utils.jl")
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
-problem = zdt1Problem(100)
+problem = zdt1Problem()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
@@ -22,7 +22,7 @@ solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, n
 
 solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
 
-solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 200000, ))
+solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
 
 mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
 
