@@ -10,7 +10,7 @@ using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
-problem = zdt4Problem()
+problem = zdt1Problem()
 
 solver::NSGAII = NSGAII()
 solver.problem = problem
