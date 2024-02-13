@@ -15,7 +15,7 @@ Current features:
   
      - Single-objective problems: continuous (Sphere), binary (OneMax)
      - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark)
-     - Constrained: Srinivas, ConstrEx
+     - Constrained problems: Srinivas, ConstrEx, Bihn2, Tanaka, Osyczka2, Golinski
 
 * Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
 * Algorithms: local search, evolutionary algorithm, NSGA-II
