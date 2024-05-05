@@ -158,7 +158,6 @@ struct CrossoverAndMutationVariation <: Variation
   end
 end
 
-
 ## Replacement components
 function muPlusLambdaReplacement(x::Vector{Solution}, y::Vector{Solution}, parameters::NamedTuple{(:comparator,), Tuple{Function}})
   jointVector = vcat(x,y)
@@ -226,3 +225,18 @@ struct RankingAndDensityEstimatorReplacement <: Replacement
   end
 end
 
+
+## Inertia weight computing strategy components
+
+function constantValueStrategy(inertiaWeightValue::Float64)
+  return inertiaWeightValue
+end
+
+struct ConstantValueStrategy <: InertiaWeightComputingStrategy
+  inertiaWeightValue::Float64 
+
+  compute::Function
+  function ConstantValueStrategy(inertiaWeightValue)
+    return new(inertiaWeightValue, constantValueStrategy)
+  end
+end
