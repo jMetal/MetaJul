@@ -1,6 +1,5 @@
 
 include("solution.jl")
-include("comparator.jl")
 include("ranking.jl")
 
 # Mutation operators

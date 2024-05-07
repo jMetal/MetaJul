@@ -20,10 +20,15 @@ export Bounds
 export restrict, createBounds, valueIsWithinBounds
 include("util/bounds.jl")
 
+export compareElementAt, compareForDominance, compareForOverallConstraintViolationDegree
+export compareForConstraintsAndDominance
+include("util/comparator.jl")
+
 export NonDominatedArchive
 include("archive.jl")
 
 export CrowdingDistanceArchive
 include("densityEstimator.jl")
+
 
 end # module metajul

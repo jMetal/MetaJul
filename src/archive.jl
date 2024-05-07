@@ -1,5 +1,4 @@
 include("solution.jl")
-include("comparator.jl")
 
 """
   struct containing an unbounded archive of non-dominated solutions

@@ -38,7 +38,8 @@ end
 
 
 utilTests = [
-    "util/boundsTests.jl"
+    "util/boundsTests.jl",
+    "util/comparatorTests.jl"
 ]
 
 for testProgram in utilTests
