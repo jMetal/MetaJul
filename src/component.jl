@@ -241,3 +241,13 @@ struct ConstantValueStrategy <: InertiaWeightComputingStrategy
   end
 end
 
+
+struct RandomSelectedValueStrategy <: InertiaWeightComputingStrategy
+  lowerBound::Float64 
+  upperBound::Float64
+
+end
+
+function compute(strategy::RandomSelectedValueStrategy)
+  return rand(strategy.lowerBound, strategy.upperBound)
+end
