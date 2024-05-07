@@ -2,7 +2,7 @@ using Random
 
 ## Solution creation components
 struct DefaultSolutionsCreation <: SolutionsCreation
-    problem::problem
+    problem::Problem
     numberOfSolutionsToCreate::Int16
 end
 

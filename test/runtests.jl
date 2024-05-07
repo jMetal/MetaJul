@@ -29,7 +29,7 @@ include("componentTests.jl")
 """
 componentTests = [
     "component/common/evaluationTest.jl",
-    #"component/common/solutionsCreationTest.jl"
+    "component/common/solutionsCreationTest.jl"
     ]
 
 for testProgram in componentTests
