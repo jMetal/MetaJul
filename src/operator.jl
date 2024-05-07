@@ -1,5 +1,4 @@
 
-include("solution.jl")
 include("ranking.jl")
 
 # Mutation operators

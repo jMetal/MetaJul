@@ -3,7 +3,7 @@ using metajul
 using Test
 
 # Utility functions
-"""
+
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)])
 end
@@ -12,7 +12,6 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
     objectives = [_ for _ in range(1, numberOfObjectives)]
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)])
 end
-"""
 
 """
 include("boundsTests.jl")
@@ -39,7 +38,8 @@ end
 
 utilTests = [
     "util/boundsTests.jl",
-    "util/comparatorTests.jl"
+    "util/comparatorTests.jl",
+    "util/archiveTests.jl"
 ]
 
 for testProgram in utilTests

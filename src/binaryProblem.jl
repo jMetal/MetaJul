@@ -1,5 +1,4 @@
 
-include("solution.jl")
 include("operator.jl")
 
 abstract type AbstractBinaryProblem <: Problem{BinarySolution} end

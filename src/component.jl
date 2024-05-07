@@ -1,4 +1,3 @@
-include("solution.jl")
 include("operator.jl")
 include("densityEstimator.jl")
 

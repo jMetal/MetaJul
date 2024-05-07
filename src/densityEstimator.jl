@@ -1,6 +1,3 @@
-include("solution.jl")
-include("archive.jl")
-
 function maxCrowdingDistanceValue()
     return typemax(Float64)
 end

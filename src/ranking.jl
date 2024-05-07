@@ -1,6 +1,3 @@
-include("solution.jl")
-include("archive.jl")
-
 # Struct and methods to implement the non-dominated ranking sorting method
 
 mutable struct Ranking{T <: Solution}

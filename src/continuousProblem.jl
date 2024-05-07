@@ -1,5 +1,4 @@
 
-include("solution.jl")
 include("operator.jl")
 
 abstract type AbstractContinuousProblem{T<:Number} <: Problem{T} end
