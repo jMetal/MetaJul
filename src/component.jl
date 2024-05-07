@@ -30,8 +30,8 @@ end
 
 struct SequentialEvaluation <: Evaluation
   parameters::NamedTuple{(:problem, ), Tuple{Problem}} 
-
   evaluate::Function
+
   function SequentialEvaluation(parameters)
     return new(parameters, sequentialEvaluation)
   end
@@ -92,8 +92,8 @@ end
 
 struct BinaryTournamentSelection <: Selection
   parameters::NamedTuple{(:matingPoolSize, :comparator), Tuple{Int, Function}} 
-
   select::Function
+  
   function BinaryTournamentSelection(parameters)
     return new(parameters, binaryTournamentMatingPoolSelection)
   end
@@ -185,8 +185,8 @@ end
 
 struct MuCommaLambdaReplacement <: Replacement
   parameters::NamedTuple{(:comparator, ), Tuple{Function}}
-
   replace::Function
+
   function MuCommaLambdaReplacement(parameters)
     return new(parameters, muCommaLambdaReplacement)
   end
@@ -218,8 +218,8 @@ end
 
 struct RankingAndDensityEstimatorReplacement <: Replacement
   parameters::NamedTuple{(:dominanceComparator,), Tuple{Function}}
-
   replace::Function
+
   function RankingAndDensityEstimatorReplacement(parameters)
     return new(parameters, rankingAndDensityEstimatorReplacement)
   end
@@ -228,15 +228,16 @@ end
 
 ## Inertia weight computing strategy components
 
-function constantValueStrategy(inertiaWeightValue::Float64)
-  return inertiaWeightValue
+function constantValueStrategy(parameters)::Float64
+  return parameters.inertiaWeight
 end
 
 struct ConstantValueStrategy <: InertiaWeightComputingStrategy
-  inertiaWeightValue::Float64 
-
+  parameters::NamedTuple{(:inertiaWeight,), Tuple{Float64}} 
   compute::Function
-  function ConstantValueStrategy(inertiaWeightValue)
-    return new(inertiaWeightValue, constantValueStrategy)
+
+  function ConstantValueStrategy(parameters)
+    return new(parameters, constantValueStrategy)
   end
 end
+

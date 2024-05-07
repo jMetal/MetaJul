@@ -120,6 +120,7 @@ end
 struct PolynomialMutation <: MutationOperator
   parameters::NamedTuple{(:probability, :distributionIndex, :bounds),Tuple{Float64, Float64,Vector{Bounds{Float64}}}} 
   execute::Function
+  
   function PolynomialMutation(crossoverParameters)
     new(crossoverParameters, polynomialMutation)
   end

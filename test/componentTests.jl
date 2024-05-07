@@ -654,12 +654,10 @@ end
 #######################################################
 
 function constantValueStrategyReturnTheValue()
-    inertiaWeight::Float64 = 0.5 
-
-    constantValueStrategy = ConstantValueStrategy(inertiaWeight)
-    return inertiaWeight == constantValueStrategy.compute()
+    strategy = ConstantValueStrategy((inertiaWeight = 0.5,))
+    return 0.5 == strategy.compute(strategy.parameters)
 end
 
 @testset "Constant value inertia weight computing strategy unit tests" begin  
-    @test randomSelectionWithoutReplacementReturnsAPermutationCase1()
+    @test constantValueStrategyReturnTheValue()
 end  
