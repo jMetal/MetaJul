@@ -45,3 +45,12 @@ utilTests = [
 for testProgram in utilTests
     include(testProgram)
 end
+
+problemTests = [
+    "problem/continuousProblemTests.jl"
+]
+
+for testProgram in problemTests
+    include(testProgram)
+end
+

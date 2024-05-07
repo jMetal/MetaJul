@@ -1,4 +1,3 @@
-include("continuousProblem.jl")
 
 #### Constrained problems
 function constrExProblem()

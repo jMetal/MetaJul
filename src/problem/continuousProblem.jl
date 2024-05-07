@@ -1,6 +1,4 @@
 
-include("operator.jl")
-
 abstract type AbstractContinuousProblem{T<:Number} <: Problem{T} end
 
 mutable struct ContinuousProblem{T} <: AbstractContinuousProblem{T}

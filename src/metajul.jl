@@ -7,8 +7,11 @@ export ContinuousSolution
 include("core/solution.jl")
 
 export ContinuousProblem
-export addObjective, addVariable, createSolution, evaluate
-include("continuousProblem.jl")
+export schafferProblem, sphereProblem
+export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
+export bounds
+export numberOfVariables, numberOfObjectives, numberOfConstraints
+include("problem/continuousProblem.jl")
 
 export Bounds
 export restrict, createBounds, valueIsWithinBounds

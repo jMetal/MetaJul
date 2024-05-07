@@ -1,7 +1,4 @@
 # Test cases for continuous problems
-
-include("../src/continuousProblem.jl")
-
 continuousTestProblem = ContinuousProblem{Real}([],[],[],"")
 addObjective(continuousTestProblem, x -> x[1] + 1)
 addObjective(continuousTestProblem, x -> x[2] + x[2])
