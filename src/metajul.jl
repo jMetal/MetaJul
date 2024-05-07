@@ -25,6 +25,9 @@ export NonDominatedArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
 
+export Ranking
+include("util/ranking.jl")
+
 export CrowdingDistanceArchive
 include("densityEstimator.jl")
 
