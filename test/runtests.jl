@@ -35,3 +35,12 @@ componentTests = [
 for testProgram in componentTests
     include(testProgram)
 end
+
+
+utilTests = [
+    "util/boundsTests.jl"
+]
+
+for testProgram in utilTests
+    include(testProgram)
+end

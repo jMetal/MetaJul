@@ -1,7 +1,8 @@
 module metajul
 
 export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
-include("core.jl")
+include("core/coreTypes.jl")
+
 include("solution.jl")
 
 export ContinuousProblem
@@ -15,9 +16,9 @@ export DefaultSolutionsCreation
 export create
 include("component/common/solutionsCreation.jl")
 
-
 export Bounds
-include("bounds.jl")
+export restrict, createBounds, valueIsWithinBounds
+include("util/bounds.jl")
 
 export NonDominatedArchive
 include("archive.jl")

@@ -1,6 +1,4 @@
 
-include("core.jl")
-include("bounds.jl")
 include("solution.jl")
 include("operator.jl")
 

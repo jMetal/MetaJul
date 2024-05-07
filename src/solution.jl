@@ -1,5 +1,4 @@
-
-include("bounds.jl")
+include("util/bounds.jl")
 
 ###########################################################
 # Continuous solutions

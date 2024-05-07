@@ -1,4 +1,3 @@
-include("core.jl")
 include("solution.jl")
 
 
