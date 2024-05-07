@@ -39,7 +39,9 @@ end
 utilTests = [
     "util/boundsTests.jl",
     "util/comparatorTests.jl",
-    "util/archiveTests.jl"
+    "util/archiveTests.jl",
+    "util/rankingTests.jl",
+    "util/densityEstimatorTests.jl"
 ]
 
 for testProgram in utilTests

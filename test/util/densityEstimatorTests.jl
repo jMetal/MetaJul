@@ -1,6 +1,3 @@
-include("../src/solution.jl")
-include("../src/densityEstimator.jl")
-
 using Test
 
 function computingTheCrowdingDistanceRaisesAnExceptionIfTheSolutionListIsEmpty()

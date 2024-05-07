@@ -26,10 +26,14 @@ export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
 
 export Ranking
+export numberOfRanks, getSubFront, appendRank!, computeRanking!, getRank, setRank
+export compareRanking, computeCrowdingDistanceEstimator!, getCrowdingDistance
+export maxCrowdingDistanceValue, setCrowdingDistance, compareCrowdingDistance
+export capacity, isFull
 include("util/ranking.jl")
 
 export CrowdingDistanceArchive
-include("densityEstimator.jl")
+include("util/densityEstimator.jl")
 
 export SequentialEvaluation, SequentialEvaluationWithArchive
 include("component/common/evaluation.jl")
