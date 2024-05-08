@@ -1,11 +1,18 @@
 module metajul
 
+export Bounds
+export restrict, createBounds, valueIsWithinBounds
+include("util/bounds.jl")
+
 export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
 include("core/coreTypes.jl")
 
 export ContinuousSolution, BinarySolution
-export initBitVector, copySolution
+export initBitVector, copySolution, bitFlip
 include("core/solution.jl")
+
+export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
+include("core/constraintHandling.jl")
 
 export ContinuousProblem
 export schafferProblem, sphereProblem
@@ -13,10 +20,6 @@ export addObjective, addVariable, addConstraint, createSolution, evaluate, setNa
 export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/continuousProblem.jl")
-
-export Bounds
-export restrict, createBounds, valueIsWithinBounds
-include("util/bounds.jl")
 
 export compareElementAt, compareForDominance, compareForOverallConstraintViolationDegree
 export compareForConstraintsAndDominance

@@ -26,6 +26,15 @@ include("operatorTests.jl")
 include("componentTests.jl")
 
 """
+coreTests = [
+    "core/solutionTest.jl",
+    "core/constraintHandlingTest.jl",
+    ]
+
+for testProgram in coreTests
+    include(testProgram)
+end
+
 componentTests = [
     "component/common/evaluationTest.jl",
     "component/common/solutionsCreationTest.jl"
@@ -61,7 +70,7 @@ operatorTests = [
     "operator/crossoverTest.jl"
 ]
 
-for operatorTests in operatorTests
-    include(operatorTests)
+for testProgram in operatorTests
+    include(testProgram)
 end
 
