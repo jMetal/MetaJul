@@ -39,6 +39,14 @@ include("util/ranking.jl")
 export CrowdingDistanceArchive
 include("util/densityEstimator.jl")
 
+export PolynomialMutation, BitFlipMutation, UniformMutation
+export mutate
+include("operator/mutation.jl")
+
+export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
+export recombine, numberOfDescendants, numberOfRequiredParents
+include("operator/crossover.jl")
+
 export SequentialEvaluation, SequentialEvaluationWithArchive
 include("component/common/evaluation.jl")
 
@@ -54,13 +62,9 @@ export RandomSelection, BinaryTournamentSelection
 export select
 include("component/evolutionaryAlgorithm/selection.jl")
 
-export PolynomialMutation, BitFlipMutation, UniformMutation
-export mutate
-include("operator/mutation.jl")
-
-export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
-export recombine, numberOfDescendants, numberOfRequiredParents
-include("operator/crossover.jl")
+export CrossoverAndMutationVariation
+export variate
+include("component/evolutionaryAlgorithm/variation.jl")
 
 export normalizeObjectives, distanceBasedSubsetSelection
 include("util/utils.jl")

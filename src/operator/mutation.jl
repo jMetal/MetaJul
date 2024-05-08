@@ -35,7 +35,7 @@ end
 function uniformMutation(x::Vector{T}, mutationOperator::UniformMutation)::Vector{T} where {T<:Real}
   probability::Real = mutationOperator.probability
   perturbation::Real = mutationOperator.perturbation
-  bounds = mutationOperator.bounds
+  bounds = mutationOperator.variableBounds
   for i in 1:length(x)
     if rand() < probability
       x[i] += (rand() - 0.5) * perturbation
@@ -62,7 +62,7 @@ end
 function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Real}
   probability::Real = mutationOperator.probability
   distributionIndex::Real = mutationOperator.distributionIndex
-  bounds = mutationOperator.bounds
+  bounds = mutationOperator.variableBounds
 
   for i in 1:length(x)
     if rand() <= probability
@@ -94,7 +94,7 @@ function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation):
   return x
 end
 
-function mutate(solution::ContinuousSolution, mutationOperator::UniformMutation)::ContinuousSolution
+function mutate(solution::ContinuousSolution, mutationOperator::PolynomialMutation)::ContinuousSolution
   solution.variables = polynomialMutation(solution.variables, mutationOperator)
   return solution
 end

@@ -26,13 +26,23 @@ end
   @test mutateABinarySolutionWithProbabilityOneFlipsAllTheBits()
 end
 
-"""
+function uniformMutationIsCorrectlyInitialiazed() 
+  solution = createContinuousSolution(3)
+  solution.variables = [1.2, 5.2]
+
+  mutation = UniformMutation(0.01, 0.5, solution.bounds)
+
+  return 0.01 == mutation.probability &&
+  0.5 == mutation.perturbation &&
+  solution.bounds == mutation.variableBounds
+end
+
 function mutateAContinuousSolutionWithUniformMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = UniformMutation((probability=0.0, perturbation=0.5, bounds=solution.bounds))
-  newSolution = mutation.execute(copySolution(solution), mutation.parameters)
+  mutation = UniformMutation(0.0, 0.5, solution.bounds)
+  newSolution = mutate(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -41,26 +51,36 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAl
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = UniformMutation((probability=1.0, perturbation=0.5, bounds=solution.bounds))
-  newSolution = mutation.execute(copySolution(solution), mutation.parameters)
+  mutation = UniformMutation(1.0, 0.5, solution.bounds)
+  newSolution = mutate(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end
 
 @testset "Uniform mutation tests" begin
-  @test mutationProbability(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.054
-  @test getPerturbation(UniformMutation((probability=0.054, perturbation=0.5, bounds=[]))) == 0.5
+  @test uniformMutationIsCorrectlyInitialiazed()
   @test mutateAContinuousSolutionWithUniformMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
 end
 
 
+function polynomialMutationIsCorrectlyInitialiazed() 
+  solution = createContinuousSolution(3)
+  solution.variables = [1.2, 5.2]
+
+  mutation = PolynomialMutation(0.01, 15, solution.bounds)
+
+  return 0.01 == mutation.probability &&
+  15 == mutation.distributionIndex &&
+  solution.bounds == mutation.variableBounds
+end
+
 function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = PolynomialMutation((probability=0.0, distributionIndex=0.5, bounds=solution.bounds))
-  newSolution = mutation.execute(copySolution(solution), mutation.parameters)
+  mutation = PolynomialMutation(0.0, 20.0, solution.bounds)
+  newSolution = mutate(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -69,17 +89,14 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChange
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = PolynomialMutation((probability=1.0, distributionIndex=0.5, bounds=solution.bounds))
-  newSolution = mutation.execute(copySolution(solution), mutation.parameters)
+  mutation = PolynomialMutation(1.0, 15, solution.bounds)
+  newSolution = mutate(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end
 
 @testset "Polynomial mutation tests" begin
-  @test mutationProbability(PolynomialMutation((probability=0.054, distributionIndex=20.0, bounds=[]))) == 0.054
-  @test getDistributionIndex(PolynomialMutation((probability=0.054, distributionIndex=10.0, bounds=[]))) == 10.0
+  @test polynomialMutationIsCorrectlyInitialiazed()
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
 end
-
-"""

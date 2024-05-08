@@ -40,6 +40,7 @@ componentTests = [
     "component/common/solutionsCreationTest.jl",
     "component/common/terminationTest.jl",
     "component/evolutionaryAlgorithm/selectionTest.jl"
+    #"component/evolutionaryAlgorithm/variationTest.jl"
     ]
 
 for testProgram in componentTests
