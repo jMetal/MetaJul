@@ -1,7 +1,5 @@
 using Dates
 
-###################################
-
 mutable struct EvolutionaryAlgorithm <: Algorithm
   name::String
   problem::Problem
