@@ -46,6 +46,10 @@ export DefaultSolutionsCreation
 export create
 include("component/common/solutionsCreation.jl")
 
+export TerminationByComputingTime, TerminationByEvaluations
+export isMet
+include("component/common/termination.jl")
+
 export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate
 include("operator/mutation.jl")

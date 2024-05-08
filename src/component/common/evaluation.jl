@@ -1,7 +1,5 @@
 using Random
 
-## Evaluation components
-
 struct SequentialEvaluation <: Evaluation
     problem::Problem
 end
