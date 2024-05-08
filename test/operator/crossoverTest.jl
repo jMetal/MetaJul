@@ -57,11 +57,12 @@ function sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheRetur
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
+sbxCrossover = SBXCrossover(0.054, 20.0, [])
 @testset "SBX crossover tests" begin
-  @test SBXCrossover(0.054, 20.0, []).probability == 0.054
-  @test SBXCrossover(0.054, 20.0, []).distributionIndex == 20.0
-  @test numberOfDescendants(SBXCrossover(0.054, 20.0, [])) == 2
-  @test numberOfRequiredParents(SBXCrossover(0.054, 20.0, [])) == 2
+  @test sbxCrossover.probability == 0.054
+  @test sbxCrossover.distributionIndex == 20.0
+  @test numberOfDescendants(sbxCrossover) == 2
+  @test numberOfRequiredParents(sbxCrossover) == 2
 
   @test sbxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
@@ -94,11 +95,12 @@ function blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesInthe
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
+blxAlphaCrossover = BLXAlphaCrossover(0.12, 0.5, [])
 @testset "BLX-alpha crossover tests" begin
-  @test BLXAlphaCrossover(0.12, 0.5, []).probability == 0.12
-  @test BLXAlphaCrossover(0.12, 0.5, []).alpha == 0.5
-  @test numberOfDescendants(BLXAlphaCrossover(0.12, 0.5, [])) == 2
-  @test numberOfRequiredParents(BLXAlphaCrossover(0.12, 0.5, [])) == 2
+  @test blxAlphaCrossover.probability == 0.12
+  @test blxAlphaCrossover.alpha == 0.5
+  @test numberOfDescendants(blxAlphaCrossover) == 2
+  @test numberOfRequiredParents(blxAlphaCrossover) == 2
 
   @test blxAlphaCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
