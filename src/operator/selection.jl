@@ -11,8 +11,7 @@ struct BinaryTournamentSelectionOperator <: SelectionOperator
   comparator::Function
 end
 
-
-function BinaryTournamentSelectionOperator(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
+function select(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
   comparator = selectionOperator.comparator
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))

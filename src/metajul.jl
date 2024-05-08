@@ -50,6 +50,10 @@ export TerminationByComputingTime, TerminationByEvaluations
 export isMet
 include("component/common/termination.jl")
 
+export RandomSelection, BinaryTournamentSelection
+export select
+include("component/evolutionaryAlgorithm/selection.jl")
+
 export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate
 include("operator/mutation.jl")

@@ -38,7 +38,8 @@ end
 componentTests = [
     "component/common/evaluationTest.jl",
     "component/common/solutionsCreationTest.jl",
-    "component/common/terminationTest.jl"
+    "component/common/terminationTest.jl",
+    "component/evolutionaryAlgorithm/selectionTest.jl"
     ]
 
 for testProgram in componentTests
