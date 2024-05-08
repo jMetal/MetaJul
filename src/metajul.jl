@@ -47,4 +47,7 @@ export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate
 include("operator/mutation.jl")
 
+export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
+export recombine, numberOfDescendants, numberOfRequiredParents
+include("operator/crossover.jl")
 end # module metajul

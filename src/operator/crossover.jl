@@ -1,21 +1,36 @@
 
 # Crossover operators
-function crossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-  return crossoverOperator.parameters.probability
+#function crossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+#  return crossoverOperator.parameters.probability
+#end
+
+#function numberOfRequiredParents(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+#  return crossoverOperator.numberOfRequiredParents
+#end
+
+#function numberOfDescendants(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
+#  return crossoverOperator.numberOfDescendants
+#end
+
+# BLX-Alpha crossover
+struct BLXAlphaCrossover <: CrossoverOperator
+  probability::Float64
+  alpha::Float64
+  bounds::Vector{Bounds{Float64}} 
 end
 
-function numberOfRequiredParents(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-  return crossoverOperator.numberOfRequiredParents
+function numberOfRequiredParents(crossover::BLXAlphaCrossover)
+  return 2 
 end
 
-function numberOfDescendants(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-  return crossoverOperator.numberOfDescendants
+function numberOfDescendants(crossover::BLXAlphaCrossover)
+  return 2
 end
 
-function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
-  probability::Real = parameters.probability
-  alpha::Real = parameters.alpha
-  bounds = parameters.bounds
+function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, crossoverOperator::BLXAlphaCrossover)::Vector{ContinuousSolution}
+  probability::Real = crossoverOperator.probability
+  alpha::Real = crossoverOperator.alpha
+  bounds = crossoverOperator.bounds
 
   child1 = copySolution(parent1)
   child2 = copySolution(parent2)
@@ -42,33 +57,26 @@ function blxAlphaCrossover(parent1::ContinuousSolution, parent2::ContinuousSolut
   return [child1, child2]
 end
 
-struct BLXAlphaCrossover <: CrossoverOperator
-  parameters::NamedTuple{(:probability, :alpha, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
-  numberOfRequiredParents::Int
-  numberOfDescendants::Int
-  execute::Function
-  function BLXAlphaCrossover(crossoverParameters)
-    new(crossoverParameters, 2, 2, blxAlphaCrossover)
-  end
+# Simulated binary crossover (SBX)
+struct SBXCrossover <: CrossoverOperator
+  probability::Float64
+  distributionIndex:: Float64
+  bounds::Vector{Bounds{Float64}} 
 end
 
-"""
-function BLXAlphaCrossover(parameters::NamedTuple)
-  return BLXAlphaCrossover(parameters, 2, 2, blxAlphaCrossover)
+function numberOfRequiredParents(crossover::SBXCrossover)
+  return 2 
 end
-"""
 
-"""
-    sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
+function numberOfDescendants(crossover::SBXCrossover)
+  return 2
+end
 
-Simulated binary crossover operator
-"""
-
-function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, parameters::NamedTuple)::Vector{ContinuousSolution}
+function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution}
   EPSILON = 1.0e-14
-  probability::Real = parameters.probability
-  distributionIndex::Real = parameters.distributionIndex
-  bounds = parameters.bounds
+  probability::Real = crossoverOperator.probability
+  distributionIndex::Real = crossoverOperator.distributionIndex
+  bounds = crossoverOperator.bounds
 
   child1 = copySolution(parent1)
   child2 = copySolution(parent2)
@@ -136,44 +144,31 @@ function sbxCrossover(parent1::ContinuousSolution, parent2::ContinuousSolution, 
   return [child1, child2]
 end
 
-
-struct SBXCrossover <: CrossoverOperator
-  parameters::NamedTuple{(:probability, :distributionIndex, :bounds), Tuple{Float64, Float64, Vector{Bounds{Float64}}}} 
-  numberOfRequiredParents::Int
-  numberOfDescendants::Int
-  execute::Function
-  function SBXCrossover(crossoverParameters)
-    new(crossoverParameters, 2, 2, sbxCrossover)
-  end
+# Single point crossover
+struct SinglePointCrossover <: CrossoverOperator
+  probability::Real 
 end
 
-#function SBXCrossover(parameters::NamedTuple)
-#  return SBXCrossover(parameters, 2, 2, sbxCrossover)
-#end
+function numberOfRequiredParents(crossover::SinglePointCrossover)
+  return 2 
+end
 
-"""
-sol1 = ContinuousSolution{Float64}([1.0, 2.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-sol2 = ContinuousSolution{Float64}([2.0, 3.0], [1.5, 2.5], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
+function numberOfDescendants(crossover::SinglePointCrossover)
+  return 2
+end
 
-crossoverParameters = (probability = 1.0, distributionIndex = 20.0, bounds =[Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-crossover = SBXCrossover(crossoverParameters)
-println("Crossover: " , crossover)
 
-childs = crossover.compute(sol1, sol2, crossover.parameters)
-println("CHILDS: ", childs)
-"""
-
-function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, parameters::NamedTuple)::Vector{BinarySolution}
+function recombine(parent1::BinarySolution, parent2::BinarySolution, crossoverOperator::SinglePointCrossover)::Vector{BinarySolution}
   @assert length(parent1.variables) == length(parent2.variables) "The length of the two binary solutions to recombine is not equal"
 
-  probability::Real = parameters.probability
+  probability::Real = crossoverOperator.probability
 
   child1 = copySolution(parent1)
   child2 = copySolution(parent2)
 
   x = child1.variables
   y = child2.variables
-  if rand() < parameters.probability
+  if rand() < probability
     cuttingPoint = rand(1:length(x))
 
     tmp = x.bits[cuttingPoint:end]
@@ -186,20 +181,3 @@ function singlePointCrossover(parent1::BinarySolution, parent2::BinarySolution, 
 
   return [child1, child2]
 end
-
-struct SinglePointCrossover <: CrossoverOperator
-  parameters::NamedTuple{(:probability,),Tuple{Float64}} 
-  numberOfRequiredParents::Int
-  numberOfDescendants::Int
-  execute::Function
-  function SinglePointCrossover(crossoverParameters)
-    new(crossoverParameters, 2, 2, singlePointCrossover)
-  end
-end
-
-"""
-function SPXCrossover(parameters::NamedTuple)
-  return SBXCrossover(parameters, 2, 2, singlePointCrossover)
-end
-"""
-
