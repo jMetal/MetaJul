@@ -75,3 +75,15 @@ for testProgram in operatorTests
     include(testProgram)
 end
 
+problemTests = [
+    "problem/continuousProblemTest.jl",
+    "problem/binaryProblemTest.jl",
+    "problem/singleObjective/oneMaxTest.jl",
+    "problem/multiObjective/oneZeroMaxTest.jl",
+    "problem/multiObjective/schafferTest.jl",
+    "problem/multiObjective/ZDTTest.jl"
+]
+
+for testProgram in problemTests
+    include(testProgram)
+end

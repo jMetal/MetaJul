@@ -61,25 +61,3 @@ function createSolution(problem::BinaryProblem)
   return BinarySolution(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict())
 end
 
-function oneMax(numberOfBits::Int) 
-  oneMax = BinaryProblem(numberOfBits, "OneMax")
-
-  f = x -> -1.0 * length([i for i in x.bits if i])
-
-  addObjective(oneMax, f)
-
-  return oneMax
-end
-
-function oneZeroMax(numberOfBits::Int) 
-  problem = BinaryProblem(numberOfBits, "OneZeroMax")
-
-  f = x -> length([i for i in x.bits if i])
-  g = y -> length([j for j in y.bits if !j])
-
-  addObjective(problem, f)
-  addObjective(problem, g)
-
-  return problem
-end
-

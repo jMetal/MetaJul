@@ -78,34 +78,6 @@ function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSoluti
   return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end
 
-### Single objective problems
-function schafferProblem()
-  schaffer = ContinuousProblem{Float64}("Schaffer")
-
-  f = x -> x[1] * x[1]
-  g = x -> (x[1] - 2.0) * (x[1] - 2.0)
-
-  addObjective(schaffer, f)
-  addObjective(schaffer, g)
-  addVariable(schaffer, Bounds{Float64}(-1000.0, 1000.0))
-
-  return schaffer
-end
-
-function sphereProblem(numberOfVariables::Int)
-  sphere = ContinuousProblem{Float64}("Sphere")
-
-  f = x -> sum([v * v for v in x])
-
-  addObjective(sphere, f)
-
-  for i in 1:numberOfVariables
-    addVariable(sphere, Bounds{Float64}(-5.12, 5.12))
-  end
-
-  return sphere
-end
-
 #### Multi-Objective problems
 function fonsecaProblem()
   fonseca = ContinuousProblem{Float64}("Fonseca")

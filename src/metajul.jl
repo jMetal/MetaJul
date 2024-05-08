@@ -57,4 +57,21 @@ include("operator/crossover.jl")
 export normalizeObjectives, distanceBasedSubsetSelection
 include("util/utils.jl")
 
+export BinaryProblem, ContinuousProblem, constrainedProblem
+include("problem/binaryProblem.jl")
+include("problem/constrainedProblem.jl")
+include("problem/continuousProblem.jl")
+
+export oneMax, sphere
+include("problem/singleObjective/oneMax.jl")
+include("problem/singleObjective/sphere.jl")
+
+export fonseca, kursawe, ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, oneZeroMax, schaffer
+include("problem/multiObjective/schaffer.jl")
+include("problem/multiObjective/fonseca.jl")
+include("problem/multiObjective/kursawe.jl")
+include("problem/multiObjective/ZDT.jl")
+include("problem/multiObjective/oneZeroMax.jl")
+
+
 end # module metajul
