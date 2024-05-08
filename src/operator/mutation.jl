@@ -1,12 +1,20 @@
 
 # Mutation operators
+#function mutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
+#  return mutationOperator.probability
+#end
 
-function mutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
-  return mutationOperator.parameters.probability
+# Bit flit mutation
+struct BitFlipMutation <: MutationOperator
+  probability::Float64
 end
 
-function bitFlipMutation(x::BitVector, parameters)::BitVector
-  probability::Real = parameters.probability
+function mutate(solution::BinarySolution, mutationOperator::BitFlipMutation)::BinarySolution
+  solution.variables = bitFlipMutation(solution.variables, mutationOperator.probability)
+  return solution
+end
+
+function bitFlipMutation(x::BitVector, probability::Float64)::BitVector
   for i in 1:length(x)
     r = rand()
     if r < probability
@@ -17,29 +25,17 @@ function bitFlipMutation(x::BitVector, parameters)::BitVector
   return x
 end
 
-function bitFlipMutation(solution::BinarySolution, parameters::NamedTuple)::BinarySolution
-  solution.variables = bitFlipMutation(solution.variables, parameters)
-  return solution
+# Uniform mutation
+struct UniformMutation <: MutationOperator
+  probability::Float64
+  perturbation::Float64
+  variableBounds::Vector{Bounds{Float64}}
 end
 
-struct BitFlipMutation <: MutationOperator
-  parameters::NamedTuple{(:probability, ),Tuple{Float64}} 
-  execute::Function
-  function BitFlipMutation(mutationParameters)
-    new(mutationParameters, bitFlipMutation)
-  end
-end
-
-"""
-function BitFlipMutation(parameters::NamedTuple)
-  return BitFlipMutation(parameters, bitFlipMutation)
-end
-"""
-
-function uniformMutation(x::Vector{T}, parameters::NamedTuple)::Vector{T} where {T<:Real}
-  probability::Real = parameters.probability
-  perturbation::Real = parameters.perturbation
-  bounds = parameters.bounds
+function uniformMutation(x::Vector{T}, mutationOperator::UniformMutation)::Vector{T} where {T<:Real}
+  probability::Real = mutationOperator.probability
+  perturbation::Real = mutationOperator.perturbation
+  bounds = mutationOperator.bounds
   for i in 1:length(x)
     if rand() < probability
       x[i] += (rand() - 0.5) * perturbation
@@ -50,33 +46,23 @@ function uniformMutation(x::Vector{T}, parameters::NamedTuple)::Vector{T} where 
   return x
 end
 
-function uniformMutation(solution::ContinuousSolution, parameters::NamedTuple)::ContinuousSolution
-  solution.variables = uniformMutation(solution.variables, parameters)
+function mutate(solution::ContinuousSolution, mutationOperator::UniformMutation)::ContinuousSolution
+  solution.variables = uniformMutation(solution.variables, mutationOperator)
   return solution
 end
 
-struct UniformMutation <: MutationOperator
-  parameters::NamedTuple{(:probability, :perturbation, :bounds),Tuple{Float64, Float64, Vector{Bounds{Float64}}}}
-  execute::Function
-  function UniformMutation(mutationParameters)
-    new(mutationParameters, uniformMutation)
-  end
+# Polynomial mutation
+struct PolynomialMutation <: MutationOperator
+  probability::Float64
+  distributionIndex::Float64
+  variableBounds::Vector{Bounds{Float64}}
 end
 
-function getPerturbation(mutation::UniformMutation)
-  return mutation.parameters.perturbation
-end
 
-"""
-function UniformMutation(parameters::NamedTuple)
-  return UniformMutation(parameters, uniformMutation)
-end
-"""
-
-function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
-  probability::Real = parameters.probability
-  distributionIndex::Real = parameters.distributionIndex
-  bounds = parameters.bounds
+function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Real}
+  probability::Real = mutationOperator.probability
+  distributionIndex::Real = mutationOperator.distributionIndex
+  bounds = mutationOperator.bounds
 
   for i in 1:length(x)
     if rand() <= probability
@@ -108,26 +94,7 @@ function polynomialMutation(x::Vector{T}, parameters)::Vector{T} where {T<:Real}
   return x
 end
 
-function polynomialMutation(solution::ContinuousSolution, parameters)::ContinuousSolution
-  solution.variables = polynomialMutation(solution.variables, parameters)
+function mutate(solution::ContinuousSolution, mutationOperator::UniformMutation)::ContinuousSolution
+  solution.variables = polynomialMutation(solution.variables, mutationOperator)
   return solution
 end
-
-struct PolynomialMutation <: MutationOperator
-  parameters::NamedTuple{(:probability, :distributionIndex, :bounds),Tuple{Float64, Float64,Vector{Bounds{Float64}}}} 
-  execute::Function
-  
-  function PolynomialMutation(crossoverParameters)
-    new(crossoverParameters, polynomialMutation)
-  end
-end
-
-function getDistributionIndex(mutation::PolynomialMutation)
-  return mutation.parameters.distributionIndex
-end
-
-"""
-function PolinomialMutation(parameters::NamedTuple)
-  return PolinomialMutation(parameters, polynomialMutation)
-end
-"""

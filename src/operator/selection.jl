@@ -1,20 +1,19 @@
 ## Selection operators
 
-function randomSelection(x::Vector, parameters=[])
+struct RandomSelectionOperator <: SelectionOperator
+end
+
+function select(x::Vector, selectionOperator::RandomSelectionOperator)
   return x[rand(1:length(x))]
 end
 
-struct RandomSelectionOperator <: SelectionOperator
-  parameters::NamedTuple
-  compute::Function
-  function RandomSelection(parameters)
-    new(parameters, randomSelection)
-  end
+struct BinaryTournamentSelectionOperator <: SelectionOperator
+  comparator::Function
 end
 
 
-function binaryTournamentSelection(x::Vector{S}, parameters::NamedTuple{(:comparator,), Tuple{Function}}) where {S <: Solution}
-  comparator = parameters.comparator
+function BinaryTournamentSelectionOperator(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
+  comparator = selectionOperator.comparator
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
 
@@ -27,11 +26,4 @@ function binaryTournamentSelection(x::Vector{S}, parameters::NamedTuple{(:compar
   return result
 end
 
-struct BinaryTournamentSelectionOperator <: SelectionOperator
-  parameters::NamedTuple{(:comparator,), Tuple{Function}}
-  compute::Function
-  function BinaryTournamentSelectionOperator(parameters)
-    new(parameters, binaryTournamentSelection)
-  end
-end
 

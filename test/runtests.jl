@@ -37,11 +37,11 @@ end
 
 
 utilTests = [
-    "util/boundsTests.jl",
-    "util/comparatorTests.jl",
-    "util/archiveTests.jl",
-    "util/rankingTests.jl",
-    "util/densityEstimatorTests.jl"
+    "util/boundsTest.jl",
+    "util/comparatorTest.jl",
+    "util/archiveTest.jl",
+    "util/rankingTest.jl",
+    "util/densityEstimatorTest.jl"
 ]
 
 for testProgram in utilTests
@@ -49,10 +49,18 @@ for testProgram in utilTests
 end
 
 problemTests = [
-    "problem/continuousProblemTests.jl"
+    "problem/continuousProblemTest.jl"
 ]
 
 for testProgram in problemTests
     include(testProgram)
+end
+
+operatorTests = [
+    "operator/mutationTest.jl"
+]
+
+for operatorTests in operatorTests
+    include(operatorTests)
 end
 

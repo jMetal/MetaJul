@@ -3,7 +3,8 @@ module metajul
 export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
 include("core/coreTypes.jl")
 
-export ContinuousSolution
+export ContinuousSolution, BinarySolution
+export initBitVector, copySolution
 include("core/solution.jl")
 
 export ContinuousProblem
@@ -41,5 +42,9 @@ include("component/common/evaluation.jl")
 export DefaultSolutionsCreation
 export create
 include("component/common/solutionsCreation.jl")
+
+export PolynomialMutation, BitFlipMutation, UniformMutation
+export mutate
+include("operator/mutation.jl")
 
 end # module metajul
