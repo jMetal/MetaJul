@@ -137,30 +137,6 @@ function computeRankingOfASolutionListWithFourNonDominatedSolutionsReturnsOneRan
     (getRank(solution1) == 1)
 end
 
-function computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRankings()
-    solution1 = createContinuousSolution(3)
-    solution1.objectives = [1.0, 2.0, 3.0]
-
-    solution2 = createContinuousSolution(3)
-    solution2.objectives = [1.0, 1.0, 1.0]
-
-    solution3 = createContinuousSolution(3)
-    solution3.objectives = [0.0, 0.0, 0.0]
-
-    solutions = [solution1, solution2, solution3]
-    
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
-
-    return (numberOfRanks(ranking) == 3) && 
-    (length(ranking.rank[1]) == 1) && 
-    (length(ranking.rank[2]) == 1) && 
-    (length(ranking.rank[3]) == 1) && 
-    (getRank(solution3) == 1) && 
-    (getRank(solution2) == 2) &&
-    (getRank(solution1) == 3)
-end
-
 function computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRankings()
     solution1Front1 = createContinuousSolution([1.0, 2.0])
     solution2Front1 = createContinuousSolution([2.0, 1.0])

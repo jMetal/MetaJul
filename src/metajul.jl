@@ -53,4 +53,8 @@ include("operator/mutation.jl")
 export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
 export recombine, numberOfDescendants, numberOfRequiredParents
 include("operator/crossover.jl")
+
+export normalizeObjectives, distanceBasedSubsetSelection
+include("util/utils.jl")
+
 end # module metajul

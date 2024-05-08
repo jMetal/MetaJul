@@ -50,7 +50,8 @@ utilTests = [
     "util/comparatorTest.jl",
     "util/archiveTest.jl",
     "util/rankingTest.jl",
-    "util/densityEstimatorTest.jl"
+    "util/densityEstimatorTest.jl",
+    "util/utilTest.jl"
 ]
 
 for testProgram in utilTests

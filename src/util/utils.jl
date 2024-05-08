@@ -1,5 +1,3 @@
-include("densityEstimator.jl")
-
 using LinearAlgebra
 
 function printObjectivesToCSVFile(fileName::String, solutions::Vector{T}) where {T<:Solution}
