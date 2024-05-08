@@ -2,41 +2,6 @@ using Dates
 
 ###################################
 
-mutable struct LocalSearch <: Algorithm
-  startingSolution::Solution
-  problem::Problem
-  numberOfIterations::Int
-  mutation::Function
-  mutationParameters::NamedTuple
-  foundSolution::Solution
-
-  LocalSearch() = new()
-end
-
-function optimize(algorithm :: LocalSearch)
-  algorithm.foundSolution = localSearch(algorithm.startingSolution, algorithm.problem,
-  algorithm.numberOfIterations, algorithm.mutation, algorithm.mutationParameters)
-  
-  return Nothing
-end
-
-function localSearch(currentSolution::Solution, problem::Problem, numberOfIterations::Int, mutationOperator::Function, mutationParameters)::Solution
-  for i in 1:numberOfIterations
-    mutatedSolution = copySolution(currentSolution)
-    mutatedSolution.variables = mutationOperator(mutatedSolution.variables, mutationParameters)
-    
-    mutatedSolution = evaluate(mutatedSolution, problem)
-
-    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
-      currentSolution = mutatedSolution
-    end
-  end
-
-  return currentSolution
-end
-
-#################################
-
 mutable struct EvolutionaryAlgorithm <: Algorithm
   name::String
   problem::Problem
