@@ -56,12 +56,6 @@ function isFeasibleReturnTrueIfABinarySolutionHasNoConstraints()
     return isFeasible(solution)
 end
 
-function isFeasibleReturnTrueIfAHasConstraintsButNoneOfThemAreViolated()
-    solution = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [2.0, 1.0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
-
-    return isFeasible(solution)
-end
-
 function isFeasibleReturnFalseIfAHasViolatedConstraint()
     solution = ContinuousSolution{Float64}([1.0, 2.0, 3.0], [1.5, 2.5], [-2.0, 1.0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
 

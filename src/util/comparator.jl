@@ -53,11 +53,9 @@ function compareForDominance(x::Vector{T}, y::Vector{T})::Int where {T<:Number}
   end
 end
 
-
 function compareForDominance(solution1::Solution, solution2::Solution)::Int
   return compareForDominance(solution1.objectives, solution2.objectives)
 end
-
 
 function compareIthObjective(solution1::Solution, solution2::Solution, index::Int=1)::Int
   return compareElementAt(solution1.objectives, solution2.objectives, index)
@@ -88,4 +86,12 @@ function compareForConstraintsAndDominance(solution1::Solution, solution2::Solut
   end
 
   return result ;
+end
+
+function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
+  result = compareRanking(x, y)
+  if (result == 0)
+    result = compareCrowdingDistance(x,y)
+  end
+  return result
 end

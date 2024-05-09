@@ -21,7 +21,7 @@ export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/continuousProblem.jl")
 
-export compareElementAt, compareForDominance, compareForOverallConstraintViolationDegree
+export compareElementAt, compareForDominance, compareIthObjective, compareForOverallConstraintViolationDegree, compareRankingAndCrowdingDistance
 export compareForConstraintsAndDominance
 include("util/comparator.jl")
 
@@ -42,6 +42,9 @@ include("util/densityEstimator.jl")
 export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate
 include("operator/mutation.jl")
+
+export BinaryTournamentSelectionOperator, RandomSelectionOperator
+include("operator/selection.jl")
 
 export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
 export recombine, numberOfDescendants, numberOfRequiredParents
@@ -67,7 +70,7 @@ export variate
 include("component/evolutionaryAlgorithm/variation.jl")
 
 export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement
-export replace 
+export replace_ 
 include("component/evolutionaryAlgorithm/replacement.jl")
 
 export normalizeObjectives, distanceBasedSubsetSelection
