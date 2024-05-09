@@ -15,12 +15,15 @@ function localSearchWithZeroIterationsReturnsTheStartingSolution()
     numberOfIterations = 0
     mutation = UniformMutation(0.01, 20.0, problem.bounds)
 
-    algorithm = LocalSearch(startingSolution, problem, numberOfIterations, mutation)
+    algorithm = LocalSearch()
+    algorithm.problem = problem
+    algorithm.numberOfIterations = numberOfIterations
+    algorithm.startingSolution = startingSolution
+    algorithm.mutation = mutation
     optimize(algorithm)
 
     return startingSolution == algorithm.foundSolution
 end
-
 
 @testset "Constraint handling functions tests" begin
     @test localSearchIsProperlyInitialized()

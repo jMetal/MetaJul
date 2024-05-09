@@ -1,11 +1,4 @@
-include("../src/bounds.jl")
-include("../src/solution.jl")
-include("../src/operator.jl")
-include("../src/binaryProblem.jl")
-include("../src/algorithm.jl")
-include("../src/component.jl")
-include("../src/utils.jl")
-
+using metajul
 using Dates
 
 # Genetic algorithm example applied to problem OneMax
@@ -16,19 +9,19 @@ solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
-solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
+solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
 
-solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
+solver.evaluation = SequentialEvaluation(solver.problem)
 
-solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 40000, ))
+solver.termination = TerminationByEvaluations(40000)
 
-mutation = BitFlipMutation((probability=1.0/numberOfVariables(problem),))
-crossover = SinglePointCrossover((probability=1.0,))
-solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
+mutation = BitFlipMutation(1.0/numberOfVariables(problem))
+crossover = SinglePointCrossover(1.0)
+solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
 
-solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareIthObjective))
+solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareIthObjective)
 
-solver.replacement = MuPlusLambdaReplacement((comparator = compareIthObjective, ))
+solver.replacement = MuPlusLambdaReplacement(compareIthObjective)
 
 startingTime = Dates.now()
 optimize(solver)

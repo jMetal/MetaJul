@@ -8,7 +8,7 @@ function isMet(algorithmAttributes::Dict, termination::TerminationByEvaluations)
 end
 
 struct TerminationByComputingTime <: Termination
-    computingTimeLimit::Int
+    computingTimeLimit
 end
 
 

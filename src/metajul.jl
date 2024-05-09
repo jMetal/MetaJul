@@ -66,10 +66,10 @@ export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstim
 export replace_ 
 include("component/evolutionaryAlgorithm/replacement.jl")
 
-export normalizeObjectives, distanceBasedSubsetSelection
+export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
-export Observable, EvaluationObserver
+export Observable, EvaluationObserver, FitnessObserver, getObservable, register!
 include("util/observer.jl")
 
 export BinaryProblem, ContinuousProblem, constrainedProblem
@@ -94,5 +94,13 @@ include("problem/multiObjective/oneZeroMax.jl")
 export LocalSearch
 export optimize
 include("algorithm/localSearch.jl")
+
+export EvolutionaryAlgorithm
+export optimize
+include("algorithm/evolutionaryAlgorithm.jl")
+
+export NSGAII
+export optimize
+include("algorithm/NSGAII.jl")
 
 end # module metajul

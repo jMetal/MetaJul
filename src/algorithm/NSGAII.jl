@@ -32,9 +32,9 @@ function nsgaII(nsgaII::NSGAII)
   solver.populationSize = nsgaII.populationSize
   solver.offspringPopulationSize = nsgaII.populationSize
 
-  solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
+  solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
 
-  solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
+  solver.evaluation = SequentialEvaluation(solver.problem)
 
   solver.termination = nsgaII.termination
   solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
