@@ -14,13 +14,6 @@ include("core/solution.jl")
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
 include("core/constraintHandling.jl")
 
-export ContinuousProblem
-export schafferProblem, sphereProblem
-export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
-export bounds
-export numberOfVariables, numberOfObjectives, numberOfConstraints
-include("problem/continuousProblem.jl")
-
 export compareElementAt, compareForDominance, compareIthObjective, compareForOverallConstraintViolationDegree, compareRankingAndCrowdingDistance
 export compareForConstraintsAndDominance
 include("util/comparator.jl")
@@ -77,6 +70,9 @@ export normalizeObjectives, distanceBasedSubsetSelection
 include("util/utils.jl")
 
 export BinaryProblem, ContinuousProblem, constrainedProblem
+export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
+export bounds
+export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/binaryProblem.jl")
 include("problem/constrainedProblem.jl")
 include("problem/continuousProblem.jl")
