@@ -1,0 +1,61 @@
+using Dates
+
+mutable struct NSGAII <: Algorithm
+  problem::Problem
+  populationSize::Int
+  numberOfEvaluations::Int
+
+  foundSolutions::Vector
+
+  termination::Termination
+  mutation::MutationOperator
+  crossover::CrossoverOperator
+
+  solver::EvolutionaryAlgorithm
+
+  dominanceComparator::Function
+
+  function NSGAII() 
+    algorithm = new()
+    algorithm.solver = EvolutionaryAlgorithm()
+    algorithm.solver.name = "NSGA-II"
+
+    algorithm.dominanceComparator = compareForDominance
+    return algorithm
+  end
+end
+
+function nsgaII(nsgaII::NSGAII) 
+  solver = nsgaII.solver 
+  
+  solver.problem = nsgaII.problem
+  solver.populationSize = nsgaII.populationSize
+  solver.offspringPopulationSize = nsgaII.populationSize
+
+  solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
+
+  solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
+
+  solver.termination = nsgaII.termination
+  solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
+
+  solver.replacement = RankingAndDensityEstimatorReplacement(nsgaII.dominanceComparator)
+
+  solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareRankingAndCrowdingDistance)
+
+  return evolutionaryAlgorithm(solver)
+end
+
+function optimize(algorithm::NSGAII)
+  algorithm.foundSolutions = nsgaII(algorithm)
+  
+  return Nothing
+end
+
+function name(nsgaII::NSGAII)
+  return name(nsgaII.solver)
+end
+
+function getObservable(nsgaII::NSGAII)
+  return getObservable(nsgaII.solver)
+end

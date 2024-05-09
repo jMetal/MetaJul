@@ -69,6 +69,9 @@ include("component/evolutionaryAlgorithm/replacement.jl")
 export normalizeObjectives, distanceBasedSubsetSelection
 include("util/utils.jl")
 
+export Observable, EvaluationObserver
+include("util/observer.jl")
+
 export BinaryProblem, ContinuousProblem, constrainedProblem
 export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
 export bounds
@@ -88,5 +91,8 @@ include("problem/multiObjective/kursawe.jl")
 include("problem/multiObjective/ZDT.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
+export LocalSearch
+export optimize
+include("algorithm/localSearch.jl")
 
 end # module metajul

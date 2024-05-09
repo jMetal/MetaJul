@@ -78,3 +78,11 @@ problemTests = [
 for testProgram in problemTests
     include(testProgram)
 end
+
+algorithmTests = [
+    "algorithm/localSearchTest.jl",
+]
+
+for testProgram in algorithmTests
+    include(testProgram)
+end
