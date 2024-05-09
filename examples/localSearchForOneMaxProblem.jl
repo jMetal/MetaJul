@@ -4,6 +4,7 @@ include("../src/operator.jl")
 include("../src/binaryProblem.jl")
 include("../src/algorithm.jl")
 
+using metajul
 using Dates
 
 # Local search example 

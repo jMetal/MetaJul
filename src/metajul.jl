@@ -66,6 +66,10 @@ export CrossoverAndMutationVariation
 export variate
 include("component/evolutionaryAlgorithm/variation.jl")
 
+export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement
+export replace 
+include("component/evolutionaryAlgorithm/replacement.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection
 include("util/utils.jl")
 
