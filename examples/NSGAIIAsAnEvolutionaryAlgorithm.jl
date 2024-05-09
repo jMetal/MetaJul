@@ -1,15 +1,8 @@
-include("../src/bounds.jl")
-include("../src/solution.jl")
-include("../src/operator.jl")
-include("../src/continuousProblem.jl")
-include("../src/algorithm.jl")
-include("../src/component.jl")
-include("../src/utils.jl")
-
+using metajul
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
-problem = zdt1Problem()
+problem = ZDT1()
 
 solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
 solver.name = "NSGA-II"
@@ -18,30 +11,30 @@ solver.problem = problem
 solver.populationSize = 100
 solver.offspringPopulationSize = 100
 
-solver.solutionsCreation = DefaultSolutionsCreation((problem = solver.problem, numberOfSolutionsToCreate = solver.populationSize))
+solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
 
-solver.evaluation = SequentialEvaluation((problem = solver.problem, ))
+solver.evaluation = SequentialEvaluation(solver.problem)
 
-solver.termination = TerminationByEvaluations((numberOfEvaluationsToStop = 25000, ))
+solver.termination = TerminationByEvaluations(25000)
 
-mutation = PolynomialMutation((probability=1.0/numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds))
+mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
 
 """
-mutation = UniformMutation((probability=1.0/numberOfVariables(problem), perturbation=20.0, bounds=problem.bounds))
+mutation = UniformMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds)
 
-crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
+crossover = BLXAlphaCrossover(1.0, 0.5, problem.bounds)
 """
-crossover = SBXCrossover((probability=0.9, distributionIndex=20.0, bounds=problem.bounds))
+crossover = SBXCrossover(0.9, 20.0, problem.bounds)
 
-solver.variation = CrossoverAndMutationVariation((offspringPopulationSize = solver.offspringPopulationSize, crossover = crossover, mutation = mutation))
+solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
 
-solver.selection = BinaryTournamentSelection((matingPoolSize = solver.variation.matingPoolSize, comparator = compareRankingAndCrowdingDistance))
+solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareRankingAndCrowdingDistance)
 
-solver.replacement = RankingAndDensityEstimatorReplacement((dominanceComparator = compareForDominance, ))
+solver.replacement = RankingAndDensityEstimatorReplacement(compareForDominance)
 
 startingTime = Dates.now()
-#optimize(solver)
-foundSolutions = evolutionaryAlgorithm(solver)
+optimize(solver)
+foundSolutions = solver.foundSolutions
 endTime = Dates.now()
 
 #foundSolutions = solver.foundSolutions

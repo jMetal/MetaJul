@@ -77,8 +77,10 @@ export addObjective, addVariable, addConstraint, createSolution, evaluate, setNa
 export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/binaryProblem.jl")
-include("problem/constrainedProblem.jl")
 include("problem/continuousProblem.jl")
+
+export tanaka, osyczka2, srinivas, binh2, constrEx, golinski
+include("problem/constrainedProblem.jl")
 
 export oneMax, sphere
 include("problem/singleObjective/oneMax.jl")
