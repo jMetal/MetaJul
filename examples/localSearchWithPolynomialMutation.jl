@@ -1,22 +1,16 @@
-include("../src/bounds.jl")
-include("../src/solution.jl")
-include("../src/operator.jl")
-include("../src/continuousProblem.jl")
-include("../src/algorithm.jl")
-
+using metajul
 using Dates
 
 # Local search example 
-problem = sphereProblem(20)
+problem = sphere(20)
 solution::Solution = createSolution(problem)
 solution = evaluate(solution, problem)
 
 solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
-solver.numberOfIterations = 10000
-solver.mutation = polynomialMutation
-solver.mutationParameters = (probability=0.1, distributionIndex=20.0, bounds=problem.bounds)
+solver.numberOfIterations = 100000
+solver.mutation = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds)
 
 startingTime = Dates.now()
 optimize(solver)

@@ -1,9 +1,3 @@
-include("../src/bounds.jl")
-include("../src/solution.jl")
-include("../src/operator.jl")
-include("../src/binaryProblem.jl")
-include("../src/algorithm.jl")
-
 using metajul
 using Dates
 
@@ -16,8 +10,7 @@ solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 20000
-solver.mutation = bitFlipMutation
-solver.mutationParameters = (probability=1.0/numberOfVariables(problem),)
+solver.mutation = BitFlipMutation(1.0/numberOfVariables(problem))
 
 startingTime = Dates.now()
 optimize(solver)

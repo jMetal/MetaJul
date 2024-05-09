@@ -5,9 +5,8 @@ mutable struct LocalSearch <: Algorithm
   mutation::MutationOperator
   foundSolution::Solution
 
-  function LocalSearch(startingSolution, problem, numberOfIterations, mutation)
-    return new(startingSolution, problem, numberOfIterations, mutation, copySolution(startingSolution))
-  end
+  LocalSearch() = new()
+  LocalSearch(startingSolution, problem, numberOfIterations, mutation) = new(startingSolution, problem, numberOfIterations, mutation, copySolution(startingSolution)) 
 end
 
 function optimize(algorithm::LocalSearch)::Solution

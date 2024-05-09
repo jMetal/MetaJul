@@ -1,11 +1,7 @@
-include("../src/bounds.jl")
-include("../src/solution.jl")
-include("../src/operator.jl")
-include("../src/continuousProblem.jl")
-include("../src/algorithm.jl")
+using metajul
 
 # Local search example 
-problem = sphereProblem(10)
+problem = sphere(10)
 solution::Solution = createSolution(problem)
 solution = evaluate(solution, problem)
 
@@ -13,8 +9,7 @@ solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
 solver.numberOfIterations = 10000
-solver.mutation = uniformMutation
-solver.mutationParameters = (probability=0.1, perturbation=0.5, bounds=problem.bounds)
+solver.mutation = UniformMutation(0.1, 0.5, problem.bounds)
 
 optimize(solver)
 
