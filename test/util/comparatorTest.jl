@@ -17,6 +17,10 @@ end
     @test compareForDominance([2.0], [1.0]) == 1
 
     @test compareForDominance([1.0, 2.0], [1.0, 1.0]) == 1
+    @test compareForDominance([2.0, 2.0], [2.0, 1.0]) == 1
+    @test compareForDominance([1.0, 2.0], [2.0, 1.0]) == 0
+    @test compareForDominance([1.0, 2.0], [1.0, 2.0]) == 0
+    @test compareForDominance([1.0, 1.0], [1.0, 2.0]) == -1
 
     @test compareForDominance([1.0,2.0,3.1], [1.0,2.0,3.1]) == 0
     
