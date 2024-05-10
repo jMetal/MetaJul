@@ -66,6 +66,10 @@ export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstim
 export replace_ 
 include("component/evolutionaryAlgorithm/replacement.jl")
 
+export ConstantValueStrategy
+export compute
+include("component/particleSwarmOptimization/inertiaWeightComputingStrategy.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
