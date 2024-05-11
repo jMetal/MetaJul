@@ -70,6 +70,10 @@ export ConstantValueStrategy
 export compute
 include("component/particleSwarmOptimization/inertiaWeightComputingStrategy.jl")
 
+export DefaultVelocityInitialization
+export initialize
+include("component/particleSwarmOptimization/velocityInitialization.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 

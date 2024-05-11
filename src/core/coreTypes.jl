@@ -18,5 +18,6 @@ abstract type Variation <: Component end
 abstract type Replacement <: Component end
 
 abstract type InertiaWeightComputingStrategy <: Component end 
+abstract type VelocityInitialization <: Component end 
 
 abstract type Archive end

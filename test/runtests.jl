@@ -29,7 +29,8 @@ componentTests = [
     "component/evolutionaryAlgorithm/selectionTest.jl",
     "component/evolutionaryAlgorithm/variationTest.jl",
     "component/evolutionaryAlgorithm/replacementTest.jl",
-    "component/particleSwarmOptimization/inertiaWeightComputingStrategy.jl"
+    "component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
+    "component/particleSwarmOptimization/velocityInitializationTest.jl"
     ]
 
 for testProgram in componentTests
