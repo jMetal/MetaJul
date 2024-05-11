@@ -68,7 +68,6 @@ function contain(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <:
 end
 
 # Crowding distance archive 
-
 struct CrowdingDistanceArchive{T<:Solution} <: Archive
   capacity::Int
   internalNonDominatedArchive::NonDominatedArchive{T}

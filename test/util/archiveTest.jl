@@ -413,7 +413,7 @@ function addASolutionToAFullArchiveRemovesTheSolutionWithTheLowestCrowdingDistan
   solution2IsAdded = add!(crowdingDistanceArchive, solution2)
   add!(crowdingDistanceArchive, solution3)
   
-  return contain(crowdingDistanceArchive, solution2) == false
+  return contain(crowdingDistanceArchive, solution2) == false && solution2IsAdded
 end
 
 function addASolutionWithALowCrowdingDistanceToAFullArchiveRemovesThatSolution()
