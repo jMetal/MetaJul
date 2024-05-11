@@ -19,5 +19,6 @@ abstract type Replacement <: Component end
 
 abstract type InertiaWeightComputingStrategy <: Component end 
 abstract type VelocityInitialization <: Component end 
+abstract type GlobalBestInitialization <: Component end 
 
 abstract type Archive end

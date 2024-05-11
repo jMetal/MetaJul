@@ -18,7 +18,7 @@ export compareElementAt, compareForDominance, compareIthObjective, compareForOve
 export compareForConstraintsAndDominance
 include("util/comparator.jl")
 
-export NonDominatedArchive
+export NonDominatedArchive, CrowdingDistanceArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
 
@@ -29,7 +29,6 @@ export maxCrowdingDistanceValue, setCrowdingDistance, compareCrowdingDistance
 export capacity, isFull
 include("util/ranking.jl")
 
-export CrowdingDistanceArchive
 include("util/densityEstimator.jl")
 
 export PolynomialMutation, BitFlipMutation, UniformMutation
@@ -73,6 +72,10 @@ include("component/particleSwarmOptimization/inertiaWeightComputingStrategy.jl")
 export DefaultVelocityInitialization
 export initialize
 include("component/particleSwarmOptimization/velocityInitialization.jl")
+
+export DefaultGlobalBestInitialization
+export initialize
+include("component/particleSwarmOptimization/GlobalBestInitialization.jl")
 
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")

@@ -67,4 +67,62 @@ function contain(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <:
   return result
 end
 
+# Crowding distance archive 
+
+struct CrowdingDistanceArchive{T<:Solution} <: Archive
+  capacity::Int
+  internalNonDominatedArchive::NonDominatedArchive{T}
+end
+
+function CrowdingDistanceArchive(capacity::Int, T::Type{<:Solution})
+  return CrowdingDistanceArchive(capacity, NonDominatedArchive(T))
+end
+
+function Base.length(archive::CrowdingDistanceArchive)::Int
+  return length(archive.internalNonDominatedArchive)
+end
+
+function isEmpty(archive::CrowdingDistanceArchive)::Bool
+  return length(archive) == 0
+end
+
+function isFull(archive::CrowdingDistanceArchive)
+  return length(archive.internalNonDominatedArchive) == archive.capacity
+end
+
+function capacity(archive::CrowdingDistanceArchive)::Int
+  return archive.capacity
+end
+
+function contain(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:Solution}
+  return contain(archive.internalNonDominatedArchive, solution)
+end
+
+function getSolutions(archive::CrowdingDistanceArchive{T})::Vector{T} where {T<:Solution}
+  return getSolutions(archive.internalNonDominatedArchive)
+end
+
+
+function computeCrowdingDistanceEstimator!(archive::CrowdingDistanceArchive{T}) where {T<:Solution}
+  return computeCrowdingDistanceEstimator!(archive.internalNonDominatedArchive.solutions)
+end
+
+function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:Solution}
+  archiveIsFull = isFull(archive)
+  solutionIsAdded = add!(archive.internalNonDominatedArchive, solution)
+
+  if solutionIsAdded && archiveIsFull
+      computeCrowdingDistanceEstimator!(getSolutions(archive))
+      sort!(getSolutions(archive), lt=((x, y) -> compareCrowdingDistance(x, y) < 0))
+
+      deletedSolution = pop!(getSolutions(archive))
+      if deletedSolution == solution
+          solutionIsAdded = false
+      end
+  end
+
+  return solutionIsAdded
+end
+
+
 
