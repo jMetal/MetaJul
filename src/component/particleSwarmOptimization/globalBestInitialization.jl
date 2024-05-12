@@ -7,7 +7,7 @@ function initialize(globalBestInitialization::DefaultGlobalBestInitialization)
     @assert length(globalBestInitialization.swarm) > 0
 
     for particle in globalBestInitialization.swarm
-        add!(globalBestInitialization.globalBest, deepcopy(particle))
+        add!(globalBestInitialization.globalBest, copySolution(particle))
     end
 
     return globalBestInitialization.globalBest

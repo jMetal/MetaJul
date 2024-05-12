@@ -21,5 +21,6 @@ abstract type InertiaWeightComputingStrategy <: Component end
 abstract type VelocityInitialization <: Component end 
 abstract type GlobalBestInitialization <: Component end 
 abstract type GlobalBestSelection <: Component end 
+abstract type GlobalBestUpdate <: Component end 
 
 abstract type Archive end

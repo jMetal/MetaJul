@@ -81,6 +81,9 @@ export BinaryTournamentGlobalBestSelection
 export select
 include("component/particleSwarmOptimization/globalBestSelection.jl")
 
+export DefaultGlobalBestUpdate
+export update
+include("component/particleSwarmOptimization/globalBestUpdate.jl")
 
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
