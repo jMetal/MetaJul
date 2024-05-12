@@ -77,6 +77,11 @@ export DefaultGlobalBestInitialization
 export initialize
 include("component/particleSwarmOptimization/GlobalBestInitialization.jl")
 
+export BinaryTournamentGlobalBestSelection
+export select
+include("component/particleSwarmOptimization/globalBestSelection.jl")
+
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
