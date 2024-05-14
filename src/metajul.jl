@@ -14,7 +14,11 @@ include("core/solution.jl")
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
 include("core/constraintHandling.jl")
 
-export compareElementAt, compareForDominance, compareIthObjective, compareForOverallConstraintViolationDegree, compareRankingAndCrowdingDistance
+
+export CompareElementAt
+export compare
+
+export compareForDominance, compareIthObjective, compareForOverallConstraintViolationDegree, compareRankingAndCrowdingDistance
 export compareForConstraintsAndDominance
 include("util/comparator.jl")
 

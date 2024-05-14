@@ -1,22 +1,22 @@
 struct MuPlusLambdaReplacement <: Replacement
-    comparator::Function
+    comparator::Comparator
 end
 
 function replace_(x::Vector{S}, y::Vector{S}, replacement::MuPlusLambdaReplacement) where {S <: Solution}
     jointVector = vcat(x, y)
-    sort!(jointVector, lt=((a, b) -> replacement.comparator(a, b) <= 0))
+    sort!(jointVector, lt=((a, b) -> compare(replacement.comparator, a, b) <= 0))
     return jointVector[1:length(x)]
 end
 
 struct MuCommaLambdaReplacement <: Replacement
-    comparator::Function
+    comparator::Comparator
 end
 
 function replace_(x::Vector{S}, y::Vector{S}, replacement::MuCommaLambdaReplacement) where {S <: Solution}
     @assert length(x) >= length(y) "The length of the x vector is lower than the length of the y vector"
 
     resultVector = Vector(y)
-    sort!(resultVector, lt=((a, b) -> replacement.comparator(a, b) <= 0))
+    sort!(resultVector, lt=((a, b) -> compare(replacement.comparator,a, b) <= 0))
 
     return resultVector[1:length(x)]
 end

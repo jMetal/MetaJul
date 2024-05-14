@@ -1,4 +1,6 @@
 # Test cases for comparators
+
+"""
 @testset "Compare elements at the same position tests" begin
     @test_throws "The vectors have a different length" compareElementAt([1,2,3], [4,5], 1)
     @test_throws "The index is out of range" compareElementAt([1,2,3], [1,2,3], -1)
@@ -8,6 +10,18 @@
     @test compareElementAt([1.0,2.1,3], [4.1,1.4,3.1], 2) ==  1
     @test compareElementAt([1,2,3], [4,5,3],3 ) ==  0
 end
+
+@testset "Compare elements at the same position tests" begin
+    @test_throws "The vectors have a different length" compare(CompareElementAt(1), [1,2,3], [4,5])
+    @test_throws "The index is out of range" compare(CompareElementAt(-1), [1,2,3], [1,2,3])
+    @test_throws "The index is out of range" compare(CompareElementAt(4), [1,2,3], [1,2,3])
+
+    @test compare(CompareElementAt(1), [1.0,2.0,3.1], [4.0,5.2,0.5]) == -1
+    @test compare(CompareElementAt(2), [1.0,2.1,3], [4.1,1.4,3.1]) ==  1
+    @test compare(CompareElementAt(3), [1,2,3], [4,5,3]) ==  0
+end
+"""
+
 
 @testset "Dominance comparison tests" begin
     @test_throws "The vectors have a different length" compareForDominance([1,2,3], [4,5])

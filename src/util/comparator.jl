@@ -1,10 +1,33 @@
 """
-    compareElementAt(x, y)
+    Comparator CompareElementAt(index)
 
 Compare the values in the same position (`index`) of two numeric vectors `x` and `y`. The result value is 0, -1, or 
 +1 depending, respectively, on the conditions `x[index] == y[index]`, `x[index] < y[index]` or `x[index] > y[index]`
 
 """
+
+struct CompareElementAt <: Comparator
+  index::Int
+
+  #CompareElementAt() = new(1)
+end
+
+function compare(comparator::CompareElementAt, x::Vector, y::Vector)
+  index = comparator.index 
+
+  @assert length(x) == length(y) "The vectors have a different length"
+  @assert index in range(1, length(x)) "The index is out of range"
+
+  result = 0
+  if x[index] < y[index]
+    result = -1
+  elseif x[index] > y[index]
+    result = 1
+  end
+
+  return result
+end
+
 function compareElementAt(x::Vector{T}, y::Vector{T}, index::Int=1)::Int where {T<:Number}
   @assert length(x) == length(y) "The vectors have a different length"
   @assert index in range(1, length(x)) "The index is out of range"

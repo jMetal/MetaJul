@@ -3,25 +3,33 @@
 #######################################################
 
 function muPlusLambdaReplacementIsCorrectlyInitialized()
-    replacement = MuPlusLambdaReplacement(compareElementAt)
+    comparator = CompareElementAt(1)
+    replacement = MuPlusLambdaReplacement(comparator)
 
-    return compareElementAt == replacement.comparator
+    return comparator == replacement.comparator
 end
 
-function RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
-    replacement = RankingAndDensityEstimatorReplacement(compareForDominance)
+function muCommaLambdaReplacementIsCorrectlyInitialized()
+    comparator = CompareElementAt(1)
+    replacement = MuCommaLambdaReplacement(comparator)
 
-    return compareForDominance == replacement.dominanceComparator
+    return comparator == replacement.comparator
 end
 
 @testset "Replacement tests" begin    
     @test muPlusLambdaReplacementIsCorrectlyInitialized()
-    @test RankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
+    @test muCommaLambdaReplacementIsCorrectlyInitialized()
 end
 
 #######################################################
 # Ranking and density estimator replacement unit tests
 #######################################################
+
+function rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
+    replacement = RankingAndDensityEstimatorReplacement(compareForDominance)
+
+    return compareForDominance == replacement.dominanceComparator
+end
 
 """
 Case 1: o = offspring, x = population
@@ -254,6 +262,7 @@ end
 
 
 @testset "Ranking and crowdingDistance replacement tests" begin    
+    @test rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase2()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase3()
