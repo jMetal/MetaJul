@@ -33,7 +33,8 @@ componentTests = [
     "component/particleSwarmOptimization/velocityInitializationTest.jl",
     "component/particleSwarmOptimization/globalBestInitializationTest.jl",
     "component/particleSwarmOptimization/globalBestSelectionTest.jl",
-    "component/particleSwarmOptimization/globalBestUpdateTest.jl"
+    "component/particleSwarmOptimization/globalBestUpdateTest.jl",
+    "component/particleSwarmOptimization/localBestInitializationTest.jl"
     ]
 
 for testProgram in componentTests

@@ -22,5 +22,6 @@ abstract type VelocityInitialization <: Component end
 abstract type GlobalBestInitialization <: Component end 
 abstract type GlobalBestSelection <: Component end 
 abstract type GlobalBestUpdate <: Component end 
+abstract type LocalBestInitialization <: Component end 
 
 abstract type Archive end

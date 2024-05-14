@@ -23,7 +23,7 @@ function inializeDefaultGlobalBestWithASolutionInitializationReturnTheRightResul
 end
 
 
-@testset "Default velocity initialization tests" begin    
+@testset "Default global best initialization tests" begin    
     @test constructorOfDefaultGlobalBestInitializationWorksProperly()    
     @test inializeDefaultGlobalBestWithASolutionInitializationReturnTheRightResult()
 end

@@ -85,6 +85,10 @@ export DefaultGlobalBestUpdate
 export update
 include("component/particleSwarmOptimization/globalBestUpdate.jl")
 
+export DefaultLocalBestInitialization
+export initialize
+include("component/particleSwarmOptimization/localBestInitialization.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
