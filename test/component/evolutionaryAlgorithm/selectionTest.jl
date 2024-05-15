@@ -105,11 +105,11 @@ end
 
 function binaryTournamentSelectionIsCorrectlyInitialized()
     matingPoolSize = 100
-    comparator = compareIthObjective
+    comparator = IthObjectiveComparator(1)
 
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
-    return 100 == selection.matingPoolSize && compareIthObjective == selection.comparator 
+    return 100 == selection.matingPoolSize && comparator == selection.comparator 
 end
 
 """
@@ -121,7 +121,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     solutions = [solution1, solution2]
 
     matingPoolSize = 1
-    comparator = compareIthObjective
+    comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
     matingPool = select(solutions, selection)
@@ -137,7 +137,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     solutions = [solution1, solution2]
 
     matingPoolSize = 2
-    comparator = compareIthObjective
+    comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
     matingPool = select(solutions, selection)
@@ -153,7 +153,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     solutions = [solution1, solution2]
 
     matingPoolSize = 4
-    comparator = compareIthObjective
+    comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
     matingPool = select(solutions, selection)

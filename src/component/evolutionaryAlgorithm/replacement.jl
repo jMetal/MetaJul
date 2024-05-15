@@ -16,27 +16,26 @@ function replace_(x::Vector{S}, y::Vector{S}, replacement::MuCommaLambdaReplacem
     @assert length(x) >= length(y) "The length of the x vector is lower than the length of the y vector"
 
     resultVector = Vector(y)
-    sort!(resultVector, lt=((a, b) -> compare(replacement.comparator,a, b) <= 0))
+    sort!(resultVector, lt=((a, b) -> compare(replacement.comparator, a, b) <= 0))
 
     return resultVector[1:length(x)]
 end
 
 struct RankingAndDensityEstimatorReplacement <: Replacement
-    dominanceComparator::Function
+    ranking
+    densityEstimator
 end
 
-function replace_(x::Vector{T}, y::Vector{T},
-    replacement::RankingAndDensityEstimatorReplacement)::Vector{T} where {T<:Solution}
+function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{T}, y::Vector{T})::Vector{T} where {T<:Solution}
     jointVector = vcat(x, y)
 
-    ranking = Ranking{T}(replacement.dominanceComparator)
-    computeRanking!(ranking, jointVector)
+    compute!(replacement.ranking, jointVector)
 
     for rank in ranking.rank
-        computeCrowdingDistanceEstimator!(rank)
+        compute!(replacement.densityEstimator, rank)
     end
 
-    sort!(jointVector, lt=((x, y) -> compareRankingAndCrowdingDistance(x, y) < 0))
+    sort!(jointVector, lt=((x, y) -> compare(replacement.rankingAndCrowdingDistanceComparator, x, y) < 0))
     return jointVector[1:length(x)]
 end
 

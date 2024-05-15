@@ -1,18 +1,20 @@
 """
-    Comparator CompareElementAt(index)
+    Comparator ElementAtComparator(index)
 
 Compare the values in the same position (`index`) of two numeric vectors `x` and `y`. The result value is 0, -1, or 
 +1 depending, respectively, on the conditions `x[index] == y[index]`, `x[index] < y[index]` or `x[index] > y[index]`
 
 """
 
-struct CompareElementAt <: Comparator
+struct ElementAtComparator <: Comparator
   index::Int
-
-  #CompareElementAt() = new(1)
 end
 
-function compare(comparator::CompareElementAt, x::Vector, y::Vector)
+function compare(comparator::ElementAtComparator, solution1, solution2)
+  return compare(comparator, solution1.objectives, solution2.objectives) 
+end
+
+function compare(comparator::ElementAtComparator, x::Vector, y::Vector)
   index = comparator.index 
 
   @assert length(x) == length(y) "The vectors have a different length"
@@ -28,27 +30,20 @@ function compare(comparator::CompareElementAt, x::Vector, y::Vector)
   return result
 end
 
-function compareElementAt(x::Vector{T}, y::Vector{T}, index::Int=1)::Int where {T<:Number}
-  @assert length(x) == length(y) "The vectors have a different length"
-  @assert index in range(1, length(x)) "The index is out of range"
-
-  result = 0
-  if x[index] < y[index]
-    result = -1
-  elseif x[index] > y[index]
-    result = 1
-  end
-
-  return result
-end
-
 """
-    compareForDominance(x, y)
+    DefaulDominanceComparator
 
 Compare two numerics vectors `x` and `y` according to the dominance relationship. The result is 0 if both vectors are non-dominated, -1 if vector `x` dominates vector `y`, and +1 if vector `x` is dominated by vector `y`. The dominance comparison assumes minimization, i.e., the lower the compared values, the better.
 
 """
-function compareForDominance(x::Vector{T}, y::Vector{T})::Int where {T<:Number}
+
+struct DefaultDominanceComparator <: Comparator end
+
+function compare(comparator::DefaultDominanceComparator, solution1, solution2)
+  return compare(comparator, solution1.objectives, solution2.objectives)
+end
+
+function compare(comparator::DefaultDominanceComparator, x::Vector{T}, y::Vector{T})::Int where {T<:Number}
   @assert length(x) == length(y) "The vectors have a different length"
 
   bestIsSolution1 = 0
@@ -77,15 +72,24 @@ function compareForDominance(x::Vector{T}, y::Vector{T})::Int where {T<:Number}
   return result
 end
 
-function compareForDominance(solution1::Solution, solution2::Solution)::Int
-  return compareForDominance(solution1.objectives, solution2.objectives)
+#function compareForDominance(solution1::Solution, solution2::Solution)::Int
+#  return compareForDominance(solution1.objectives, solution2.objectives)
+#end
+
+struct IthObjectiveComparator <: Comparator
+  index::Int
+  elementAtComparator::ElementAtComparator
+
+  IthObjectiveComparator(index) = new(index, ElementAtComparator(index))
 end
 
-function compareIthObjective(solution1::Solution, solution2::Solution, index::Int=1)::Int
-  return compareElementAt(solution1.objectives, solution2.objectives, index)
+function compare(comparator::IthObjectiveComparator, solution1::Solution, solution2::Solution)::Int
+  return compare(comparator.elementAtComparator, solution1.objectives, solution2.objectives)
 end
 
-function compareForOverallConstraintViolationDegree(solution1::Solution, solution2::Solution)::Int
+struct OverallConstraintViolationDegreeComparator <: Comparator end 
+
+function compare(comparator::OverallConstraintViolationDegreeComparator, solution1::Solution, solution2::Solution)::Int
   constraintViolationSolution1 = overallConstraintViolationDegree(solution1)
   constraintViolationSolution2 = overallConstraintViolationDegree(solution2)
 
@@ -103,19 +107,33 @@ function compareForOverallConstraintViolationDegree(solution1::Solution, solutio
   return result
 end
 
-function compareForConstraintsAndDominance(solution1::Solution, solution2::Solution)::Int
-  result = compareForOverallConstraintViolationDegree(solution1, solution2)
+struct ConstraintsAndDominanceComparator <: Comparator
+  dominanceComparator::Comparator
+  overallConstraintViolationDegreeComparator::OverallConstraintViolationDegreeComparator
+
+  ConstraintsAndDominanceComparator() = new(DefaultDominanceComparator(), OverallConstraintViolationDegreeComparator())
+end
+
+function compare(constraintsAndDominanceComparator::ConstraintsAndDominanceComparator, solution1::Solution, solution2::Solution)::Int
+  result = compare(constraintsAndDominanceComparator.overallConstraintViolationDegreeComparator, solution1, solution2)
   if result == 0
-    result = compareForDominance(solution1, solution2)
+    result = compare(constraintsAndDominanceComparator.dominanceComparator, solution1, solution2)
   end
 
   return result ;
 end
 
-function compareRankingAndCrowdingDistance(x::Solution, y::Solution)::Int
-  result = compareRanking(x, y)
+struct RankingAndCrowdingDistanceComparator <: Comparator 
+  rankingComparator::Comparator
+  crowdingDistanceComparator::CrowdingDistanceComparator
+
+  RankingAndCrowdingDistanceComparator() = new(DominanceRankingComparator(), CrowdingDistanceComparator())
+end
+
+function compare(rankingAndCrowdingDistanceComparator::RankingAndCrowdingDistanceComparator, x::Solution, y::Solution)::Int
+  result = compare(rankingAndCrowdingDistanceComparator.rankingComparator, x, y)
   if (result == 0)
-    result = compareCrowdingDistance(x,y)
+    result = compare(rankingAndCrowdingDistanceComparator.crowdingDistanceComparator, x, y)
   end
   return result
 end

@@ -1,4 +1,4 @@
-using Test
+# Unit tests for DominanceRanking
 
 function appendARankToAnEmtpyRankingLedToANumberOfRanksEqualToOne() 
     solution1 = ContinuousSolution{Float64}([1.0, 2.0], [1.0, 2.0], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
@@ -7,16 +7,16 @@ function appendARankToAnEmtpyRankingLedToANumberOfRanksEqualToOne()
 
     nonDominatedSolutions = [solution1, solution2, solution3]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
 
     appendRank!(ranking, nonDominatedSolutions)
     return numberOfRanks(ranking) == 1
 end
 
 @testset "Emtpy ranking tests" begin    
-    @test length(Ranking{ContinuousSolution{Float64}}().rank) == 0
-    @test numberOfRanks(Ranking{ContinuousSolution{Float64}}()) == 0
-    @test_throws "The subfront id 1 is not in the range 1:0" getSubFront(Ranking{ContinuousSolution{Float64}}(), 1)
+    @test length(DominanceRanking{ContinuousSolution{Float64}}().rank) == 0
+    @test numberOfRanks(DominanceRanking{ContinuousSolution{Float64}}()) == 0
+    @test_throws "The subfront id 1 is not in the range 1:0" getSubFront(DominanceRanking{ContinuousSolution{Float64}}(), 1)
 
     @test appendARankToAnEmtpyRankingLedToANumberOfRanksEqualToOne()
 end
@@ -24,8 +24,8 @@ end
 function computeRankingOfAnEmptySolutionListReturnAnEmptyRanking()
     solutions = Vector{ContinuousSolution{Float64}}(undef, 0)
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return numberOfRanks(ranking) == 0
 end
@@ -33,8 +33,8 @@ end
 function computeRankingOfASolutionListWithASolutionReturnsARankingContainingThatSolution()
     solutions = [createContinuousSolution(3)]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return numberOfRanks(ranking) == 1 && isequal(solutions[1].objectives, ranking.rank[1][1].objectives)
 end
@@ -47,8 +47,8 @@ function computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingle
     solution2.objectives = [1.0, 1.0, 4.0]
 
     solutions = [solution1, solution2]
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return numberOfRanks(ranking) == 1 
 end
@@ -61,8 +61,8 @@ function computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingle
     solution2.objectives = [1.0, 1.0, 4.0]
 
     solutions = [solution1, solution2]
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (getRank(solution1) == getRank(solution2) == 1) && (length(ranking.rank[1]) == 2)
 end
@@ -76,8 +76,8 @@ function computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRanking
 
     solutions = [solution1, solution2]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
     (length(ranking.rank[1]) == 1) && 
@@ -98,8 +98,8 @@ function computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRan
 
     solutions = [solution1, solution2, solution3]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 3) && 
     (length(ranking.rank[1]) == 1) && 
@@ -126,8 +126,8 @@ function computeRankingOfASolutionListWithFourNonDominatedSolutionsReturnsOneRan
 
     solutions = [solution1, solution2, solution3, solution4]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 1) && 
     (length(ranking.rank[1]) == 4) && 
@@ -146,8 +146,8 @@ function computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRanking
 
     solutions = [solution1Front1, solution3Front2, solution1Front2, solution2Front2, solution2Front1]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
     (length(ranking.rank[1]) == 2) && 
@@ -176,8 +176,8 @@ function computeRankingOfASolutionListWithWeakDominatedSolutionsWorkProperly()
 
     solutions = [solution1, solution2, solution3, solution4, solution5, solution6]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
     (length(ranking.rank[1]) == 4) && 
@@ -205,8 +205,8 @@ function computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
 
     solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
 
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
     
     return numberOfRanks(ranking) == 3 &&
     length(ranking.rank[1]) == 4 &&
@@ -229,8 +229,8 @@ function computeRankingMustWorkProperlyWithAnExampleOfNineSolutions()
 
     solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
     
-    ranking = Ranking{ContinuousSolution{Float64}}()
-    computeRanking!(ranking, solutions)
+    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    compute!(ranking, solutions)
 
     return numberOfRanks(ranking) == 2 &&
     length(ranking.rank[1]) == 4 &&
@@ -261,7 +261,7 @@ function compareTwoSolutionsWithEqualRankReturnsZero()
     setRank(solution1, 1)
     setRank(solution2, 1)
 
-    return compareRanking(solution1, solution2) == 0
+    return compare(DominanceRankingComparator(), solution1, solution2) == 0
 end
 
 function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
@@ -271,7 +271,8 @@ function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasALowerRankValue()
     setRank(solution1, 1)
     setRank(solution2, 2)
 
-    return compareRanking(solution1, solution2) == -1
+    comparator = DominanceRankingComparator()
+    return compare(comparator, solution1, solution2) == -1
 end
 
 function compareTwoSolutionsReturnOneIfTheFirstSolutionHasAHigherRankValue()
@@ -281,7 +282,8 @@ function compareTwoSolutionsReturnOneIfTheFirstSolutionHasAHigherRankValue()
     setRank(solution1, 2)
     setRank(solution2, 1)
 
-    return compareRanking(solution1, solution2) == 1
+    comparator = DominanceRankingComparator()
+    return compare(comparator, solution1, solution2) == 1
 end
 
 @testset "Ranking comparators tests" begin    

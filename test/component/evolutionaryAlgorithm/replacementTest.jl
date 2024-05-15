@@ -3,14 +3,14 @@
 #######################################################
 
 function muPlusLambdaReplacementIsCorrectlyInitialized()
-    comparator = CompareElementAt(1)
+    comparator = ElementAtComparator(1)
     replacement = MuPlusLambdaReplacement(comparator)
 
     return comparator == replacement.comparator
 end
 
 function muCommaLambdaReplacementIsCorrectlyInitialized()
-    comparator = CompareElementAt(1)
+    comparator = ElementAtComparator(1)
     replacement = MuCommaLambdaReplacement(comparator)
 
     return comparator == replacement.comparator
@@ -26,9 +26,11 @@ end
 #######################################################
 
 function rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
-    replacement = RankingAndDensityEstimatorReplacement(compareForDominance)
+    ranking = DominanceRanking(ContinuousSolution{Float64})
+    densityEstimator = CrowdingDistanceDensityEstimator()
+    replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
 
-    return compareForDominance == replacement.dominanceComparator
+    return ranking == replacement.ranking && densityEstimator == replacement.densityEstimator
 end
 
 """
@@ -45,7 +47,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
     
@@ -67,7 +69,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase2()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  
@@ -93,7 +95,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase3()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  
@@ -127,7 +129,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase4()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  
@@ -161,7 +163,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     population = [solution1, solution4]
     offspringPopulation = [solution2, solution3]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  
@@ -199,7 +201,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     population = [solution1, solution2, solution5]
     offspringPopulation = [solution3, solution4, solution6]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  
@@ -240,7 +242,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     offspringPopulation = [solution1, solution2, solution5]
     population = [solution3, solution4, solution6]
 
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
     replacement = RankingAndDensityEstimatorReplacement(dominanceComparator)
     resultPopulation = replace_(population, offspringPopulation, replacement)
  

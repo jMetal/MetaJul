@@ -50,7 +50,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionReturnsTrue()
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   
   return add!(archive, nonDominatedSolution)
 end
@@ -62,7 +62,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionContainsBothSolutions()
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, nonDominatedSolution)
   
   return contain(archive, solution) && contain(archive, nonDominatedSolution)
@@ -76,7 +76,7 @@ function addANonDominatedSolutionToAnArchiveWithASolutionIncreasesItsLengthByOne
   nonDominatedSolution = createContinuousSolution(3)
   nonDominatedSolution.objectives = [1.0, 1.0, 4.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, nonDominatedSolution)
 
   return length(archive) == 2
@@ -89,7 +89,7 @@ function addADominatedSolutionToAnArchiveWithASolutionReturnFalse()
   dominatedSolution = createContinuousSolution(3)
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, dominatedSolution)
 
   return !add!(archive, dominatedSolution)
@@ -103,7 +103,7 @@ function addADominatedSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength(
   dominatedSolution = createContinuousSolution(3)
   dominatedSolution.objectives = [2.0, 3.0, 4.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, dominatedSolution)
 
   return length(archive) == 1
@@ -117,7 +117,7 @@ function addADominatingSolutionToAnArchiveWithASolutionReturnsTrue()
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   
   return add!(archive, dominatingSolution)
 end
@@ -129,7 +129,7 @@ function addADominatingSolutionToAnArchiveWithASolutionDoesNotIncreasesItsLength
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, dominatingSolution)
 
   return length(archive) == 1
@@ -142,7 +142,7 @@ function addADominatingSolutionToAnArchiveWithASolutionRemovesTheExistingOneWhic
   dominatingSolution = createContinuousSolution(3)
   dominatingSolution.objectives = [0.0, 1.0, 2.0]
 
-  archive = NonDominatedArchive([solution], compareForDominance)
+  archive = NonDominatedArchive([solution], DefaultDominanceComparator())
   add!(archive, dominatingSolution)
 
   return contain(archive, dominatingSolution) && !contain(archive, solution)
@@ -349,7 +349,10 @@ function computingTheCrowdingDistanceOfAnArchiveWithASolutionMakesTheSolutionToH
   solution = createContinuousSolution(5)
 
   add!(crowdingDistanceArchive, solution)
-  computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+
+  densityEstimator = CrowdingDistanceDensityEstimator()
+  compute!(densityEstimator, getSolutions(crowdingDistanceArchive))
+
   return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[1]) == maxCrowdingDistanceValue()
 end
 
@@ -360,7 +363,10 @@ function computingTheCrowdingDistanceOfAnArchiveWithTwoSolutionsMakesThemToHaveT
 
   add!(crowdingDistanceArchive, solution1)
   add!(crowdingDistanceArchive, solution2)
-  computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+
+  densityEstimator = CrowdingDistanceDensityEstimator()
+  compute!(densityEstimator, getSolutions(crowdingDistanceArchive))
+
   return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[1]) == maxCrowdingDistanceValue()
   return getCrowdingDistance(getSolutions(crowdingDistanceArchive)[2]) == maxCrowdingDistanceValue()
 end
@@ -374,7 +380,10 @@ function computingTheCrowdingDistanceOfAnArchiveWithTheeSolutionsAssignTheHighes
   add!(crowdingDistanceArchive, solution1)
   add!(crowdingDistanceArchive, solution2)
   add!(crowdingDistanceArchive, solution3)
-  computeCrowdingDistanceEstimator!(crowdingDistanceArchive)
+
+  densityEstimator = CrowdingDistanceDensityEstimator()
+  compute!(densityEstimator, getSolutions(crowdingDistanceArchive))
+
   return getCrowdingDistance(solution1) == maxCrowdingDistanceValue()
   return getCrowdingDistance(solution2) == maxCrowdingDistanceValue()
   return getCrowdingDistance(solution3) != maxCrowdingDistanceValue()

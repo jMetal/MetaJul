@@ -1,13 +1,15 @@
 using Test
 
 function computingTheCrowdingDistanceRaisesAnExceptionIfTheSolutionListIsEmpty()
-    computeCrowdingDistanceEstimator!(Vector{ContinuousSolution{Float64}}(undef, 0))
+    densityEstimator = CrowdingDistanceDensityEstimator
+    compute(densityEstimator, Vector{ContinuousSolution{Float64}}(undef, 0))
 end
 
 function computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
     solutions = [createContinuousSolution([1.0, 2.0])]
 
-    computeCrowdingDistanceEstimator!(solutions)
+    densityEstimator = CrowdingDistanceDensityEstimator
+    compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
 end
@@ -15,7 +17,8 @@ end
 function computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
     solutions = [createContinuousSolution([1.0, 2.0]), createContinuousSolution([2.0, 1.0])]
 
-    computeCrowdingDistanceEstimator!(solutions)
+    densityEstimator = CrowdingDistanceDensityEstimator
+    compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
     return getCrowdingDistance(solutions[2]) == maxCrowdingDistanceValue()
@@ -27,7 +30,8 @@ function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsT
     solution3 = createContinuousSolution(3)
     solutions = [solution1, solution2, solution3]
 
-    computeCrowdingDistanceEstimator!(solutions)
+    densityEstimator = CrowdingDistanceDensityEstimator
+    compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
     return getCrowdingDistance(solutions[2]) == 2.0
@@ -49,7 +53,7 @@ function compareTwoSolutionsWithEqualCrowdingDistanceReturnsZero()
     setCrowdingDistance(solution1, 1.0)
     setCrowdingDistance(solution2, 1.0)
 
-    return compareCrowdingDistance(solution1, solution2) == 0
+    return compare(CrowdingDistanceComparator(), solution1, solution2) == 0
 end
 
 function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasAHigherCrowdingDistance()
@@ -59,7 +63,7 @@ function compareTwoSolutionsReturnMinusOneIfTheFirstSolutionHasAHigherCrowdingDi
     setCrowdingDistance(solution1, 20.0)
     setCrowdingDistance(solution2, 1.0)
 
-    return compareCrowdingDistance(solution1, solution2) == -1
+    return compare(CrowdingDistanceComparator(), solution1, solution2)  == -1
 end
 
 function compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance()
@@ -69,7 +73,7 @@ function compareTwoSolutionsReturnOneIfTheFirstSolutionHasALowerCrowdingDistance
     setCrowdingDistance(solution1, 1.0)
     setCrowdingDistance(solution2, 2.0)
 
-    return compareCrowdingDistance(solution1, solution2) == 1
+    return compare(CrowdingDistanceComparator(), solution1, solution2)  == 1
 end
 
 @testset "Ranking comparators tests" begin

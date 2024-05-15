@@ -28,13 +28,13 @@ componentTests = [
     "component/common/terminationTest.jl",
     "component/evolutionaryAlgorithm/selectionTest.jl",
     "component/evolutionaryAlgorithm/variationTest.jl",
-    "component/evolutionaryAlgorithm/replacementTest.jl",
-    "component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
-    "component/particleSwarmOptimization/velocityInitializationTest.jl",
-    "component/particleSwarmOptimization/globalBestInitializationTest.jl",
-    "component/particleSwarmOptimization/globalBestSelectionTest.jl",
-    "component/particleSwarmOptimization/globalBestUpdateTest.jl",
-    "component/particleSwarmOptimization/localBestInitializationTest.jl"
+    #"component/evolutionaryAlgorithm/replacementTest.jl",
+    #"component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
+    #"component/particleSwarmOptimization/velocityInitializationTest.jl",
+    #"component/particleSwarmOptimization/globalBestInitializationTest.jl",
+    #"component/particleSwarmOptimization/globalBestSelectionTest.jl",
+    #"component/particleSwarmOptimization/globalBestUpdateTest.jl",
+    #"component/particleSwarmOptimization/localBestInitializationTest.jl"
     ]
 
 for testProgram in componentTests

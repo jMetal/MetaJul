@@ -14,26 +14,25 @@ include("core/solution.jl")
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
 include("core/constraintHandling.jl")
 
+export DominanceRanking, DominanceRankingComparator
+export numberOfRanks, getSubFront, appendRank!, compute!, getRank, setRank
+export compare, computeCrowdingDistanceEstimator!, getCrowdingDistance
+export maxCrowdingDistanceValue, setCrowdingDistance, compareCrowdingDistance
+export capacity, isFull
+include("util/ranking.jl")
 
-export CompareElementAt
+export CrowdingDistanceDensityEstimator
+include("util/densityEstimator.jl")
+
+export ElementAtComparator, DefaultDominanceComparator, IthObjectiveComparator, IthObjectiveComparator, RankingAndCrowdingDistanceComparator
+export OverallConstraintViolationDegreeComparator, ConstraintsAndDominanceComparator
+export CrowdingDistanceComparator
 export compare
-
-export compareForDominance, compareIthObjective, compareForOverallConstraintViolationDegree, compareRankingAndCrowdingDistance
-export compareForConstraintsAndDominance
 include("util/comparator.jl")
 
 export NonDominatedArchive, CrowdingDistanceArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
-
-export Ranking
-export numberOfRanks, getSubFront, appendRank!, computeRanking!, getRank, setRank
-export compareRanking, computeCrowdingDistanceEstimator!, getCrowdingDistance
-export maxCrowdingDistanceValue, setCrowdingDistance, compareCrowdingDistance
-export capacity, isFull
-include("util/ranking.jl")
-
-include("util/densityEstimator.jl")
 
 export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate

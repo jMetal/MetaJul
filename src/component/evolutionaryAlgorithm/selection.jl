@@ -36,7 +36,7 @@ end
 
 struct BinaryTournamentSelection <: Selection
     matingPoolSize::Int
-    comparator::Function
+    comparator::Comparator
 end
 
 function select(solutions::Vector{S}, selection::BinaryTournamentSelection)::Vector{S} where {S<:Solution}

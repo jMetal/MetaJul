@@ -8,7 +8,7 @@ function select(x::Vector, selectionOperator::RandomSelectionOperator)
 end
 
 struct BinaryTournamentSelectionOperator <: SelectionOperator
-  comparator::Function
+  comparator::Comparator
 end
 
 function select(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
@@ -16,7 +16,7 @@ function select(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
   index1 = rand(1:length(x))
   index2 = rand(1:length(x))
 
-  if comparator(x[index1], x[index2]) < 0
+  if compare(comparator, x[index1], x[index2]) < 0
     result = x[index1]
   else
     result = x[index2]

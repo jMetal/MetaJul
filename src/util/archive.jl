@@ -4,11 +4,11 @@
 
 struct NonDominatedArchive{T <: Solution} <: Archive
   solutions::Array{T}
-  comparator::Function
+  comparator::Comparator
 end
 
 function NonDominatedArchive(T::Type{<: Solution})
-  return NonDominatedArchive{T}(T[], compareForDominance)
+  return NonDominatedArchive{T}(T[], DefaultDominanceComparator())
 end
 
 function Base.length(archive::Archive)::Int
@@ -34,7 +34,7 @@ function add!(archive::NonDominatedArchive{T}, solution::T)::Bool where {T <: So
       solutionIsAlreadyInTheArchive = false
       currentSolutionIndex = 1
       while !solutionIsDominated && !solutionIsAlreadyInTheArchive && currentSolutionIndex <= length(archive)
-        result = comparator(solution, archive.solutions[currentSolutionIndex])
+        result = compare(comparator, solution, archive.solutions[currentSolutionIndex])
         if result == -1
           deleteat!(archive.solutions, currentSolutionIndex)
         elseif result == 1
@@ -71,10 +71,11 @@ end
 struct CrowdingDistanceArchive{T<:Solution} <: Archive
   capacity::Int
   internalNonDominatedArchive::NonDominatedArchive{T}
+  crowdingDistanceComparator::CrowdingDistanceComparator
 end
 
 function CrowdingDistanceArchive(capacity::Int, T::Type{<:Solution})
-  return CrowdingDistanceArchive(capacity, NonDominatedArchive(T))
+  return CrowdingDistanceArchive(capacity, NonDominatedArchive(T), CrowdingDistanceComparator()) 
 end
 
 function Base.length(archive::CrowdingDistanceArchive)::Int
@@ -102,17 +103,20 @@ function getSolutions(archive::CrowdingDistanceArchive{T})::Vector{T} where {T<:
 end
 
 
-function computeCrowdingDistanceEstimator!(archive::CrowdingDistanceArchive{T}) where {T<:Solution}
-  return computeCrowdingDistanceEstimator!(archive.internalNonDominatedArchive.solutions)
-end
+#function computeCrowdingDistanceEstimator!(archive::CrowdingDistanceArchive{T}) where {T<:Solution}
+#  return computeCrowdingDistanceEstimator!(archive.internalNonDominatedArchive.solutions)
+#end
 
 function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:Solution}
   archiveIsFull = isFull(archive)
   solutionIsAdded = add!(archive.internalNonDominatedArchive, solution)
 
   if solutionIsAdded && archiveIsFull
-      computeCrowdingDistanceEstimator!(getSolutions(archive))
-      sort!(getSolutions(archive), lt=((x, y) -> compareCrowdingDistance(x, y) < 0))
+      densityEstimator = CrowdingDistanceDensityEstimator()
+      compute!(densityEstimator, getSolutions(archive))
+      #computeCrowdingDistanceEstimator!(getSolutions(archive))
+      crowdingDistanceComparator = archive.crowdingDistanceComparator
+      sort!(getSolutions(archive), lt=((x, y) -> compare(crowdingDistanceComparator, x, y) < 0))
 
       deletedSolution = pop!(getSolutions(archive))
       if deletedSolution == solution

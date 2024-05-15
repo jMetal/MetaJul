@@ -1,29 +1,29 @@
 # Struct and methods to implement the non-dominated ranking sorting method
 
-mutable struct Ranking{T <: Solution}
+mutable struct DominanceRanking{T <: Solution} <: Ranking
     rank::Vector{Vector{T}}
-    dominanceComparator::Function
+    dominanceComparator::Comparator
 end 
 
-function Ranking{T}(dominanceComparator::Function) where {T <: Solution} 
-    Ranking{T}(Vector{Vector{T}}(undef, 0), dominanceComparator)
+function DominanceRanking{T}(dominanceComparator::Comparator) where {T <: Solution} 
+    DominanceRanking{T}(Vector{Vector{T}}(undef, 0), dominanceComparator)
 end
 
-function Ranking{T}() where {T <: Solution} 
-     return Ranking{T}(compareForDominance)
+function DominanceRanking{T}() where {T <: Solution} 
+     return DominanceRanking{T}(DefaultDominanceComparator())
 end
 
-function getSubFront(ranking::Ranking, rankId::Integer)
+function getSubFront(ranking::DominanceRanking, rankId::Integer)
     message = string("The subfront id ", rankId, " is not in the range 1:", length(ranking.rank))
     @assert length(ranking.rank)  >= rankId message
     return ranking.rank[rankId]
 end
 
-function numberOfRanks(ranking::Ranking)::Int
+function numberOfRanks(ranking::DominanceRanking)::Int
     return length(ranking.rank)
 end
 
-function appendRank!(ranking::Ranking{T}, newRank::Vector{T}) where {T <: Solution}
+function appendRank!(ranking::DominanceRanking{T}, newRank::Vector{T}) where {T <: Solution}
     push!(ranking.rank, newRank)
     return Nothing
 end
@@ -36,7 +36,9 @@ function setRank(solution::Solution, rank::Int)
     return solution.attributes["RANKING_ATTRIBUTE"] = rank
 end
 
-function compareRanking(solution1::Solution, solution2::Solution) 
+struct DominanceRankingComparator <: Comparator end
+
+function compare(comparator::DominanceRankingComparator, solution1::Solution, solution2::Solution) 
     result = 0
     if getRank(solution1) < getRank(solution2)
         result = -1
@@ -47,7 +49,7 @@ function compareRanking(solution1::Solution, solution2::Solution)
     return result
 end
 
-function computeRanking!(ranking::Ranking{T}, solutions::Array{T}) where {T <: Solution}
+function compute!(ranking::DominanceRanking{T}, solutions::Array{T}) where {T <: Solution}
     solutionsToRank = [solution for solution in solutions]
     rankCounter = 1
 

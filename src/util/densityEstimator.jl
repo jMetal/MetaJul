@@ -10,7 +10,9 @@ function setCrowdingDistance(solution::T, crowdingDistance::Real) where {T<:Solu
     return solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
 end
 
-function compareCrowdingDistance(solution1::Solution, solution2::Solution)::Int
+struct CrowdingDistanceComparator <: Comparator end
+
+function compare(comparator::CrowdingDistanceComparator, solution1::Solution, solution2::Solution)::Int
     result = 0
     if getCrowdingDistance(solution1) > getCrowdingDistance(solution2)
         result = -1
@@ -21,12 +23,17 @@ function compareCrowdingDistance(solution1::Solution, solution2::Solution)::Int
     return result
 end
 
+
+
 """
     computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Solution}
 
 Computes the crowding distance density estimator to the solutions of a list. It is assumed that the list only contains non-dominated solutions.
 """
-function computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T<:Solution}
+
+struct CrowdingDistanceDensityEstimator <: DensityEstimator end
+
+function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions::Vector{T}) where {T<:Solution}
     @assert length(solutions) > 0 "The solution list is empty"
     if length(solutions) < 3
         for solution in solutions
@@ -40,7 +47,8 @@ function computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T<:Solut
 
         for i in range(1, numberOfObjectives)
             #sort!(solutions, by = s -> s.objectives[i])
-            sort!(solutions, lt=(x, y) -> compareIthObjective(x, y, i) <= 0)
+            objectiveComparator = IthObjectiveComparator(i)
+            sort!(solutions, lt=(x, y) -> compare(objectiveComparator, x, y) <= 0)
 
             minimumObjectiveValue = solutions[1].objectives[i]
             maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]
