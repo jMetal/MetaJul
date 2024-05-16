@@ -28,7 +28,7 @@ componentTests = [
     "component/common/terminationTest.jl",
     "component/evolutionaryAlgorithm/selectionTest.jl",
     "component/evolutionaryAlgorithm/variationTest.jl",
-    #"component/evolutionaryAlgorithm/replacementTest.jl",
+    "component/evolutionaryAlgorithm/replacementTest.jl",
     #"component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
     #"component/particleSwarmOptimization/velocityInitializationTest.jl",
     #"component/particleSwarmOptimization/globalBestInitializationTest.jl",

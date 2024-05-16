@@ -1,14 +1,14 @@
 using Test
 
 function computingTheCrowdingDistanceRaisesAnExceptionIfTheSolutionListIsEmpty()
-    densityEstimator = CrowdingDistanceDensityEstimator
-    compute(densityEstimator, Vector{ContinuousSolution{Float64}}(undef, 0))
+    densityEstimator = CrowdingDistanceDensityEstimator()
+    compute!(densityEstimator, Vector{ContinuousSolution{Float64}}(undef, 0))
 end
 
 function computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
     solutions = [createContinuousSolution([1.0, 2.0])]
 
-    densityEstimator = CrowdingDistanceDensityEstimator
+    densityEstimator = CrowdingDistanceDensityEstimator()
     compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
@@ -17,7 +17,7 @@ end
 function computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
     solutions = [createContinuousSolution([1.0, 2.0]), createContinuousSolution([2.0, 1.0])]
 
-    densityEstimator = CrowdingDistanceDensityEstimator
+    densityEstimator = CrowdingDistanceDensityEstimator()
     compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
@@ -30,7 +30,7 @@ function computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsT
     solution3 = createContinuousSolution(3)
     solutions = [solution1, solution2, solution3]
 
-    densityEstimator = CrowdingDistanceDensityEstimator
+    densityEstimator = CrowdingDistanceDensityEstimator()
     compute!(densityEstimator, solutions)
 
     return getCrowdingDistance(solutions[1]) == maxCrowdingDistanceValue()
