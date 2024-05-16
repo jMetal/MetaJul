@@ -15,8 +15,6 @@ solver.termination = TerminationByEvaluations(25000)
 solver.mutation = PolynomialMutation(1.0/numberOfVariables(problem),20.0, problem.bounds)
 solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
 
-solver.dominanceComparator = compareForDominance
-
 """
 solver.crossover = BLXAlphaCrossover(1.0, 0.5, problem.bounds))
 """

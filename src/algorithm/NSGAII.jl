@@ -13,19 +13,19 @@ mutable struct NSGAII <: Algorithm
 
   solver::EvolutionaryAlgorithm
 
-  dominanceComparator::Function
+  dominanceComparator::Comparator
 
   function NSGAII() 
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
 
-    algorithm.dominanceComparator = compareForDominance
+    algorithm.dominanceComparator = DefaultDominanceComparator()
     return algorithm
   end
 end
 
-function nsgaII(nsgaII::NSGAII) 
+function nsgaII(nsgaII::NSGAII)
   solver = nsgaII.solver 
   
   solver.problem = nsgaII.problem
@@ -39,9 +39,10 @@ function nsgaII(nsgaII::NSGAII)
   solver.termination = nsgaII.termination
   solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
 
-  solver.replacement = RankingAndDensityEstimatorReplacement(nsgaII.dominanceComparator)
+  #solver.replacement = RankingAndDensityEstimatorReplacement(nsgaII.dominanceComparator)
+  solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking{ContinuousSolution{Float64}}(nsgaII.dominanceComparator), CrowdingDistanceDensityEstimator())
 
-  solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareRankingAndCrowdingDistance)
+  solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, nsgaII.dominanceComparator)
 
   return evolutionaryAlgorithm(solver)
 end

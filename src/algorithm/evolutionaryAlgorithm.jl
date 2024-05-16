@@ -35,20 +35,20 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   startingTime = Dates.now()
 
   population = create(ea.solutionsCreation)
-  population = evaluate(population, ea.evaluation)
+  population = evaluate(ea.evaluation, population)
 
   evaluations = length(population)
   ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
 
   notify(ea.observable, ea.status)
 
-  while !isMet(ea.status, ea.termination)
-    matingPool = select(population, ea.selection)
+  while !isMet(ea.termination, ea.status)
+    matingPool = select(ea.selection, population)
     
-    offspringPopulation = variate(population, matingPool, ea.variation)
-    offspringPopulation = evaluate(offspringPopulation, ea.evaluation)
+    offspringPopulation = variate(ea.variation, population, matingPool)
+    offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
 
-    population = replace_(population, offspringPopulation, ea.replacement)
+    population = replace_(ea.replacement, population, offspringPopulation)
 
     evaluations += length(offspringPopulation)
     ea.status["EVALUATIONS"] = evaluations

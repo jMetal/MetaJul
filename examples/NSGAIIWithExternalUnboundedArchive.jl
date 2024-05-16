@@ -24,9 +24,9 @@ crossover = SBXCrossover(0.9, 20.0, problem.bounds)
 
 solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
 
-solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareRankingAndCrowdingDistance)
+solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, DefaultDominanceComparator())
 
-solver.replacement = RankingAndDensityEstimatorReplacement(compareForDominance)
+solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking{ContinuousSolution{Float64}}(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
 startingTime = Dates.now()
 optimize(solver)

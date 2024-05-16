@@ -1,5 +1,12 @@
 # Unit tests for DominanceRanking
 
+function createADominanceRankingWithADominanceComparatorWorksProperly()
+    comparator = DefaultDominanceComparator()
+    ranking = DominanceRanking{ContinuousSolution{Float64}}(comparator)
+
+    return comparator == ranking.dominanceComparator
+end
+
 function appendARankToAnEmtpyRankingLedToANumberOfRanksEqualToOne() 
     solution1 = ContinuousSolution{Float64}([1.0, 2.0], [1.0, 2.0], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
     solution2 = ContinuousSolution{Float64}([1.0, 2.0], [2.0, 1.0], [0], Dict(), [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(2, 3)])
@@ -14,6 +21,7 @@ function appendARankToAnEmtpyRankingLedToANumberOfRanksEqualToOne()
 end
 
 @testset "Emtpy ranking tests" begin    
+    @test createADominanceRankingWithADominanceComparatorWorksProperly()
     @test length(DominanceRanking{ContinuousSolution{Float64}}().rank) == 0
     @test numberOfRanks(DominanceRanking{ContinuousSolution{Float64}}()) == 0
     @test_throws "The subfront id 1 is not in the range 1:0" getSubFront(DominanceRanking{ContinuousSolution{Float64}}(), 1)
