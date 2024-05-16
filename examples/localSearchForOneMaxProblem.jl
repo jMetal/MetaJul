@@ -3,14 +3,14 @@ using metajul
 using Dates
 
 # Local search example 
-problem = oneMax(1024)
+problem = oneMax(512)
 solution::Solution = createSolution(problem)
 solution = evaluate(solution, problem)
 
 solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
-solver.numberOfIterations = 20000
+solver.numberOfIterations = 200000
 solver.mutation = BitFlipMutation(1.0/numberOfVariables(problem))
 
 startingTime = Dates.now()

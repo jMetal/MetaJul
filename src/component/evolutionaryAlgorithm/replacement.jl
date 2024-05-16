@@ -24,6 +24,9 @@ end
 struct RankingAndDensityEstimatorReplacement <: Replacement
     ranking
     densityEstimator
+    rankingAndDensityEstimatorComparator
+
+    RankingAndDensityEstimatorReplacement(ranking, densityEstimator) = new(ranking, densityEstimator, RankingAndCrowdingDistanceComparator())
 end
 
 function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{T}, y::Vector{T})::Vector{T} where {T<:Solution}
@@ -31,11 +34,11 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
 
     compute!(replacement.ranking, jointVector)
 
-    for rank in ranking.rank
+    for rank in replacement.ranking.rank
         compute!(replacement.densityEstimator, rank)
     end
 
-    sort!(jointVector, lt=((x, y) -> compare(replacement.rankingAndCrowdingDistanceComparator, x, y) < 0))
+    sort!(jointVector, lt=((x, y) -> compare(replacement.rankingAndDensityEstimatorComparator, x, y) < 0))
     return jointVector[1:length(x)]
 end
 
