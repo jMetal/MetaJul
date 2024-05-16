@@ -10,7 +10,7 @@ solution = evaluate(solution, problem)
 solver::LocalSearch = LocalSearch()
 solver.startingSolution = solution
 solver.problem = problem
-solver.numberOfIterations = 200000
+solver.numberOfIterations = 20000
 solver.mutation = BitFlipMutation(1.0/numberOfVariables(problem))
 
 startingTime = Dates.now()

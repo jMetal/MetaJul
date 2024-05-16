@@ -16,7 +16,7 @@ function optimize(algorithm::LocalSearch)::Solution
   mutation = algorithm.mutation
 
   for _ in 1:numberOfIterations
-    mutatedSolution = copySolution(algorithm.startingSolution)
+    mutatedSolution = copySolution(currentSolution)
     mutatedSolution = mutate(mutatedSolution, mutation)
     
     mutatedSolution = evaluate(mutatedSolution, problem)
