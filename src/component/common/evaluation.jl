@@ -4,7 +4,7 @@ struct SequentialEvaluation <: Evaluation
     problem::Problem
 end
 
-function evaluate(solutions::Vector{S}, evaluation::SequentialEvaluation) where {S<:Solution}
+function evaluate(evaluation::SequentialEvaluation, solutions::Vector{S}) where {S<:Solution}
     return [evaluate(solution, evaluation.problem) for solution in solutions]
 end
 
@@ -13,7 +13,7 @@ struct SequentialEvaluationWithArchive <: Evaluation
     archive::Archive
 end
 
-function evaluate(solutions::Vector{S}, evaluation::SequentialEvaluationWithArchive) where {S<:Solution}
+function evaluate(evaluation::SequentialEvaluationWithArchive, solutions::Vector{S}) where {S<:Solution}
     archive = evaluation.archive
     problem::Problem = evaluation.problem
     for solution in solutions

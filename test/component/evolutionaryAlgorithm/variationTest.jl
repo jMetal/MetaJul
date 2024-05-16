@@ -43,7 +43,7 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseA()
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
-    offspringPopulation = variate(matingPool, matingPool, variation)
+    offspringPopulation = variate(variation, matingPool, matingPool)
 
     return length(offspringPopulation) == 100
 end
@@ -60,7 +60,7 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseB()
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
-    offspringPopulation = variate(matingPool, matingPool, variation)
+    offspringPopulation = variate(variation, matingPool, matingPool)
 
     return length(offspringPopulation) == 1
 end

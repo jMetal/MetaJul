@@ -18,7 +18,7 @@ struct CrossoverAndMutationVariation <: Variation
     end
 end
 
-function variate(solutions::Vector{S}, matingPool::Vector{S}, variation::CrossoverAndMutationVariation)::Vector{S} where {S <: Solution} 
+function variate(variation::CrossoverAndMutationVariation, solutions::Vector{S}, matingPool::Vector{S}, )::Vector{S} where {S <: Solution} 
     parents = collect(zip(matingPool[1:2:end], matingPool[2:2:end]))
 
     crossover = variation.crossover

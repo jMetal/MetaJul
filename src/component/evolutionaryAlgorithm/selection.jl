@@ -3,7 +3,7 @@ struct RandomSelection <: Selection
     withReplacement::Bool
 end
 
-function select(vector::Vector, selection::RandomSelection)::Vector
+function select(selection::RandomSelection, vector::Vector)::Vector
     matingPoolSize::Int = selection.matingPoolSize
     withReplacement::Bool = selection.withReplacement
     if withReplacement
@@ -19,7 +19,7 @@ function select(vector::Vector, selection::RandomSelection)::Vector
 end
 
 
-function select(solutions::Vector{T}, selection::RandomSelection)::Vector{T} where {T<:Solution}
+function select(selection::RandomSelection, solutions::Vector{T})::Vector{T} where {T<:Solution}
     matingPoolSize::Int = selection.matingPoolSize
     withReplacement::Bool = selection.withReplacement
     if withReplacement
@@ -39,7 +39,7 @@ struct BinaryTournamentSelection <: Selection
     comparator::Comparator
 end
 
-function select(solutions::Vector{S}, selection::BinaryTournamentSelection)::Vector{S} where {S<:Solution}
+function select(selection::BinaryTournamentSelection, solutions::Vector{S})::Vector{S} where {S<:Solution}
     matingPoolSize::Int = selection.matingPoolSize
     selectionOperator = BinaryTournamentSelectionOperator(selection.comparator)
     return [select(solutions, selectionOperator) for _ in range(1, matingPoolSize)]

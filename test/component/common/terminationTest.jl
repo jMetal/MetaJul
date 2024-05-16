@@ -4,7 +4,7 @@ function terminationByEvaluationsIsMet()
     termination = TerminationByEvaluations(evaluationsLimit)
     algorithmStatus = Dict("EVALUATIONS" => 100)
     
-    return isMet(algorithmStatus, termination)
+    return isMet(termination, algorithmStatus)
 end
 
 function terminationByEvaluationsIsNotMet()
@@ -13,7 +13,7 @@ function terminationByEvaluationsIsNotMet()
     termination = TerminationByEvaluations(evaluationsLimit)
     algorithmStatus = Dict("EVALUATIONS" => 99)
     
-    return !isMet(algorithmStatus, termination)
+    return !isMet(termination, algorithmStatus)
 end
 
 @testset "Termination by evaluations tests" begin    
@@ -28,7 +28,7 @@ function terminationByComputingTimeIsMet()
     termination = TerminationByComputingTime(computingTimeLimit)
     algorithmStatus = Dict("COMPUTING_TIME" => 100)
     
-    return isMet(algorithmStatus, termination)
+    return isMet(termination, algorithmStatus)
 end
 
 function terminationByComputingTimeIsNotMet()
@@ -37,7 +37,7 @@ function terminationByComputingTimeIsNotMet()
     termination = TerminationByComputingTime(computingTimeLimit)
     algorithmStatus = Dict("COMPUTING_TIME" => 99)
     
-    return !isMet(algorithmStatus, termination)
+    return !isMet(termination, algorithmStatus)
 end
 
 @testset "Termination by computing time tests" begin    

@@ -3,7 +3,7 @@ struct TerminationByEvaluations <: Termination
 end
 
 
-function isMet(algorithmAttributes::Dict, termination::TerminationByEvaluations)::Bool
+function isMet(termination::TerminationByEvaluations, algorithmAttributes::Dict)::Bool
     return get(algorithmAttributes, "EVALUATIONS", 0) >= termination.numberOfEvaluationsToStop
 end
 
@@ -12,7 +12,7 @@ struct TerminationByComputingTime <: Termination
 end
 
 
-function isMet(algorithmAttributes::Dict, termination::TerminationByComputingTime)::Bool
+function isMet(termination::TerminationByComputingTime, algorithmAttributes::Dict)::Bool
     return get(algorithmAttributes, "COMPUTING_TIME", 0) >= termination.computingTimeLimit
 end
 

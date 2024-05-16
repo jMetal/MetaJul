@@ -15,7 +15,7 @@ function randomSelectionWithReplacementReturnsTheNumberOfRequestedElements()
     selection = RandomSelection(matingPoolSize, true)
     vector = [1,2,3,4]
 
-    selectedItems = select(vector, selection)
+    selectedItems = select(selection, vector)
 
     return length(selectedItems) == matingPoolSize
 end
@@ -25,7 +25,7 @@ function randomSelectionWithoutReplacementReturnsTheNumberOfRequestedElements()
     selection = RandomSelection(matingPoolSize, false)
     vector = [1,2,3,4,5,7,8]
 
-    selectedItems = select(vector, selection)
+    selectedItems = select(selection, vector)
 
     return length(selectedItems) == matingPoolSize
 end
@@ -35,7 +35,7 @@ function randomSelectionWithoutReplacementDoesNotReturnRepeatedItems()
     selection = RandomSelection(matingPoolSize, false)
     vector = [1,2,3,4,5,6,7,8]
 
-    selectedItems = select(vector, selection)
+    selectedItems = select(selection, vector)
 
     return vector == sort(selectedItems)
 end
@@ -47,7 +47,7 @@ function randomSelectionWithReplacementReturnAListOfOneSolutionIfTheSolutionList
     withReplacement = true
     selection = RandomSelection(matingPoolSize, withReplacement)
 
-    return [solutions[1] for i in 1:5] == select(solutions, selection)
+    return [solutions[1] for i in 1:5] == select(selection, solutions)
 end
 
 function randomSelectionWithReplacementReturnAListWithTheMatingPoolSize()
@@ -58,7 +58,7 @@ function randomSelectionWithReplacementReturnAListWithTheMatingPoolSize()
     withReplacement = true
     selection = RandomSelection(matingPoolSize, withReplacement)
 
-    selectedSolutions = select(solutions, selection)
+    selectedSolutions = select(selection, solutions)
     
     return length(selectedSolutions) == 5
 end
@@ -71,7 +71,7 @@ function randomSelectionWithoutReplacementRaisesAnExceptionIfTheMatingPoolSizeIs
     withReplacement = false
     selection = RandomSelection(matingPoolSize, withReplacement)
 
-    select(solutions, selection)
+    select(selection, solutions)
 end
 
 function randomSelectionWithoutReplacementReturnsAPermutation()
@@ -81,7 +81,7 @@ function randomSelectionWithoutReplacementReturnsAPermutation()
     matingPoolSize = 10
     withReplacement = false
     selection = RandomSelection(matingPoolSize, withReplacement)
-    selectedSolutions = select(solutions, selection)
+    selectedSolutions =  select(selection, solutions)
 
     return  all(i -> solutions[i] in selectedSolutions, [_ for _ in range(1,solutionListSize)])
 end
@@ -124,7 +124,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
-    matingPool = select(solutions, selection)
+    matingPool = select(selection, solutions)
     return (length(matingPool) == 1)
 end
 
@@ -140,7 +140,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
-    matingPool = select(solutions, selection)
+    matingPool = select(selection, solutions)
     return (length(matingPool) == 2)
 end
 
@@ -156,7 +156,7 @@ function binaryTournamentSelectionReturnASolutionListWithTheCorrectMatingPoolSiz
     comparator = IthObjectiveComparator(1)
     selection = BinaryTournamentSelection(matingPoolSize, comparator)
 
-    matingPool = select(solutions, selection)
+    matingPool = select(selection, solutions)
     return (length(matingPool) == 4)
 end
 

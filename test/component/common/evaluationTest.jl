@@ -22,7 +22,7 @@ function sequentialEvaluationEvaluatesTheSolutions()
     push!(solutions, createSolution(problem))
 
     evaluation = SequentialEvaluation(problem)
-    evaluatedSolutions = evaluate(solutions, evaluation)
+    evaluatedSolutions = evaluate(evaluation, solutions)
 
     return length(evaluatedSolutions) == numberOfSolutions && 
     evaluatedSolutions[1].objectives[1] == 2 && 
@@ -52,7 +52,7 @@ function sequentialEvaluationWithArchiveEvaluatesTheSolutions()
 
     externalArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
     evaluation = SequentialEvaluationWithArchive(problem, externalArchive)
-    evaluatedSolutions = evaluate(solutions, evaluation)
+    evaluatedSolutions = evaluate(evaluation, solutions)
 
     return length(evaluatedSolutions) == numberOfSolutions && 
     evaluatedSolutions[1].objectives[1] == 2 && 
@@ -70,7 +70,7 @@ function sequentialEvaluationWithArchiveAddsTheSolutionsToTheArchiveEvaluatesThe
 
     externalArchive = CrowdingDistanceArchive(10, ContinuousSolution{Float64})
     evaluation = SequentialEvaluationWithArchive(problem, externalArchive)
-    evaluate(solutions, evaluation)
+    evaluate(evaluation, solutions)
 
     return length(externalArchive) >= 1
 end
