@@ -1,6 +1,5 @@
 # Unit tests for DefaultGlobalBestInitialization
 
-
 function inializeDefaultGlobalBestWithASolutionInitializationReturnTheRightResult()
     swarmSize = 1
     swarm = [createContinuousSolution([1.0, 3.0]) for _ in 1:swarmSize]

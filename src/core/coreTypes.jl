@@ -23,6 +23,7 @@ abstract type GlobalBestInitialization <: Component end
 abstract type GlobalBestSelection <: Component end 
 abstract type GlobalBestUpdate <: Component end 
 abstract type LocalBestInitialization <: Component end 
+abstract type LocalBestUpdate <: Component end 
 
 abstract type Ranking end
 abstract type DensityEstimator end

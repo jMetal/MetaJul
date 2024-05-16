@@ -92,6 +92,10 @@ export DefaultLocalBestInitialization
 export initialize
 include("component/particleSwarmOptimization/localBestInitialization.jl")
 
+export DefaultLocalBestUpdate
+export update
+include("component/particleSwarmOptimization/localBestUpdate.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
