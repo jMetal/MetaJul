@@ -26,7 +26,7 @@ end
 #######################################################
 
 function rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
 
@@ -47,7 +47,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -71,7 +71,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase2()
     population = [solution1]
     offspringPopulation = [solution2]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -99,7 +99,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase3()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -135,7 +135,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase4()
     population = [solution1, solution3]
     offspringPopulation = [solution2, solution4]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -171,7 +171,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     population = [solution1, solution4]
     offspringPopulation = [solution2, solution3]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -211,7 +211,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     population = [solution1, solution2, solution5]
     offspringPopulation = [solution3, solution4, solution6]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     
@@ -254,7 +254,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     offspringPopulation = [solution1, solution2, solution5]
     population = [solution3, solution4, solution6]
 
-    ranking = DominanceRanking{ContinuousSolution{Float64}}()
+    ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
     

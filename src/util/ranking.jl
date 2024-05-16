@@ -1,16 +1,16 @@
 # Struct and methods to implement the non-dominated ranking sorting method
 
-mutable struct DominanceRanking{T <: Solution} <: Ranking
-    rank::Vector{Vector{T}}
+mutable struct DominanceRanking <: Ranking
+    rank::Vector
     dominanceComparator::Comparator
 end 
 
-function DominanceRanking{T}(dominanceComparator::Comparator) where {T <: Solution} 
-    DominanceRanking{T}(Vector{Vector{T}}(undef, 0), dominanceComparator)
+function DominanceRanking(dominanceComparator::Comparator)  
+    DominanceRanking(Vector{Vector}(undef, 0), dominanceComparator)
 end
 
-function DominanceRanking{T}() where {T <: Solution} 
-     return DominanceRanking{T}(DefaultDominanceComparator())
+function DominanceRanking() 
+     return DominanceRanking(DefaultDominanceComparator())
 end
 
 function getSubFront(ranking::DominanceRanking, rankId::Integer)
@@ -23,7 +23,7 @@ function numberOfRanks(ranking::DominanceRanking)::Int
     return length(ranking.rank)
 end
 
-function appendRank!(ranking::DominanceRanking{T}, newRank::Vector{T}) where {T <: Solution}
+function appendRank!(ranking::DominanceRanking, newRank::Vector{T}) where {T <: Solution}
     push!(ranking.rank, newRank)
     return Nothing
 end
@@ -49,7 +49,7 @@ function compare(comparator::DominanceRankingComparator, solution1::Solution, so
     return result
 end
 
-function compute!(ranking::DominanceRanking{T}, solutions::Array{T}) where {T <: Solution}
+function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T <: Solution}
     solutionsToRank = [solution for solution in solutions]
     rankCounter = 1
 
