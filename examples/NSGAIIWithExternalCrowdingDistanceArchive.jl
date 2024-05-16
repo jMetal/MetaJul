@@ -27,7 +27,7 @@ solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize,
 
 solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, DefaultDominanceComparator())
 
-solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking{ContinuousSolution{Float64}}(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
+solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
 startingTime = Dates.now()
 optimize(solver)
