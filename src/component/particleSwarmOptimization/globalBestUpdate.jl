@@ -1,14 +1,11 @@
-struct DefaultGlobalBestUpdate <: GlobalBestUpdate
-    swarm::Vector{ContinuousSolution}
-    globalBest::CrowdingDistanceArchive
-end
+struct DefaultGlobalBestUpdate <: GlobalBestUpdate end
 
-function update(globalBestUpdate::DefaultGlobalBestUpdate)
-    @assert length(globalBestUpdate.swarm) > 0
+function update(globalBestUpdate::DefaultGlobalBestUpdate, swarm, globalBest)
+    @assert length(swarm) > 0
 
-    for solution in globalBestUpdate.swarm
-        add!(globalBestUpdate.globalBest, copySolution(solution))
+    for solution in swarm
+        add!(globalBest, copySolution(solution))
     end
 
-    return globalBestUpdate.globalBest
+    return globalBest
 end

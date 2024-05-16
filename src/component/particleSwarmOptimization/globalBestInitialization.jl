@@ -1,15 +1,12 @@
-struct DefaultGlobalBestInitialization <: GlobalBestInitialization
-    swarm::Vector{ContinuousSolution}
-    globalBest::CrowdingDistanceArchive
-end
+struct DefaultGlobalBestInitialization <: GlobalBestInitialization end
 
-function initialize(globalBestInitialization::DefaultGlobalBestInitialization)
-    @assert length(globalBestInitialization.swarm) > 0
+function initialize(globalBestInitialization::DefaultGlobalBestInitialization, swarm, globalBest)
+    @assert length(swarm) > 0
 
-    for particle in globalBestInitialization.swarm
-        add!(globalBestInitialization.globalBest, copySolution(particle))
+    for particle in swarm
+        add!(globalBest, copySolution(particle))
     end
 
-    return globalBestInitialization.globalBest
+    return globalBest
 end
 

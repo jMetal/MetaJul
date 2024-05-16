@@ -31,10 +31,10 @@ componentTests = [
     "component/evolutionaryAlgorithm/replacementTest.jl",
     "component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
     "component/particleSwarmOptimization/velocityInitializationTest.jl",
-    "component/particleSwarmOptimization/globalBestInitializationTest.jl"
-    #"component/particleSwarmOptimization/globalBestSelectionTest.jl",
-    #"component/particleSwarmOptimization/globalBestUpdateTest.jl",
-    #"component/particleSwarmOptimization/localBestInitializationTest.jl"
+    "component/particleSwarmOptimization/globalBestInitializationTest.jl",
+    "component/particleSwarmOptimization/globalBestSelectionTest.jl",
+    "component/particleSwarmOptimization/globalBestUpdateTest.jl",
+    "component/particleSwarmOptimization/localBestInitializationTest.jl"
     ]
 
 for testProgram in componentTests

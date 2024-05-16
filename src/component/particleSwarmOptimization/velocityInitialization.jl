@@ -1,9 +1,7 @@
-struct DefaultVelocityInitialization <: VelocityInitialization
-    swarm::Vector{ContinuousSolution}
-end
+struct DefaultVelocityInitialization <: VelocityInitialization end
 
-function initialize(velocityInitialization::DefaultVelocityInitialization)
-    numberOfVariables = length(velocityInitialization.swarm[1].variables)
+function initialize(velocityInitialization::DefaultVelocityInitialization, swarm)
+    numberOfVariables = length(swarm[1].variables)
 
-    return zeros(length(velocityInitialization.swarm), numberOfVariables)
+    return zeros(length(swarm), numberOfVariables)
 end

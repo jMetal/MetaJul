@@ -1,8 +1,8 @@
 struct BinaryTournamentGlobalBestSelection <: GlobalBestSelection
-    dominanceComparator::Function
+    dominanceComparator::Comparator
 end
 
-function select(globalBestSolutions::Vector{ContinuousSolution{Float64}}, globalBestSelection::BinaryTournamentGlobalBestSelection)
+function select(globalBestSelection::BinaryTournamentGlobalBestSelection, globalBestSolutions::Vector{ContinuousSolution{Float64}}, )
     position1 = rand(1:length(globalBestSolutions))
     position2 = rand(1:length(globalBestSolutions))
 
@@ -11,7 +11,7 @@ function select(globalBestSolutions::Vector{ContinuousSolution{Float64}}, global
 
     globalBest = solution2
 
-    if globalBestSelection.dominanceComparator(solution1, solution2) < 1
+    if compare(globalBestSelection.dominanceComparator, solution1, solution2) < 1
         globalBest = copySolution(solution1)
     else
         globalBest = copySolution(solution2)

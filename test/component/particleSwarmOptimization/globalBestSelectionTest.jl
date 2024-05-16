@@ -1,7 +1,7 @@
 # Unit tests for BinaryTournamentGlobalBestSelection
 
 function constructorOfBinaryTournamentGlobalBestSelectionWorksProperly()
-    dominanceComparator = compareForDominance
+    dominanceComparator = DefaultDominanceComparator()
 
     globalBestSelection = BinaryTournamentGlobalBestSelection(dominanceComparator)
 
@@ -13,9 +13,9 @@ function binaryTournamentGlobalBestSelectionWorksProperlyWhenTheSwarmHasASolutio
     swarmSize = 1
     swarm = [createContinuousSolution([1.0, 3.0]) for _ in 1:swarmSize]
 
-    globalBestSelection = BinaryTournamentGlobalBestSelection(compareForDominance)
+    globalBestSelection = BinaryTournamentGlobalBestSelection(DefaultDominanceComparator())
 
-    solution = select(swarm, globalBestSelection)
+    solution = select(globalBestSelection, swarm)
 
     return isequal(swarm[1], solution)
 end

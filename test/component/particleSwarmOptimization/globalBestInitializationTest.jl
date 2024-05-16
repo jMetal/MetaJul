@@ -1,29 +1,19 @@
 # Unit tests for DefaultGlobalBestInitialization
 
-function constructorOfDefaultGlobalBestInitializationWorksProperly()
-    swarmSize = 10
-    swarm = [createContinuousSolution([1.0, 3.0]) for _ in 1:swarmSize]
-
-    globalBest = CrowdingDistanceArchive(20, ContinuousSolution)
-    globalBestInitialization = DefaultGlobalBestInitialization(swarm, globalBest) 
-
-    return swarm == globalBestInitialization.swarm && globalBest == globalBestInitialization.globalBest
-end
 
 function inializeDefaultGlobalBestWithASolutionInitializationReturnTheRightResult()
     swarmSize = 1
     swarm = [createContinuousSolution([1.0, 3.0]) for _ in 1:swarmSize]
 
     globalBest = CrowdingDistanceArchive(20, ContinuousSolution)
-    globalBestInitialization = DefaultGlobalBestInitialization(swarm, globalBest) 
+    globalBestInitialization = DefaultGlobalBestInitialization() 
 
-    initialize(globalBestInitialization)
+    initialize(globalBestInitialization, swarm, globalBest)
     
-    return 1 == length(globalBestInitialization.globalBest) 
+    return 1 == length(globalBest) 
 end
 
 
 @testset "Default global best initialization tests" begin    
-    @test constructorOfDefaultGlobalBestInitializationWorksProperly()    
     @test inializeDefaultGlobalBestWithASolutionInitializationReturnTheRightResult()
 end
