@@ -3,47 +3,50 @@ using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.
 
-problem = ZDT1()
+function main()
 
-solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
-solver.name = "NSGA-II"
-solver.problem = problem
-solver.populationSize = 100
-solver.offspringPopulationSize = 100
+    problem = ZDT1()
 
-solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
+    solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
+    solver.name = "NSGA-II"
+    solver.problem = problem
+    solver.populationSize = 100
+    solver.offspringPopulationSize = 100
 
-externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
+    solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
 
-solver.evaluation = SequentialEvaluationWithArchive(solver.problem, externalArchive)
+    externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
 
-solver.termination = TerminationByEvaluations(25000)
+    solver.evaluation = SequentialEvaluationWithArchive(solver.problem, externalArchive)
 
-mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    solver.termination = TerminationByEvaluations(25000)
 
-crossover = SBXCrossover(0.9, 20.0, problem.bounds)
+    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
 
-solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
+    crossover = SBXCrossover(0.9, 20.0, problem.bounds)
 
-solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, DefaultDominanceComparator())
+    solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
 
-solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
+    solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, DefaultDominanceComparator())
 
-startingTime = Dates.now()
-optimize(solver)
-foundSolutions = solver.foundSolutions
-endTime = Dates.now()
+    solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
-foundSolutions = getSolutions(externalArchive)
+    startingTime = Dates.now()
+    optimize(solver)
+    foundSolutions = solver.foundSolutions
+    endTime = Dates.now()
 
-objectivesFileName = "FUN.csv"
-variablesFileName = "VAR.csv"
+    foundSolutions = getSolutions(externalArchive)
 
-println("Algorithm: ", name(solver))
+    objectivesFileName = "FUN.csv"
+    variablesFileName = "VAR.csv"
 
-println("Objectives stored in file ", objectivesFileName)
-printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+    println("Algorithm: ", name(solver))
 
-println("Variavbles stored in file ", variablesFileName)
-printVariablesToCSVFile(variablesFileName, foundSolutions)
-println("Computing time: ", (endTime - startingTime))
+    println("Objectives stored in file ", objectivesFileName)
+    printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+
+    println("Variavbles stored in file ", variablesFileName)
+    printVariablesToCSVFile(variablesFileName, foundSolutions)
+    println("Computing time: ", (endTime - startingTime))
+end

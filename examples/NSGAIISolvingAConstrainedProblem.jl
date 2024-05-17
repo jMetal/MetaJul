@@ -3,33 +3,36 @@ using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
-problem = srinivas()
+function main()
 
-solver::NSGAII = NSGAII()
-solver.problem = problem
-solver.populationSize = 100
+    problem = srinivas()
 
-solver.termination = TerminationByEvaluations(25000)
+    solver::NSGAII = NSGAII()
+    solver.problem = problem
+    solver.populationSize = 100
 
-solver.mutation = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds)
-solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+    solver.termination = TerminationByEvaluations(25000)
 
-solver.dominanceComparator = ConstraintsAndDominanceComparator()
+    solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
 
-startingTime = Dates.now()
-optimize(solver)
-endTime = Dates.now()
+    solver.dominanceComparator = ConstraintsAndDominanceComparator()
 
-foundSolutions = solver.foundSolutions
+    startingTime = Dates.now()
+    optimize(solver)
+    endTime = Dates.now()
 
-objectivesFileName = "FUN.csv"
-variablesFileName = "VAR.csv"
+    foundSolutions = solver.foundSolutions
 
-println("Algorithm: ", name(solver))
+    objectivesFileName = "FUN.csv"
+    variablesFileName = "VAR.csv"
 
-println("Objectives stored in file ", objectivesFileName)
-printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+    println("Algorithm: ", name(solver))
 
-println("Variables stored in file ", variablesFileName)
-printVariablesToCSVFile(variablesFileName, foundSolutions)
-println("Computing time: ", (endTime - startingTime))
+    println("Objectives stored in file ", objectivesFileName)
+    printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+
+    println("Variables stored in file ", variablesFileName)
+    printVariablesToCSVFile(variablesFileName, foundSolutions)
+    println("Computing time: ", (endTime - startingTime))
+end
