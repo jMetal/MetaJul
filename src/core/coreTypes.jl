@@ -26,6 +26,7 @@ abstract type LocalBestInitialization <: Component end
 abstract type LocalBestUpdate <: Component end 
 abstract type Perturbation <: Component end 
 abstract type PositionUpdate <: Component end 
+abstract type VelocityUpdate <: Component end 
 
 abstract type Ranking end
 abstract type DensityEstimator end

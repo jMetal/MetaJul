@@ -100,6 +100,10 @@ export FrequencySelectionMutationBasedPerturbation
 export perturbate
 include("component/particleSwarmOptimization/perturbation.jl")
 
+export DefaultPositionUpdate
+export update
+include("component/particleSwarmOptimization/positionUpdate.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
