@@ -34,10 +34,9 @@ solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking{Cont
 
 startingTime = Dates.now()
 optimize(solver)
-foundSolutions = solver.foundSolutions
 endTime = Dates.now()
 
-#foundSolutions = solver.foundSolutions
+foundSolutions = solver.foundSolutions
 
 objectivesFileName = "FUN.csv"
 variablesFileName = "VAR.csv"
