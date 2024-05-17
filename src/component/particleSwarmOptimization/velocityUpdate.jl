@@ -1,10 +1,10 @@
 # Default velocity update strategy
 
-struct DefaultVelocityUpdate <: VelocityUpdate 
+struct DefaultVelocityUpdate <: VelocityUpdate
     c1Min
     c1Max
     c2Min
-    c2Max      
+    c2Max
 end
 
 function update(velocityUpdate::DefaultVelocityUpdate, swarm, speed, localBest, leaders, globalBestSelection, inertiaWeightComputingStrategy)
@@ -16,8 +16,8 @@ function update(velocityUpdate::DefaultVelocityUpdate, swarm, speed, localBest, 
 
         r1 = rand()
         r2 = rand()
-        c1 = velocityUpdate.c1Min + rand() * (velocityUpdate.c1Max - velocityUpdate.c1Min) 
-        c2 = velocityUpdate.c2Min + rand() * (velocityUpdate.c2Max - velocityUpdate.c2Min) 
+        c1 = velocityUpdate.c1Min + rand() * (velocityUpdate.c1Max - velocityUpdate.c1Min)
+        c2 = velocityUpdate.c2Min + rand() * (velocityUpdate.c2Max - velocityUpdate.c2Min)
 
         inertiaWeight = compute(inertiaWeightComputingStrategy)
 
@@ -26,33 +26,33 @@ function update(velocityUpdate::DefaultVelocityUpdate, swarm, speed, localBest, 
 
         end
     end
-    
+
     return speed
 end
 
 
 # Constrained velocity update strategy
 
-struct ConstrainedVelocityUpdate <: VelocityUpdate 
+struct ConstrainedVelocityUpdate <: VelocityUpdate
     c1Min
     c1Max
     c2Min
-    c2Max      
+    c2Max
 
     deltaMin::Vector
     deltaMax::Vector
 
     function ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
-      deltaMin = Array{Float64}(undef, numberOfVariables(problem))  
-      deltaMax = Array{Float64}(undef, numberOfVariables(problem))  
+        deltaMin = Array{Float64}(undef, numberOfVariables(problem))
+        deltaMax = Array{Float64}(undef, numberOfVariables(problem))
 
-      for i in 1:numberOfVariables(problem)
-        bounds = bounds(problem)[i]
-        deltaMax[i] = (bounds.upperBound - bounds.lowerBound) / 2.0
-        deltaMin[i] = - deltaMax[i]
-      end
+        for i in 1:numberOfVariables(problem)
+            bounds = bounds(problem)[i]
+            deltaMax[i] = (bounds.upperBound - bounds.lowerBound) / 2.0
+            deltaMin[i] = -deltaMax[i]
+        end
 
-      return new(c1Min, c1Max, c2Min, c2Max, deltaMin, deltaMax)
+        return new(c1Min, c1Max, c2Min, c2Max, deltaMin, deltaMax)
     end
 end
 
@@ -65,8 +65,8 @@ function update(velocityUpdate::ConstrainedVelocityUpdate, swarm, speed, localBe
 
         r1 = rand()
         r2 = rand()
-        c1 = velocityUpdate.c1Min + rand() * (velocityUpdate.c1Max - velocityUpdate.c1Min) 
-        c2 = velocityUpdate.c2Min + rand() * (velocityUpdate.c2Max - velocityUpdate.c2Min) 
+        c1 = velocityUpdate.c1Min + rand() * (velocityUpdate.c1Max - velocityUpdate.c1Min)
+        c2 = velocityUpdate.c2Min + rand() * (velocityUpdate.c2Max - velocityUpdate.c2Min)
 
         inertiaWeight = compute(inertiaWeightComputingStrategy)
 
@@ -74,25 +74,25 @@ function update(velocityUpdate::ConstrainedVelocityUpdate, swarm, speed, localBe
             speed[i][j] = velocityConstriction(constrictionCoefficient(c1, c2) * inertiaWeight * speed[i][j] + c1 * r1 * (localBestParticle.variables[j] - particle.variables[j]) + c2 * r2 * (globalBestParticle.variables[j] - particle.variables[j]), velocityUpdate.deltaMin, velocityUpdate.deltaMax, j)
         end
     end
-    
+
     return speed
 end
 
 function velocityConstriction(velocity, deltaMin, deltaMax, variableIndex)
-dmax = deltaMax[variableIndex]
-  dmin = deltaMin[variableIndex]
+    dmax = deltaMax[variableIndex]
+    dmin = deltaMin[variableIndex]
 
-  result = velocity
-  
-  if velocity > dmax
-    result = dmax
-  end
+    result = velocity
 
-  if velocity < dmin
-    result = dmin
-  end
+    if velocity > dmax
+        result = dmax
+    end
 
-  return result
+    if velocity < dmin
+        result = dmin
+    end
+
+    return result
 end
 
 function constrictionCoefficient(c1, c2)

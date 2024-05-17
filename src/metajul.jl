@@ -104,6 +104,10 @@ export DefaultPositionUpdate
 export update
 include("component/particleSwarmOptimization/positionUpdate.jl")
 
+export DefaultVelocityUpdate, ConstrainedVelocityUpdate
+export update
+include("component/particleSwarmOptimization/velocityUpdate.jl")
+
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
