@@ -38,7 +38,7 @@ function udpateWorksProperlyCaseB()
 end
 
 """
-Case B: the swarm has a particle which is non-dominated with its local best, so the local best is updated
+Case C: the swarm has a particle which is non-dominated with its local best, so the local best is updated
 """
 function udpateWorksProperlyCaseC()
     swarm = [createContinuousSolution([7.0, 3.0])]

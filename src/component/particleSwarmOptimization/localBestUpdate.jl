@@ -7,11 +7,10 @@ function update(localBestUpdate::DefaultLocalBestUpdate, swarm, localBest)
 
     for i in 1:length(swarm)
       result = compare(localBestUpdate.dominanceComparator, swarm[i], localBest[i])
-      println(result)
       if result != 1
         localBest[i] = copySolution(swarm[i])
       end
     end
     
-    return Nothing
+    return localBest
 end

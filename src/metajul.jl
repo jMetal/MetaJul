@@ -78,7 +78,7 @@ include("component/particleSwarmOptimization/velocityInitialization.jl")
 
 export DefaultGlobalBestInitialization
 export initialize
-include("component/particleSwarmOptimization/GlobalBestInitialization.jl")
+include("component/particleSwarmOptimization/globalBestInitialization.jl")
 
 export BinaryTournamentGlobalBestSelection
 export select
@@ -95,6 +95,10 @@ include("component/particleSwarmOptimization/localBestInitialization.jl")
 export DefaultLocalBestUpdate
 export update
 include("component/particleSwarmOptimization/localBestUpdate.jl")
+
+export FrequencySelectionMutationBasedPerturbation
+export perturbate
+include("component/particleSwarmOptimization/perturbation.jl")
 
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
