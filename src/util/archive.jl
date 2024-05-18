@@ -72,10 +72,11 @@ struct CrowdingDistanceArchive{T<:Solution} <: Archive
   capacity::Int
   internalNonDominatedArchive::NonDominatedArchive{T}
   crowdingDistanceComparator::CrowdingDistanceComparator
+  densityEstimator::CrowdingDistanceDensityEstimator
 end
 
 function CrowdingDistanceArchive(capacity::Int, T::Type{<:Solution})
-  return CrowdingDistanceArchive(capacity, NonDominatedArchive(T), CrowdingDistanceComparator()) 
+  return CrowdingDistanceArchive(capacity, NonDominatedArchive(T), CrowdingDistanceComparator(), CrowdingDistanceDensityEstimator()) 
 end
 
 function Base.length(archive::CrowdingDistanceArchive)::Int
@@ -112,8 +113,7 @@ function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:
   solutionIsAdded = add!(archive.internalNonDominatedArchive, solution)
 
   if solutionIsAdded && archiveIsFull
-      densityEstimator = CrowdingDistanceDensityEstimator()
-      compute!(densityEstimator, getSolutions(archive))
+      compute!(archive.densityEstimator, getSolutions(archive))
       #computeCrowdingDistanceEstimator!(getSolutions(archive))
       crowdingDistanceComparator = archive.crowdingDistanceComparator
       sort!(getSolutions(archive), lt=((x, y) -> compare(crowdingDistanceComparator, x, y) < 0))
