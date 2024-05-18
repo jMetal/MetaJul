@@ -13,6 +13,7 @@ abstract type Component end
 abstract type SolutionsCreation <: Component end
 abstract type Evaluation <: Component end
 abstract type Termination <: Component end
+
 abstract type Selection <: Component end
 abstract type Variation <: Component end
 abstract type Replacement <: Component end

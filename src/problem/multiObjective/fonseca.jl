@@ -6,7 +6,6 @@ function fonseca()
     addVariable(problem, Bounds{Float64}(-4.0, 4.0))
   end
 
-
   f1 = x -> begin
     sum1 = 0.0
     for i in range(1, numberOfVariables)

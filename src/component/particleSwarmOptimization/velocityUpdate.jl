@@ -47,8 +47,8 @@ struct ConstrainedVelocityUpdate <: VelocityUpdate
         deltaMax = Array{Float64}(undef, numberOfVariables(problem))
 
         for i in 1:numberOfVariables(problem)
-            bounds = bounds(problem)[i]
-            deltaMax[i] = (bounds.upperBound - bounds.lowerBound) / 2.0
+            problemBounds = bounds(problem)[i]
+            deltaMax[i] = (problemBounds.upperBound - problemBounds.lowerBound) / 2.0
             deltaMin[i] = -deltaMax[i]
         end
 
