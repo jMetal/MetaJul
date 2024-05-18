@@ -143,6 +143,10 @@ export EvolutionaryAlgorithm
 export optimize
 include("algorithm/evolutionaryAlgorithm.jl")
 
+export ParticleSwarmOptimization
+export optimize
+include("algorithm/particleSwarmOptimization.jl")
+
 export NSGAII
 export optimize
 include("algorithm/NSGAII.jl")
