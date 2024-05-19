@@ -19,6 +19,8 @@ mutable struct ParticleSwarmOptimization <: Algorithm
   inertiaWeightComputingStrategy::InertiaWeightComputingStrategy
   globalBestSelection::GlobalBestSelection
 
+  globalBest::CrowdingDistanceArchive
+
   observable::Observable
 
   status::Dict
@@ -40,15 +42,15 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
 
   swarm = create(pso.solutionsCreation)
   swarm = evaluate(pso.evaluation, swarm)
-  speed = initialize(pso.velocityInitialization)
-  localBest = initialize(pso.localBestInitialization)
-  globalBest = initialize(pso.globalBestInitialization)
+  speed = initialize(pso.velocityInitialization, swarm)
+  localBest = initialize(pso.localBestInitialization, swarm)
+  globalBest = initialize(pso.globalBestInitialization, swarm, pso.globalBest)
 
   evaluations = length(swarm)
   # globalBest.computeDensityEstimator();
-  compute!(globalBest, getSolutions(swarm))
+  #compute!(globalBest, getSolutions(swarm))
 
-  pso.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
+  pso.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => getSolutions(globalBest), "COMPUTING_TIME" => (Dates.now() - startingTime))
 
   notify(pso.observable, pso.status)
 
@@ -64,21 +66,21 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
     
     evaluations += length(swarm)
     pso.status["EVALUATIONS"] = evaluations
-    pso.status["POPULATION"] = population
+    pso.status["POPULATION"] = getSolutions(globalBest)
     pso.status["COMPUTING_TIME"] = Dates.now() - startingTime
 
     # globalBest.computeDensityEstimator();
-    compute!(globalBest, getSolutions(swarm))
+    #compute!(globalBest, getSolutions(swarm))
 
     notify(pso.observable, pso.status)
   end
 
-  foundSolutions = population
+  foundSolutions = swarm
   return foundSolutions
 end
 
 function optimize(algorithm::ParticleSwarmOptimization)
-  algorithm.foundSolutions = particleSwarmOptimization(algorithm)
+  particleSwarmOptimization(algorithm)
   
   return Nothing
 end

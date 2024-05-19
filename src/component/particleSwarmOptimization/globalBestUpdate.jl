@@ -7,5 +7,7 @@ function update(globalBestUpdate::DefaultGlobalBestUpdate, swarm, globalBest)
         add!(globalBest, copySolution(solution))
     end
 
+    compute!(globalBest.densityEstimator, swarm)
+
     return globalBest
 end
