@@ -7,8 +7,8 @@ function main()
     problem = oneZeroMax(512)
 
     solver::NSGAII = NSGAII()
-    solver.problem = problem
     solver.populationSize = 100
+    solver.problem = problem
 
     solver.termination = TerminationByEvaluations(25000)
 

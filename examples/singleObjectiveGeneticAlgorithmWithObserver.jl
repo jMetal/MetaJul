@@ -6,23 +6,22 @@ function main()
     problem = oneMax(512)
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
-    solver.problem = problem
-    solver.populationSize = 100
-    solver.offspringPopulationSize = 100
+    populationSize = 100
+    offspringPopulationSize = 100
 
-    solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
+    solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
 
-    solver.evaluation = SequentialEvaluation(solver.problem)
+    solver.evaluation = SequentialEvaluation(problem)
 
     solver.termination = TerminationByEvaluations(40000)
 
     mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
     crossover = SinglePointCrossover(1.0)
-    solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
+    solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
-    solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareIthObjective)
+    solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, IthObjectiveComparator(1))
 
-    solver.replacement = MuPlusLambdaReplacement(compareIthObjective)
+    solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
     #observer = EvaluationObserver(4000)
     observer = FitnessObserver(500)

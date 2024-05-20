@@ -8,13 +8,12 @@ function main()
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "GA"
 
-    solver.problem = problem
-    solver.populationSize = 100
-    solver.offspringPopulationSize = 100
+    populationSize = 100
+    offspringPopulationSize = 100
 
-    solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
+    solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
 
-    solver.evaluation = SequentialEvaluation(solver.problem)
+    solver.evaluation = SequentialEvaluation(problem)
 
     solver.termination = TerminationByEvaluations(700000)
 
@@ -23,11 +22,11 @@ function main()
     solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
     """
     crossover = SBXCrossover(1.0, 20.0, problem.bounds)
-    solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
+    solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
-    solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, compareIthObjective)
+    solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, IthObjectiveComparator(1))
 
-    solver.replacement = MuPlusLambdaReplacement(compareIthObjective)
+    solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
     startingTime = Dates.now()
     optimize(solver)

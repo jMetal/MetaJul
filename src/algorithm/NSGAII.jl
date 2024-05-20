@@ -27,17 +27,17 @@ end
 
 function nsgaII(nsgaII::NSGAII)
   solver = nsgaII.solver 
-  
-  solver.problem = nsgaII.problem
-  solver.populationSize = nsgaII.populationSize
-  solver.offspringPopulationSize = nsgaII.populationSize
+  problem = nsgaII.problem
 
-  solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
+  populationSize = nsgaII.populationSize
+  offspringPopulationSize = nsgaII.populationSize
 
-  solver.evaluation = SequentialEvaluation(solver.problem)
+  solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
+
+  solver.evaluation = SequentialEvaluation(problem)
 
   solver.termination = nsgaII.termination
-  solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
+  solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
 
   #solver.replacement = RankingAndDensityEstimatorReplacement(nsgaII.dominanceComparator)
   solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(nsgaII.dominanceComparator), CrowdingDistanceDensityEstimator())

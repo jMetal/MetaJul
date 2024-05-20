@@ -9,15 +9,14 @@ function main()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
-    solver.problem = problem
-    solver.populationSize = 100
-    solver.offspringPopulationSize = 100
+    populationSize = 100
+    offspringPopulationSize = 100
 
-    solver.solutionsCreation = DefaultSolutionsCreation(solver.problem, solver.populationSize)
+    solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
 
-    externalArchive = CrowdingDistanceArchive(solver.populationSize, ContinuousSolution{Float64})
+    externalArchive = CrowdingDistanceArchive(populationSize, ContinuousSolution{Float64})
 
-    solver.evaluation = SequentialEvaluationWithArchive(solver.problem, externalArchive)
+    solver.evaluation = SequentialEvaluationWithArchive(problem, externalArchive)
 
     solver.termination = TerminationByEvaluations(25000)
 
@@ -25,7 +24,7 @@ function main()
 
     crossover = SBXCrossover(0.9, 20.0, problem.bounds)
 
-    solver.variation = CrossoverAndMutationVariation(solver.offspringPopulationSize, crossover, mutation)
+    solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
     solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, DefaultDominanceComparator())
 

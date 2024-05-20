@@ -2,9 +2,6 @@ using Dates
 
 mutable struct EvolutionaryAlgorithm <: Algorithm
   name::String
-  problem::Problem
-  populationSize::Int
-  offspringPopulationSize::Int
 
   foundSolutions::Vector
 
