@@ -47,8 +47,6 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
   globalBest = initialize(pso.globalBestInitialization, swarm, pso.globalBest)
 
   evaluations = length(swarm)
-  # globalBest.computeDensityEstimator();
-  #compute!(globalBest, getSolutions(swarm))
 
   pso.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => getSolutions(globalBest), "COMPUTING_TIME" => (Dates.now() - startingTime))
 
@@ -69,14 +67,11 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
     pso.status["POPULATION"] = getSolutions(globalBest)
     pso.status["COMPUTING_TIME"] = Dates.now() - startingTime
 
-    # globalBest.computeDensityEstimator();
-    #compute!(globalBest, getSolutions(swarm))
-
     notify(pso.observable, pso.status)
   end
 
-  foundSolutions = swarm
-  return foundSolutions
+  pso.foundSolutions = getSolutions(globalBest)
+  return pso.foundSolutions
 end
 
 function optimize(algorithm::ParticleSwarmOptimization)

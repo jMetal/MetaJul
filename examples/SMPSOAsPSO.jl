@@ -7,7 +7,7 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT1()
+    problem = ZDT4()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
@@ -16,11 +16,12 @@ function main()
 
     solver.globalBest = CrowdingDistanceArchive(swarmSize, ContinuousSolution{Float64})
 
-
     solver.velocityInitialization = DefaultVelocityInitialization()
     solver.localBestInitialization = DefaultLocalBestInitialization()
     solver.globalBestInitialization = DefaultGlobalBestInitialization()
     
+    solver.globalBestSelection = BinaryTournamentGlobalBestSelection(DefaultDominanceComparator())
+
     solver.inertiaWeightComputingStrategy = ConstantValueStrategy(0.1)
     
     mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 2.0, bounds(problem))
@@ -29,6 +30,7 @@ function main()
 
     solver.globalBestUpdate = DefaultGlobalBestUpdate()
     solver.localBestUpdate = DefaultLocalBestUpdate(DefaultDominanceComparator())
+    solver.positionUpdate = DefaultPositionUpdate(-1.0, -1.0, bounds(problem))
 
     c1Min = 1.5
     c1Max = 2.5
@@ -36,8 +38,7 @@ function main()
     c2Max = 2.5
 
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
-
-    #println(solver)
+    #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
     startingTime = Dates.now()
     optimize(solver)

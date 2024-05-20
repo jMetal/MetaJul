@@ -12,7 +12,7 @@ function update(velocityUpdate::DefaultVelocityUpdate, swarm, speed, localBest, 
     for i in 1:length(swarm)
         particle = copySolution(swarm[i])
         localBestParticle = copySolution(localBest[i])
-        globalBestParticle = select(globalBestSelection, leaders)
+        globalBestParticle = select(globalBestSelection, getSolutions(leaders))
 
         r1 = rand()
         r2 = rand()
@@ -22,8 +22,7 @@ function update(velocityUpdate::DefaultVelocityUpdate, swarm, speed, localBest, 
         inertiaWeight = compute(inertiaWeightComputingStrategy)
 
         for j in 1:length(particle.variables)
-            speed[i][j] = inertiaWeight * speed[i][j] + c1 * r1 * (localBestParticle.variables[j] - particle.variables[j]) + c2 * r2 * (globalBestParticle.variables[j] - particle.variables[j])
-
+            speed[i, j] = inertiaWeight * speed[i, j] + c1 * r1 * (localBestParticle.variables[j] - particle.variables[j]) + c2 * r2 * (globalBestParticle.variables[j] - particle.variables[j])
         end
     end
 
@@ -61,7 +60,7 @@ function update(velocityUpdate::ConstrainedVelocityUpdate, swarm, speed, localBe
     for i in 1:length(swarm)
         particle = copySolution(swarm[i])
         localBestParticle = copySolution(localBest[i])
-        globalBestParticle = select(globalBestSelection, leaders)
+        globalBestParticle = select(globalBestSelection, getSolutions(leaders))
 
         r1 = rand()
         r2 = rand()
@@ -71,7 +70,8 @@ function update(velocityUpdate::ConstrainedVelocityUpdate, swarm, speed, localBe
         inertiaWeight = compute(inertiaWeightComputingStrategy)
 
         for j in 1:length(particle.variables)
-            speed[i][j] = velocityConstriction(constrictionCoefficient(c1, c2) * inertiaWeight * speed[i][j] + c1 * r1 * (localBestParticle.variables[j] - particle.variables[j]) + c2 * r2 * (globalBestParticle.variables[j] - particle.variables[j]), velocityUpdate.deltaMin, velocityUpdate.deltaMax, j)
+            speed[i, j] = velocityConstriction(constrictionCoefficient(c1, c2) * 
+            inertiaWeight * speed[i, j] + c1 * r1 * (localBestParticle.variables[j] - particle.variables[j]) + c2 * r2 * (globalBestParticle.variables[j] - particle.variables[j]), velocityUpdate.deltaMin, velocityUpdate.deltaMax, j)
         end
     end
 
@@ -97,7 +97,7 @@ end
 
 function constrictionCoefficient(c1, c2)
     rho = c1 + c2
-    result
+    result = 0.0
     if rho <= 4.0
         result = 1.0
     else
