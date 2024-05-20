@@ -46,6 +46,14 @@ end
 function compare(comparator::DefaultDominanceComparator, x::Vector{T}, y::Vector{T})::Int where {T<:Number}
   @assert length(x) == length(y) "The vectors have a different length"
 
+  """
+  x==y && return 0
+
+  all(t->(t[1]≤t[2]), zip(x, y)) && return -1
+  all(t->(t[1]≤t[2]), zip(y, x)) && return  1
+  return 0
+  """
+  
   bestIsSolution1 = 0
   bestIsSolution2 = 0
 

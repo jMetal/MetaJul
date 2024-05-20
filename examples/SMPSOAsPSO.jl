@@ -7,7 +7,7 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT4()
+    problem = kursawe()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
@@ -24,7 +24,8 @@ function main()
 
     solver.inertiaWeightComputingStrategy = ConstantValueStrategy(0.1)
     
-    mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 2.0, bounds(problem))
+    mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, bounds(problem))
+    
     mutationFrequency = 6
     solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperarator)    
 

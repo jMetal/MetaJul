@@ -58,7 +58,6 @@ struct PolynomialMutation <: MutationOperator
   variableBounds::Vector{Bounds{Float64}}
 end
 
-
 function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Real}
   probability::Real = mutationOperator.probability
   distributionIndex::Real = mutationOperator.distributionIndex
