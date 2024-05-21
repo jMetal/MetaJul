@@ -18,7 +18,7 @@ Current features:
      - Constrained problems: Srinivas, ConstrEx, Bihn2, Tanaka, Osyczka2, Golinski
 
 * Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
-* Algorithms: local search, evolutionary algorithm, NSGA-II
+* Algorithms: local search, evolutionary algorithm, NSGA-II, SMPSO (multi-objective PSO)
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
 * Observers: ``EvaluationObserver``, ``FitnessObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
@@ -36,6 +36,7 @@ The ``examples`` folder contains, among others:
 * NSGA-II using a bounded crowding distance archive
 * NSGA-II solving a constrained problem
 * NSGA-II using an observer (`EvaluationObserver`) that prints the number of evaluations 
+* SMPSO
 
 Jupyter notebooks with examples can be found in the ``notebooks`` folder.
 
