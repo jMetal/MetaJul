@@ -2,12 +2,13 @@ using metajul
 using Dates
 
 # SMPSO algorithm configured from the ParticleSwarmOptimization template
+
 function main()
 
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = kursawe()
+    problem = ZDT1()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
