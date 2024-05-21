@@ -3,7 +3,7 @@ using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
 function main()
-    problem = ZDT4()
+    problem = ZDT1(100)
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
@@ -13,7 +13,7 @@ function main()
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
     solver.evaluation = SequentialEvaluation(problem)
-    solver.termination = TerminationByEvaluations(25000)
+    solver.termination = TerminationByEvaluations(100000)
 
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
     crossover = SBXCrossover(0.9, 20.0, problem.bounds)
@@ -37,11 +37,11 @@ function main()
     variablesFileName = "VAR.csv"
 
     println("Algorithm: ", name(solver))
+    println("Computing time: ", (endTime - startingTime))
 
     println("Objectives stored in file ", objectivesFileName)
     printObjectivesToCSVFile(objectivesFileName, foundSolutions)
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
 end

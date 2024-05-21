@@ -1,13 +1,15 @@
-function maxCrowdingDistanceValue()
+@inline function maxCrowdingDistanceValue()
     return typemax(Float64)
 end
 
-function getCrowdingDistance(solution::T) where {T<:Solution}
-    return get(solution.attributes, "CROWDING_DISTANCE_ATTRIBUTE", 0)
+@inline function getCrowdingDistance(solution::T) where {T<:Solution}
+    return get(solution.attributes, "CROWDING_DISTANCE_ATTRIBUTE", 0.0)
 end
 
-function setCrowdingDistance(solution::T, crowdingDistance::Real) where {T<:Solution}
-    return solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
+@inline function setCrowdingDistance(solution::T, crowdingDistance::Float64) where {T<:Solution}
+    solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
+
+    return Nothing
 end
 
 struct CrowdingDistanceComparator <: Comparator end
@@ -23,8 +25,6 @@ function compare(comparator::CrowdingDistanceComparator, solution1::Solution, so
     return result
 end
 
-
-
 """
     computeCrowdingDistanceEstimator!(solutions::Vector{T}) where {T <: Solution}
 
@@ -34,8 +34,11 @@ Computes the crowding distance density estimator to the solutions of a list. It 
 struct CrowdingDistanceDensityEstimator <: DensityEstimator end
 
 function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions::Vector{T}) where {T<:Solution}
+    num_solutions = length(solutions)
+    objectiveComparator = IthObjectiveComparator(1)
+
     @assert length(solutions) > 0 "The solution list is empty"
-    if length(solutions) < 3
+    if num_solutions < 3
         for solution in solutions
             setCrowdingDistance(solution, maxCrowdingDistanceValue())
         end
@@ -46,21 +49,23 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
         end
 
         for i in range(1, numberOfObjectives)
-            #sort!(solutions, by = s -> s.objectives[i])
-            objectiveComparator = IthObjectiveComparator(i)
+            setIndex(objectiveComparator, i) = IthObjectiveComparator(i)
             sort!(solutions, lt=(x, y) -> compare(objectiveComparator, x, y) <= 0)
 
             minimumObjectiveValue = solutions[1].objectives[i]
             maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]
 
-            setCrowdingDistance(solutions[begin],maxCrowdingDistanceValue())
+            setCrowdingDistance(solutions[begin], maxCrowdingDistanceValue())
             setCrowdingDistance(solutions[end], maxCrowdingDistanceValue())
 
-            for j in range(2, length(solutions) - 1)
-                distance = solutions[j+1].objectives[i] - solutions[j-1].objectives[i]
-                distance = distance / (maximumObjectiveValue - minimumObjectiveValue)
-                distance = distance + getCrowdingDistance(solutions[j])
-                setCrowdingDistance(solutions[j], distance)
+            obj_range_inv = 1 / (maximumObjectiveValue - minimumObjectiveValue)
+
+            for j in 2:(num_solutions-1)
+                @inbounds begin
+                    distance = (solutions[j+1].objectives[i] - solutions[j-1].objectives[i]) * obj_range_inv
+                    distance += getCrowdingDistance(solutions[j])
+                    setCrowdingDistance(solutions[j], distance)
+                end
             end
         end
     end

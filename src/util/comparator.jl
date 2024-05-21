@@ -84,11 +84,15 @@ end
 #  return compareForDominance(solution1.objectives, solution2.objectives)
 #end
 
-struct IthObjectiveComparator <: Comparator
+mutable struct IthObjectiveComparator <: Comparator
   index::Int
   elementAtComparator::ElementAtComparator
 
   IthObjectiveComparator(index) = new(index, ElementAtComparator(index))
+end
+
+function setIndex(comparator::IthObjectiveComparator, index::Int)
+  comparator.index = index
 end
 
 function compare(comparator::IthObjectiveComparator, solution1::Solution, solution2::Solution)::Int
