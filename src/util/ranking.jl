@@ -50,6 +50,7 @@ function compare(comparator::DominanceRankingComparator, solution1::Solution, so
 end
 
 function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T <: Solution}
+    ranking.rank = []
     solutionsToRank = [solution for solution in solutions]
     rankCounter = 1
 

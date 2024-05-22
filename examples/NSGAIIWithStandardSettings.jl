@@ -8,6 +8,7 @@ function main()
     problem = ZDT1()
 
     solver::NSGAII = NSGAII()
+    solver.problem = problem
     solver.populationSize = 100
 
     solver.termination = TerminationByEvaluations(25000)

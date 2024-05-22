@@ -65,7 +65,7 @@ export variate
 include("component/evolutionaryAlgorithm/variation.jl")
 
 export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement
-export replace_ 
+export replace_
 include("component/evolutionaryAlgorithm/replacement.jl")
 
 export ConstantValueStrategy

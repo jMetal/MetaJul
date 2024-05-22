@@ -61,7 +61,7 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
             obj_range_inv = 1 / (maximumObjectiveValue - minimumObjectiveValue)
 
             for j in 2:(num_solutions-1)
-                @inbounds begin
+                begin
                     distance = (solutions[j+1].objectives[i] - solutions[j-1].objectives[i]) * obj_range_inv
                     distance += getCrowdingDistance(solutions[j])
                     setCrowdingDistance(solutions[j], distance)

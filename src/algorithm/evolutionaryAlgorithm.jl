@@ -54,7 +54,6 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
 
     notify(ea.observable, ea.status)
   end
-
   foundSolutions = population
   return foundSolutions
 end
