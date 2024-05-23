@@ -35,7 +35,7 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
 
     compute!(replacement.ranking, jointVector)
 
-    for rank in replacement.ranking.rank
+    for rank in replacement.ranking.ranks
         compute!(replacement.densityEstimator, rank)
     end
 

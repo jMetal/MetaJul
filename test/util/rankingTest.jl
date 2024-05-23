@@ -22,7 +22,7 @@ end
 
 @testset "Emtpy ranking tests" begin    
     @test createADominanceRankingWithADominanceComparatorWorksProperly()
-    @test length(DominanceRanking().rank) == 0
+    @test length(DominanceRanking().ranks) == 0
     @test numberOfRanks(DominanceRanking()) == 0
     @test_throws "The subfront id 1 is not in the range 1:0" getSubFront(DominanceRanking(), 1)
 
@@ -44,7 +44,7 @@ function computeRankingOfASolutionListWithASolutionReturnsARankingContainingThat
     ranking = DominanceRanking()
     compute!(ranking, solutions)
 
-    return numberOfRanks(ranking) == 1 && isequal(solutions[1].objectives, ranking.rank[1][1].objectives)
+    return numberOfRanks(ranking) == 1 && isequal(solutions[1].objectives, ranking.ranks[1][1].objectives)
 end
 
 function computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingleRank()
@@ -72,7 +72,7 @@ function computeRankingOfASolutionListWithTwoNonDominatedSolutionsReturnsASingle
     ranking = DominanceRanking()
     compute!(ranking, solutions)
 
-    return (getRank(solution1) == getRank(solution2) == 1) && (length(ranking.rank[1]) == 2)
+    return (getRank(solution1) == getRank(solution2) == 1) && (length(ranking.ranks[1]) == 2)
 end
 
 function computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRankings()
@@ -88,8 +88,8 @@ function computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRanking
     compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
-    (length(ranking.rank[1]) == 1) && 
-    (length(ranking.rank[2]) == 1) && 
+    (length(ranking.ranks[1]) == 1) && 
+    (length(ranking.ranks[2]) == 1) && 
     (getRank(solution2) == 1) && 
     (getRank(solution1) == 2)
 end
@@ -110,9 +110,9 @@ function computeRankingOfASolutionListWithThreeDominatedSolutionsReturnsThreeRan
     compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 3) && 
-    (length(ranking.rank[1]) == 1) && 
-    (length(ranking.rank[2]) == 1) && 
-    (length(ranking.rank[3]) == 1) && 
+    (length(ranking.ranks[1]) == 1) && 
+    (length(ranking.ranks[2]) == 1) && 
+    (length(ranking.ranks[3]) == 1) && 
     (getRank(solution3) == 1) && 
     (getRank(solution2) == 2) &&
     (getRank(solution1) == 3)
@@ -138,7 +138,7 @@ function computeRankingOfASolutionListWithFourNonDominatedSolutionsReturnsOneRan
     compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 1) && 
-    (length(ranking.rank[1]) == 4) && 
+    (length(ranking.ranks[1]) == 4) && 
     (getRank(solution4) == 1) && 
     (getRank(solution3) == 1) && 
     (getRank(solution2) == 1) &&
@@ -158,8 +158,8 @@ function computeRankingOfASolutionListWithTwoNonDominatedFrontsReturnsTwoRanking
     compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
-    (length(ranking.rank[1]) == 2) && 
-    (length(ranking.rank[2]) == 3) && 
+    (length(ranking.ranks[1]) == 2) && 
+    (length(ranking.ranks[2]) == 3) && 
     (getRank(solution1Front1) == 1) && 
     (getRank(solution2Front2) == 2) 
 end
@@ -188,8 +188,8 @@ function computeRankingOfASolutionListWithWeakDominatedSolutionsWorkProperly()
     compute!(ranking, solutions)
 
     return (numberOfRanks(ranking) == 2) && 
-    (length(ranking.rank[1]) == 4) && 
-    (length(ranking.rank[2]) == 2) && 
+    (length(ranking.ranks[1]) == 4) && 
+    (length(ranking.ranks[2]) == 2) && 
     (getRank(solution1) == 1) && 
     (getRank(solution6) == 1) 
 end
@@ -217,9 +217,9 @@ function computeRankingMustWorkProperlyWithTheExampleOfTheMNDSPaper()
     compute!(ranking, solutions)
     
     return numberOfRanks(ranking) == 3 &&
-    length(ranking.rank[1]) == 4 &&
-    length(ranking.rank[2]) == 4 &&
-    length(ranking.rank[3]) == 3
+    length(ranking.ranks[1]) == 4 &&
+    length(ranking.ranks[2]) == 4 &&
+    length(ranking.ranks[3]) == 3
 end
 
 function computeRankingMustWorkProperlyWithAnExampleOfNineSolutions() 
@@ -241,8 +241,8 @@ function computeRankingMustWorkProperlyWithAnExampleOfNineSolutions()
     compute!(ranking, solutions)
 
     return numberOfRanks(ranking) == 2 &&
-    length(ranking.rank[1]) == 4 &&
-    length(ranking.rank[2]) == 5
+    length(ranking.ranks[1]) == 4 &&
+    length(ranking.ranks[2]) == 5
 end
 
 @testset "Compute ranking tests" begin    

@@ -4,8 +4,8 @@
 
 mutable struct ContinuousSolution{T<:Number} <: Solution
     variables::Array{T}
-    objectives::Array{AbstractFloat}
-    constraints::Array{AbstractFloat}
+    objectives::Array{Real}
+    constraints::Array{Real}
     attributes::Dict
     bounds::Array{Bounds{T}}
 end
