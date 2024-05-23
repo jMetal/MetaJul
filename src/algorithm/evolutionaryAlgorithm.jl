@@ -45,7 +45,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     offspringPopulation = variate(ea.variation, population, matingPool)
     offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
 
-    population = replace_(ea.replacement, population, offspringPopulation)
+    @time population = replace_(ea.replacement, population, offspringPopulation)
 
     evaluations += length(offspringPopulation)
     ea.status["EVALUATIONS"] = evaluations

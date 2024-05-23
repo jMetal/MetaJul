@@ -114,7 +114,6 @@ function add!(archive::CrowdingDistanceArchive{T}, solution::T)::Bool where {T<:
 
   if solutionIsAdded && archiveIsFull
       compute!(archive.densityEstimator, getSolutions(archive))
-      #computeCrowdingDistanceEstimator!(getSolutions(archive))
       crowdingDistanceComparator = archive.crowdingDistanceComparator
       sort!(getSolutions(archive), lt=((x, y) -> compare(crowdingDistanceComparator, x, y) < 0))
 
