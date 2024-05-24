@@ -60,7 +60,7 @@ function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solu
             solution.attributes["INDEX"] = index
             add!(nonDominatedArchive, solution)
         end
-        
+
         counterOfDeletedSolutions = 0
         for solution in nonDominatedArchive.solutions
             setRank(solution, rankCounter)
@@ -75,7 +75,7 @@ function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solu
 end
 
 
-
+"""
 function dominates(a::Solution, b::Solution)
     all(a.objectives .<= b.objectives) && any(a.objectives .< b.objectives)
 end
@@ -143,10 +143,8 @@ function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Sol
 end
 
 
-
-"""
 function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
-    ranking.rank = []
+    ranking.ranks = []
     # Loop through each individual in the population
     for i in 1:length(solutions)
         # Initialize dominance count for current individual
@@ -166,13 +164,13 @@ function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Sol
 
         # If not dominated by anyone, assign rank 1
         if dominated_by == 0
-            push!(ranks, 1)
+            push!(ranking.ranks, 1)
             setRank(solutions[i], 1)
         else
             # Find minimum rank of individuals dominating i
-            min_rank = minimum(ranks[find(solutions .== (solutions[i]))])
+            min_rank = minimum(ranking.ranks[find(solutions .== (solutions[i]))])
             # Assign rank 1 higher than the minimum dominating rank
-            push!(ranks, min_rank + 1)
+            push!(ranking.ranks, min_rank + 1)
             setRank(solutions[i], min_rank + 1)
         end
     end
@@ -181,4 +179,3 @@ function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Sol
     return ranks
 end
 """
-
