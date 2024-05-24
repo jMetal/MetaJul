@@ -1,4 +1,3 @@
-
 abstract type Observer end
 
 struct Observable
@@ -49,3 +48,30 @@ function update(observer::FitnessObserver, data::Dict)
   end
 end
 
+using Plots
+
+struct FrontPlotObserver <: Observer
+  frequency::Int
+
+  function FrontPlotObserver(frequency)
+    gr()
+    return new(frequency)
+  end
+end
+
+function update(observer::FrontPlotObserver, data::Dict)
+
+  evaluations = data["EVALUATIONS"]
+  population = data["POPULATION"]
+  if mod(evaluations, observer.frequency) == 0
+    sort!(population, lt=((x,y) -> x.objectives[1] < y.objectives[1]))
+
+    x = [solution.objectives[1] for solution in population];
+    y = [solution.objectives[2] for solution in population];
+
+    scatter(x, y,  title = string("Pareto front approximation. Evaluations: ", evaluations), label = "Solutions", show = true)
+    xlabel!("First objective")
+    ylabel!("Second objective")
+    sleep(0.5)
+  end
+end

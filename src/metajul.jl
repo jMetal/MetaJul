@@ -111,7 +111,7 @@ include("component/particleSwarmOptimization/velocityUpdate.jl")
 export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
 include("util/utils.jl")
 
-export Observable, EvaluationObserver, FitnessObserver, getObservable, register!
+export Observable, EvaluationObserver, FitnessObserver, getObservable, FrontPlotObserver, register!
 include("util/observer.jl")
 
 export BinaryProblem, ContinuousProblem, constrainedProblem
