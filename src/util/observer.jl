@@ -69,7 +69,7 @@ function update(observer::FrontPlotObserver, data::Dict)
     x = [solution.objectives[1] for solution in population];
     y = [solution.objectives[2] for solution in population];
 
-    scatter(x, y,  title = string("Pareto front approximation. Evaluations: ", evaluations), label = "Solutions", show = true)
+    scatter(x, y,  title = string("Pareto front approximation. Evaluations: ", evaluations), label = "Solutions", show = true, reuse=true)
     xlabel!("First objective")
     ylabel!("Second objective")
     sleep(0.5)
