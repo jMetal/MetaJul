@@ -9,6 +9,7 @@ function main()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
+    
     populationSize = 100
     offspringPopulationSize = 100
 
