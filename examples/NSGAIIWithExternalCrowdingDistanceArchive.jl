@@ -1,4 +1,4 @@
-using metajul
+using MetaJul
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.

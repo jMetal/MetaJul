@@ -1,4 +1,4 @@
-using metajul
+using MetaJul
 using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template

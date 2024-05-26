@@ -1,4 +1,4 @@
-using metajul
+using MetaJul
 using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template

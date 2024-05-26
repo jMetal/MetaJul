@@ -1,4 +1,4 @@
-using metajul
+using MetaJul
 using Dates
 
 # Genetic algorithm example applied to problem OneMax

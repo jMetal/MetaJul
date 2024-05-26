@@ -1,4 +1,4 @@
-module metajul
+module MetaJul
 
 export Bounds
 export restrict, createBounds, valueIsWithinBounds
