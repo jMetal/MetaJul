@@ -108,7 +108,7 @@ export DefaultVelocityUpdate, ConstrainedVelocityUpdate
 export update
 include("component/particleSwarmOptimization/velocityUpdate.jl")
 
-export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile
+export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile, readFrontFromCSVFile
 include("util/utils.jl")
 
 export Observable, EvaluationObserver, FitnessObserver, getObservable, FrontPlotObserver, register!

@@ -1,4 +1,4 @@
-@inline function maxCrowdingDistanceValue()
+function maxCrowdingDistanceValue()
     return typemax(Float64)
 end
 
@@ -48,9 +48,8 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
             setCrowdingDistance(solution, 0.0)
         end
 
-        for i in range(1, numberOfObjectives)
-            setIndex(objectiveComparator, i) = IthObjectiveComparator(i)
-            sort!(solutions, lt=(x, y) -> compare(objectiveComparator, x, y) <= 0)
+        for i in 1:numberOfObjectives
+            sort!(solutions, by = solution -> solution.objectives[i])
 
             minimumObjectiveValue = solutions[1].objectives[i]
             maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]

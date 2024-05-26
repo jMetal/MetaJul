@@ -3,7 +3,7 @@ using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 function main()
-    problem = ZDT4()
+    problem = ZDT1()
 
     solver::NSGAII = NSGAII()
     solver.problem = problem
@@ -14,7 +14,7 @@ function main()
     solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
     solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
 
-    observer = FrontPlotObserver(1000)
+    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT4.csv"))
     register!(getObservable(solver), observer)
 
     startingTime = Dates.now()

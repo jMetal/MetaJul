@@ -86,7 +86,7 @@ function ZDT4(numberOfVariables::Int=10)
   zdt4 = ContinuousProblem{Float64}("ZDT4")
 
   addVariable(zdt4, Bounds{Float64}(0.0, 1.0))
-  for _ in range(2, numberOfVariables)
+  for _ in 2:numberOfVariables
     addVariable(zdt4, Bounds{Float64}(-5.0, 5.0))
   end
 

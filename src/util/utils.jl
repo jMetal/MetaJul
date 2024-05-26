@@ -1,4 +1,9 @@
 using LinearAlgebra
+using CSV
+
+function readFrontFromCSVFile(fileName::String) :: Matrix
+    return CSV.read(fileName, CSV.Tables.matrix; header=false)
+end
 
 function printObjectivesToCSVFile(fileName::String, solutions::Vector{T}) where {T<:Solution}
     open(fileName, "w") do outputFile

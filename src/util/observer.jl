@@ -52,10 +52,13 @@ using Plots
 
 struct FrontPlotObserver <: Observer
   frequency::Int
+  problemName
+  front::Matrix
 
-  function FrontPlotObserver(frequency)
+  function FrontPlotObserver(frequency, problemName, front::Matrix)
     gr()
-    return new(frequency)
+        
+    return new(frequency, problemName, front)
   end
 end
 
@@ -64,14 +67,22 @@ function update(observer::FrontPlotObserver, data::Dict)
   evaluations = data["EVALUATIONS"]
   population = data["POPULATION"]
   if mod(evaluations, observer.frequency) == 0
+    front = observer.front
+    x = front[:, 1]
+    y = front[:, 2]
+
+    plot(x, y,  title = string(observer.problemName), label = "Reference front", show = true, reuse=true)
+
+    xlabel!("First objective")
+    ylabel!("Second objective")
+  
     sort!(population, lt=((x,y) -> x.objectives[1] < y.objectives[1]))
 
     x = [solution.objectives[1] for solution in population];
     y = [solution.objectives[2] for solution in population];
 
-    scatter(x, y,  title = string("Pareto front approximation. Evaluations: ", evaluations), label = "Solutions", show = true, reuse=true)
-    xlabel!("First objective")
-    ylabel!("Second objective")
-    sleep(0.5)
+    scatter!(x, y,  title = string(observer.problemName, ". Evaluations: ", evaluations), label = "Solutions", show = true, reuse=true)
+        
+    sleep(0.25)
   end
 end
