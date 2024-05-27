@@ -5,6 +5,8 @@ using Dates
 function main()
     problem = ZDT1()
 
+
+    println(string("ZDT1: ", numberOfVariables(problem)))
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
 
