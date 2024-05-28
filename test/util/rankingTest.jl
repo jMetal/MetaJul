@@ -86,7 +86,7 @@ function computeRankingOfASolutionListWithTwoDominatedSolutionsReturnsTwoRanking
 
     ranking = DominanceRanking()
     compute!(ranking, solutions)
-
+    
     return (numberOfRanks(ranking) == 2) && 
     (length(ranking.ranks[1]) == 1) && 
     (length(ranking.ranks[2]) == 1) && 

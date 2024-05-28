@@ -74,12 +74,77 @@ function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solu
     end
 end
 
-
-"""
 function dominates(a::Solution, b::Solution)
     all(a.objectives .<= b.objectives) && any(a.objectives .< b.objectives)
 end
 
+function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
+    # dominateMe[i] contains the number of individuals dominating i
+    dominateMe = zeros(Int, length(solutions))
+
+    # iDominate[k] contains the list of individuals dominated by k
+    iDominate = [Int[] for _ in 1:length(solutions)]
+
+    # front[i] contains the list of individuals belonging to the front i
+    front = [Int[] for _ in 1:(length(solutions)+1)]
+
+    for p in 1:length(solutions)
+        # Initialize the list of individuals that i dominate and the number
+        # of individuals that dominate me
+        iDominate[p] = Int[]
+        dominateMe[p] = 0
+    end
+
+    for p in 1:(length(solutions)-1)
+        # For all q individuals , calculate if p dominates q or vice versa
+        for q in (p+1):length(solutions)
+            flagDominate = compare(ranking.dominanceComparator, solutions[p], solutions[q])
+
+            if flagDominate == -1
+                push!(iDominate[p], q)
+                dominateMe[q] += 1
+            elseif flagDominate == 1
+                push!(iDominate[q], p)
+                dominateMe[p] += 1
+            end
+        end
+    end
+
+    for i in 1:length(solutions)
+        if dominateMe[i] == 0
+            push!(front[1], i)
+            setRank(solutions[i], 1)
+        end
+    end
+
+    # Obtain the rest of fronts
+    i = 1
+    while !isempty(front[i])
+        i += 1
+        for p in front[i-1]
+            for q in iDominate[p]
+                dominateMe[q] -= 1
+                if dominateMe[q] == 0
+                    push!(front[i], q)
+                    setRank(solutions[q], i)
+                end
+            end
+        end
+    end
+
+    ranked_sub_populations = Vector{Vector{T}}(undef, i - 1)
+    for j in 1:(i-1)
+        ranked_sub_populations[j] = Vector{T}(undef, length(front[j]))
+        for k in 1:length(front[j])
+            ranked_sub_populations[j][k] = solutions[front[j][k]]
+        end
+    end
+
+    ranking.ranks = ranked_sub_populations
+end
+
+
+"""
 function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
     ranking.ranks = []
 
