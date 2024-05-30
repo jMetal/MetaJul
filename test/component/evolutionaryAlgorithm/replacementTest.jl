@@ -342,13 +342,13 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase9()
     population = solutions[1:8]
     offspringPopulation = solutions[9:16]
 
-    println(toString(population, "population"))
-    println(toString(offspringPopulation, "offspringPopulation"))
+    #println(toString(population, "population"))
+    #println(toString(offspringPopulation, "offspringPopulation"))
     resultPopulation = replace_(replacement, population, offspringPopulation)
 
-    println(toString(ranking))
+    #println(toString(ranking))
 
-    println(toString(resultPopulation, "", densityEstimator))
+    #println(toString(resultPopulation, "", densityEstimator))
 
     return length(resultPopulation) == 8
 end
