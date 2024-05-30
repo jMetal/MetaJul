@@ -16,7 +16,7 @@ function muCommaLambdaReplacementIsCorrectlyInitialized()
     return comparator == replacement.comparator
 end
 
-@testset "Replacement tests" begin    
+@testset "Replacement tests" begin
     @test muPlusLambdaReplacementIsCorrectlyInitialized()
     @test muCommaLambdaReplacementIsCorrectlyInitialized()
 end
@@ -50,11 +50,11 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
-    
+
     return length(resultPopulation) == 1 &&
-    getRank(solution1) == 1 && getRank(solution2) == 1 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) ==  typemax(Float64)
+           getRank(solution1) == 1 && getRank(solution2) == 1 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) == typemax(Float64)
 end
 
 """
@@ -74,11 +74,11 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase2()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 1 && isequal(solution1, resultPopulation[1]) &&
-    getRank(solution1) == 1 && getRank(solution2) == 2 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) ==  typemax(Float64)
+           getRank(solution1) == 1 && getRank(solution2) == 2 && getCrowdingDistance(solution1) == typemax(Float64) && getCrowdingDistance(solution2) == typemax(Float64)
 end
 
 
@@ -102,20 +102,20 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase3()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 2 &&
-    getRank(solution1) == 1 && 
-    getRank(solution2) == 1 && 
-    getRank(solution3) == 1 && 
-    getRank(solution4) == 1 && 
-    solution1 in resultPopulation &&
-    solution4 in resultPopulation &&
-    getCrowdingDistance(solution1) == typemax(Float64) && 
-    getCrowdingDistance(solution2) != typemax(Float64) && 
-    getCrowdingDistance(solution3) != typemax(Float64) && 
-    getCrowdingDistance(solution4) ==  typemax(Float64)
+           getRank(solution1) == 1 &&
+           getRank(solution2) == 1 &&
+           getRank(solution3) == 1 &&
+           getRank(solution4) == 1 &&
+           solution1 in resultPopulation &&
+           solution4 in resultPopulation &&
+           getCrowdingDistance(solution1) == typemax(Float64) &&
+           getCrowdingDistance(solution2) != typemax(Float64) &&
+           getCrowdingDistance(solution3) != typemax(Float64) &&
+           getCrowdingDistance(solution4) == typemax(Float64)
 end
 
 """
@@ -138,20 +138,20 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase4()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 2 &&
-    getRank(solution1) == 1 && 
-    getRank(solution2) == 2 && 
-    getRank(solution3) == 2 && 
-    getRank(solution4) == 2 && 
-    solution1 in resultPopulation &&
-    (solution2 in resultPopulation || solution4 in resultPopulation) &&
-    getCrowdingDistance(solution1) == typemax(Float64) && 
-    getCrowdingDistance(solution2) == typemax(Float64) && 
-    getCrowdingDistance(solution3) != typemax(Float64) && 
-    getCrowdingDistance(solution4) ==  typemax(Float64)
+           getRank(solution1) == 1 &&
+           getRank(solution2) == 2 &&
+           getRank(solution3) == 2 &&
+           getRank(solution4) == 2 &&
+           solution1 in resultPopulation &&
+           (solution2 in resultPopulation || solution4 in resultPopulation) &&
+           getCrowdingDistance(solution1) == typemax(Float64) &&
+           getCrowdingDistance(solution2) == typemax(Float64) &&
+           getCrowdingDistance(solution3) != typemax(Float64) &&
+           getCrowdingDistance(solution4) == typemax(Float64)
 end
 
 """
@@ -174,20 +174,20 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 2 &&
-    getRank(solution1) == 1 && 
-    getRank(solution2) == 1 && 
-    getRank(solution3) == 2 && 
-    getRank(solution4) == 2 && 
-    solution1 in resultPopulation &&
-    solution2 in resultPopulation  &&
-    getCrowdingDistance(solution1) == typemax(Float64) && 
-    getCrowdingDistance(solution2) == typemax(Float64) && 
-    getCrowdingDistance(solution3) == typemax(Float64) && 
-    getCrowdingDistance(solution4) ==  typemax(Float64)
+           getRank(solution1) == 1 &&
+           getRank(solution2) == 1 &&
+           getRank(solution3) == 2 &&
+           getRank(solution4) == 2 &&
+           solution1 in resultPopulation &&
+           solution2 in resultPopulation &&
+           getCrowdingDistance(solution1) == typemax(Float64) &&
+           getCrowdingDistance(solution2) == typemax(Float64) &&
+           getCrowdingDistance(solution3) == typemax(Float64) &&
+           getCrowdingDistance(solution4) == typemax(Float64)
 end
 
 """
@@ -214,23 +214,23 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 3 &&
-    getRank(solution1) == 1 && 
-    getRank(solution2) == 1 && 
-    getRank(solution3) == 1 && 
-    getRank(solution4) == 1 && 
-    getRank(solution5) == 1 && 
-    getRank(solution6) == 1 && 
-    solution1 in resultPopulation &&
-    solution4 in resultPopulation &&
-    solution6 in resultPopulation &&
-    getCrowdingDistance(solution1) == typemax(Float64) && 
-    getCrowdingDistance(solution2) != typemax(Float64) && 
-    getCrowdingDistance(solution3) != typemax(Float64) && 
-    getCrowdingDistance(solution6) ==  typemax(Float64)
+           getRank(solution1) == 1 &&
+           getRank(solution2) == 1 &&
+           getRank(solution3) == 1 &&
+           getRank(solution4) == 1 &&
+           getRank(solution5) == 1 &&
+           getRank(solution6) == 1 &&
+           solution1 in resultPopulation &&
+           solution4 in resultPopulation &&
+           solution6 in resultPopulation &&
+           getCrowdingDistance(solution1) == typemax(Float64) &&
+           getCrowdingDistance(solution2) != typemax(Float64) &&
+           getCrowdingDistance(solution3) != typemax(Float64) &&
+           getCrowdingDistance(solution6) == typemax(Float64)
 end
 
 """
@@ -257,23 +257,23 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     resultPopulation = replace_(replacement, population, offspringPopulation)
- 
+
     return length(resultPopulation) == 3 &&
-    getRank(solution1) == 1 && 
-    getRank(solution2) == 2 && 
-    getRank(solution3) == 1 && 
-    getRank(solution4) == 2 && 
-    getRank(solution5) == 1 && 
-    getRank(solution6) == 1 && 
-    solution1 in resultPopulation &&
-    solution3 in resultPopulation &&
-    solution6 in resultPopulation &&
-    getCrowdingDistance(solution1) == typemax(Float64) && 
-    getCrowdingDistance(solution2) == typemax(Float64) && 
-    getCrowdingDistance(solution4) == typemax(Float64) && 
-    getCrowdingDistance(solution6) ==  typemax(Float64)
+           getRank(solution1) == 1 &&
+           getRank(solution2) == 2 &&
+           getRank(solution3) == 1 &&
+           getRank(solution4) == 2 &&
+           getRank(solution5) == 1 &&
+           getRank(solution6) == 1 &&
+           solution1 in resultPopulation &&
+           solution3 in resultPopulation &&
+           solution6 in resultPopulation &&
+           getCrowdingDistance(solution1) == typemax(Float64) &&
+           getCrowdingDistance(solution2) == typemax(Float64) &&
+           getCrowdingDistance(solution4) == typemax(Float64) &&
+           getCrowdingDistance(solution6) == typemax(Float64)
 end
 
 function rankingAndDensityEstimatorReplacementWorksProperlyCase8()
@@ -305,15 +305,56 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase8()
     ranking = DominanceRanking()
     densityEstimator = CrowdingDistanceDensityEstimator()
     replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
-    
+
     population = solutions[1:10]
     offspringPopulation = solutions[11:20]
     resultPopulation = replace_(replacement, population, offspringPopulation)
 
-    return length(resultPopulation) == 10 
+    return length(resultPopulation) == 10
 end
 
-@testset "Ranking and crowdingDistance replacement tests" begin    
+function rankingAndDensityEstimatorReplacementWorksProperlyCase9()
+    objectiveValues = [
+        [0.5655121242688416, 122.05467685520247],
+        [0.5655121250339731, 111.9985560901313],
+        [0.43014627330305144, 120.42155746003654],
+        [0.07336635446929285, 161.04962975606725],
+        [0.43014627330305144, 160.40525052973234],
+        [0.6762217810478277, 179.7511934374773],
+        [0.43014627330305144, 151.06343252458754],
+        [0.43014627330305144, 136.3722551798597],
+        [0.7798429543256261, 88.00557995059926],
+        [0.07336635446929285, 161.04962975606725],
+        [0.43014627330305144, 120.42155746003654],
+        [0.5655121250339731, 111.9985560901313],
+        [0.5460487092960259, 116.39993882084455],
+        [0.07336635446929285, 167.51690132793735],
+        [0.5655121242688416, 122.05467685520247],
+        [0.43014627330305144, 136.3722551798597]
+    ]
+
+    solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
+
+    ranking = DominanceRanking()
+    densityEstimator = CrowdingDistanceDensityEstimator()
+    replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
+
+    population = solutions[1:8]
+    offspringPopulation = solutions[9:16]
+
+    println(toString(population, "population"))
+    println(toString(offspringPopulation, "offspringPopulation"))
+    resultPopulation = replace_(replacement, population, offspringPopulation)
+
+    println(toString(ranking))
+
+    println(toString(resultPopulation, "", densityEstimator))
+
+    return length(resultPopulation) == 8
+end
+
+
+@testset "Ranking and crowdingDistance replacement tests" begin
     @test rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase1()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase2()
@@ -323,5 +364,6 @@ end
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase8()
+    @test rankingAndDensityEstimatorReplacementWorksProperlyCase9()
 end
 

@@ -45,12 +45,13 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     offspringPopulation = variate(ea.variation, population, matingPool)
     offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
 
-    println(toString(population, "Population N"))
-    println(toString(offspringPopulation, "Offspring population"))
+    #println(toString(population, "Population N"))
+    #println(toString(offspringPopulation, "Offspring population"))
 
     population = replace_(ea.replacement, population, offspringPopulation)
 
-    println(toString(population, "Population N + 1"))
+    #println(toString(population, "Population N + 1"))
+    #println(toString(population, "P", CrowdingDistanceDensityEstimator()))
 
     evaluations += length(offspringPopulation)
     ea.status["EVALUATIONS"] = evaluations
