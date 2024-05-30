@@ -34,6 +34,7 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
     jointVector = vcat(x, y)
 
     compute!(replacement.ranking, jointVector)
+    #println(toString(replacement.ranking))
 
     for rank in replacement.ranking.ranks
         compute!(replacement.densityEstimator, rank)

@@ -49,7 +49,7 @@ function compare(comparator::DominanceRankingComparator, solution1::Solution, so
     return result
 end
 
-function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
+function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
     ranking.ranks = []
     solutionsToRank = [solution for solution in solutions]
     rankCounter = 1
@@ -78,7 +78,7 @@ function dominates(a::Solution, b::Solution)
     all(a.objectives .<= b.objectives) && any(a.objectives .< b.objectives)
 end
 
-function compute2!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
+function compute!(ranking::DominanceRanking, solutions::Array{T}) where {T<:Solution}
     # dominateMe[i] contains the number of individuals dominating i
     dominateMe = zeros(Int, length(solutions))
 

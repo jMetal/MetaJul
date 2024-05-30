@@ -45,7 +45,12 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
     offspringPopulation = variate(ea.variation, population, matingPool)
     offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
 
+    println(toString(population, "Population N"))
+    println(toString(offspringPopulation, "Offspring population"))
+
     population = replace_(ea.replacement, population, offspringPopulation)
+
+    println(toString(population, "Population N + 1"))
 
     evaluations += length(offspringPopulation)
     ea.status["EVALUATIONS"] = evaluations
@@ -54,14 +59,12 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
 
     notify(ea.observable, ea.status)
   end
-  foundSolutions = population
-  return foundSolutions
+
+  ea.foundSolutions = population
 end
 
 function optimize(algorithm::EvolutionaryAlgorithm)
-  algorithm.foundSolutions = evolutionaryAlgorithm(algorithm)
-  
-  return Nothing
+  evolutionaryAlgorithm(algorithm)
 end
 
 function name(algorithm::EvolutionaryAlgorithm)
