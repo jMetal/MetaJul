@@ -276,6 +276,42 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase7()
     getCrowdingDistance(solution6) ==  typemax(Float64)
 end
 
+function rankingAndDensityEstimatorReplacementWorksProperlyCase8()
+    objectiveValues = [
+        [0.07336635446929285, 5.603220188306353],
+        [0.43014627330305144, 5.708218645222796],
+        [0.7798429543256261, 5.484124010814388],
+        [0.49045165212590114, 5.784519349470215],
+        [0.843511347097429, 5.435997012510192],
+        [0.9279447115273152, 5.285778278767635],
+        [0.5932205233840192, 6.887287053050965],
+        [0.9455066295318578, 5.655731733404245],
+        [0.9228750336383887, 4.8155865600591605],
+        [0.022333588871048637, 5.357300649511081],
+        [0.07336635446929285, 4.955242979343399],
+        [0.9228750336383887, 4.368497851779355],
+        [0.8409372615592949, 4.7393211155296315],
+        [0.8452552028963248, 5.729254698390962],
+        [0.4814413714745963, 4.814059473570379],
+        [0.48149159013716136, 5.214371319566827],
+        [0.9455066295318578, 5.024547164793679],
+        [0.843511347097429, 4.823648491299312],
+        [0.06050659328388003, 4.97308823770029],
+        [0.07336635446929285, 5.603220188306353]
+    ]
+
+    solutions = [createContinuousSolution(objectives) for objectives in objectiveValues]
+
+    ranking = DominanceRanking()
+    densityEstimator = CrowdingDistanceDensityEstimator()
+    replacement = RankingAndDensityEstimatorReplacement(ranking, densityEstimator)
+    
+    population = solutions[1:10]
+    offspringPopulation = solutions[11:20]
+    resultPopulation = replace_(replacement, population, offspringPopulation)
+
+    return length(resultPopulation) == 10 
+end
 
 @testset "Ranking and crowdingDistance replacement tests" begin    
     @test rankingAndDensityEstimatorReplacementIsCorrectlyInitialized()
@@ -286,5 +322,6 @@ end
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase5()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase6()
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase7()
+    @test rankingAndDensityEstimatorReplacementWorksProperlyCase8()
 end
 

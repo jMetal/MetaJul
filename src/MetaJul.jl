@@ -151,4 +151,7 @@ export NSGAII
 export optimize
 include("algorithm/NSGAII.jl")
 
-end # module metajul
+export toString
+include("util/toString.jl")
+end 
+# module metajul

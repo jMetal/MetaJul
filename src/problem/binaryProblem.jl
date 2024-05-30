@@ -40,7 +40,6 @@ function addConstraint(problem::BinaryProblem, constraint::Function)
   return Nothing ;
 end
 
-
 function evaluate(solution::BinarySolution, problem::BinaryProblem)::BinarySolution 
   for i in 1:length(problem.objectives)
     solution.objectives[i] =  problem.objectives[i](solution.variables)

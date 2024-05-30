@@ -37,34 +37,33 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
     num_solutions = length(solutions)
     objectiveComparator = IthObjectiveComparator(1)
 
+    front = copy(solutions)
     @assert length(solutions) > 0 "The solution list is empty"
     if num_solutions < 3
-        for solution in solutions
+        for solution in front
             setCrowdingDistance(solution, maxCrowdingDistanceValue())
         end
     else
-        numberOfObjectives = length(solutions[1].objectives)
-        for solution in solutions
+        numberOfObjectives = length(front[1].objectives)
+        for solution in front
             setCrowdingDistance(solution, 0.0)
         end
 
         for i in 1:numberOfObjectives
-            sort!(solutions, by = solution -> solution.objectives[i])
+            sort!(front, by = solution -> solution.objectives[i])
 
-            minimumObjectiveValue = solutions[1].objectives[i]
-            maximumObjectiveValue = solutions[numberOfObjectives].objectives[i]
+            minimumObjectiveValue = front[1].objectives[i]
+            maximumObjectiveValue = front[length(front)].objectives[i]
 
-            setCrowdingDistance(solutions[begin], maxCrowdingDistanceValue())
-            setCrowdingDistance(solutions[end], maxCrowdingDistanceValue())
+            setCrowdingDistance(front[begin], maxCrowdingDistanceValue())
+            setCrowdingDistance(front[end], maxCrowdingDistanceValue())
 
             obj_range_inv = 1 / (maximumObjectiveValue - minimumObjectiveValue)
 
             for j in 2:(num_solutions-1)
-                begin
-                    distance = (solutions[j+1].objectives[i] - solutions[j-1].objectives[i]) * obj_range_inv
-                    distance += getCrowdingDistance(solutions[j])
-                    setCrowdingDistance(solutions[j], distance)
-                end
+                distance = (front[j+1].objectives[i] - front[j-1].objectives[i]) * obj_range_inv
+                distance += getCrowdingDistance(front[j])
+                setCrowdingDistance(front[j], distance)
             end
         end
     end

@@ -4,9 +4,7 @@ using Random
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
 function main()
-    Random.seed!(1)
-
-    problem = ZDT6()
+    problem = ZDT2()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
@@ -17,7 +15,6 @@ function main()
     solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
     solver.evaluation = SequentialEvaluation(problem)
     solver.termination = TerminationByEvaluations(25000)
-
 
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
     crossover = SBXCrossover(0.9, 20.0, problem.bounds)
