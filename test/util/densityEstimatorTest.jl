@@ -60,9 +60,9 @@ end
 @testset "Crowding distance estimator test cases" begin
     @test_throws "The solution list is empty" computingTheCrowdingDistanceRaisesAnExceptionIfTheSolutionListIsEmpty()
 
-   # @test computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
-   # @test computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
-   # @test computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsTheRightValues()
+    @test computingTheCrowdingDistanceOnAListWithASolutionAssignsTheMaxValueToTheSolution()
+    @test computingTheCrowdingDistanceOnAListWithTwoSolutionAssignsTheMaxValueToThem()
+    @test computingTheCrowdingDistanceOnAListWithThreeBiObjectiveSolutionAssignsTheRightValues()
     @test computingTheCrowdingDistanceOnAListOfSixSolutionAssignsTheRightValues()
 end
 

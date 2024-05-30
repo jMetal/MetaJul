@@ -35,7 +35,6 @@ struct CrowdingDistanceDensityEstimator <: DensityEstimator end
 
 function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions::Vector{T}) where {T<:Solution}
     num_solutions = length(solutions)
-    objectiveComparator = IthObjectiveComparator(1)
 
     front = copy(solutions)
     @assert length(solutions) > 0 "The solution list is empty"
@@ -50,7 +49,7 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
         end
 
         for i in 1:numberOfObjectives
-            sort!(front, by = solution -> solution.objectives[i])
+            sort!(front, by=solution -> solution.objectives[i])
 
             minimumObjectiveValue = front[1].objectives[i]
             maximumObjectiveValue = front[length(front)].objectives[i]
@@ -58,10 +57,13 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
             setCrowdingDistance(front[begin], maxCrowdingDistanceValue())
             setCrowdingDistance(front[end], maxCrowdingDistanceValue())
 
-            obj_range_inv = 1 / (maximumObjectiveValue - minimumObjectiveValue)
-
             for j in 2:(num_solutions-1)
-                distance = (front[j+1].objectives[i] - front[j-1].objectives[i]) * obj_range_inv
+                distance = (front[j+1].objectives[i] - front[j-1].objectives[i]) 
+
+                if (maximumObjectiveValue - minimumObjectiveValue) > 0
+                    distance = distance / (maximumObjectiveValue - minimumObjectiveValue)
+                end
+
                 distance += getCrowdingDistance(front[j])
                 setCrowdingDistance(front[j], distance)
             end
