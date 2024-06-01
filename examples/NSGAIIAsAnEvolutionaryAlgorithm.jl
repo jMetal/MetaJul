@@ -4,7 +4,7 @@ using Random
 
 # NSGA-II algorithm configured from the evolutionary algorithm template
 function main()
-    problem = ZDT1()
+    problem = ZDT4()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
