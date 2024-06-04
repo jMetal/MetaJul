@@ -66,8 +66,14 @@ function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T}
   return solution
 end
 
-function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<:Number}
+function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<:Real}
   x = [problem.bounds[i].lowerBound + rand() * (problem.bounds[i].upperBound - problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
+
+  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
+end
+
+function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<: Int}
+  x = [floor(Int, problem.bounds[i].lowerBound + rand() * (problem.bounds[i].upperBound - problem.bounds[i].lowerBound)) for i in 1:length(problem.bounds)]
 
   return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
 end

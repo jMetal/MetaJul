@@ -41,7 +41,7 @@ include("operator/mutation.jl")
 export BinaryTournamentSelectionOperator, RandomSelectionOperator
 include("operator/selection.jl")
 
-export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover
+export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover, IntegerSBXCrossover
 export recombine, numberOfDescendants, numberOfRequiredParents
 include("operator/crossover.jl")
 
