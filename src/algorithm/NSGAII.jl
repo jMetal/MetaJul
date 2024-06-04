@@ -39,7 +39,6 @@ function nsgaII(nsgaII::NSGAII)
   solver.termination = nsgaII.termination
   solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, nsgaII.crossover, nsgaII.mutation)
 
-  #solver.replacement = RankingAndDensityEstimatorReplacement(nsgaII.dominanceComparator)
   solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(nsgaII.dominanceComparator), CrowdingDistanceDensityEstimator())
 
   solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, nsgaII.dominanceComparator)

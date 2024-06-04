@@ -91,17 +91,20 @@ function ZDT4(numberOfVariables::Int=10)
   end
 
   function evalG(x::Vector{Float64})
+    """
     g = 0.0
 
     for i in 2:length(x)
       g += x[i]^2 - 10.0 * cos(4.0 * π * x[i])
     end
 
-    #g = 1.0 +10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*pi*x[i])) for i in range(2,length(x))])
 
     constant = 1.0 + 10.0 * (length(x) - 1)
 
     return g + constant
+    """
+    return 1.0 + 10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*π*x[i])) for i in range(2,length(x))])
+
   end
 
   function evalH(v::Float64, g::Float64)
@@ -122,41 +125,39 @@ function ZDT4(numberOfVariables::Int=10)
   return zdt4
 end
 
-"""
-function ZDT6(numberOfVariables::Int=10)
-  zdt6 = ContinuousProblem{Float64}("ZDT6")
 
-  addVariable(zdt6, Bounds{Float64}(0.0, 1.0))
-  for _ in range(2, numberOfVariables)
-    addVariable(zdt6, Bounds{Float64}(-5.0, 5.0))
+function zdt4()
+  problem = ContinuousProblem{Float64}("ZDT4")
+
+  addVariable(problem, Bounds{Float64}(0.0, 1.0))  # x1 in [0, 1]
+  for _ in 2:10  # x2, ..., x10 in [-5, 5]
+      addVariable(problem, Bounds{Float64}(-5.0, 5.0))
   end
 
-    function evalG(x::Vector{Float64})
-    g = sum(x[i] for i in range(2,length(x)))
-    g = g / (length(x) - 1.0)
+  f1 = x -> x[1]
 
-    g = ^(g, 0.25)
-    g = 9.0 * g
-    g = 1.0 + g
-
-    return g
+  function g(x)
+      sum = 0.0
+      for i in 2:length(x)
+          sum += x[i]^2 - 10 * cos(4 * π * x[i])
+      end
+      return 1 + 10 * (length(x) - 1) + sum
   end
 
-  function evalH(v::Float64, g::Float64)
-    return 1.0 - ^(v/g, 2.0)
+  function h(f1, g)
+      return 1.0 - sqrt(f1 / g)
   end
 
-  f1 = x -> 1.0 - exp(-4.0*x[1]) * ^(sin(6*pi*x[1]),6.0)
-  g = evalG(x)
-  h = evalH(f1, g)
-  f2 = g * h
- 
-  addObjective(zdt6, f1)
-  addObjective(zdt6, f2)
+  f2 = x -> begin
+      gx = g(x)
+      f1(x) * h(f1(x), gx)
+  end
 
-  return zdt6
+  addObjective(problem, f1)
+  addObjective(problem, f2)
+
+  return problem
 end
-"""
 
 struct ProblemZDT6 <: AbstractContinuousProblem{Float64}
   bounds::Vector{Bounds{Float64}}
@@ -216,3 +217,4 @@ function evaluate(solution::ContinuousSolution{Float64}, problem::ProblemZDT6)::
 
   return solution
 end
+
