@@ -19,8 +19,9 @@ Current features:
 
 * Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
 * Algorithms: local search, evolutionary algorithm, NSGA-II, SMPSO (multi-objective PSO)
+* Encodings: continuous (float, integer), binary
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
-* Observers: ``EvaluationObserver``, ``FitnessObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
+* Observers: ``EvaluationObserver``, ``FitnessObserver``, ``FrontPlotObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
 The ``examples`` folder contains, among others:
 
@@ -35,8 +36,9 @@ The ``examples`` folder contains, among others:
 * NSGA-II using a bounded crowding distance archive
 * NSGA-II using a bounded crowding distance archive
 * NSGA-II solving a constrained problem
-* NSGA-II using an observer (`EvaluationObserver`) that prints the number of evaluations 
+* NSGA-II using an observer (`FrontPlotObserver`) that plots the population when running the algorithm
 * SMPSO
+* SMPSO using an (`FrontPlotObserver`) that plots the archive solutions when running the algorithm
 
 Jupyter notebooks with examples can be found in the ``notebooks`` folder.
 
