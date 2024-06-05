@@ -1,8 +1,8 @@
 function integerProblem()
     problem = ContinuousProblem{Int64}("integerProblem")
 
-    addVariable(problem, Bounds{Int64}(0, 20))  # Assuming some bounds for x1
-    addVariable(problem, Bounds{Int64}(0, 20))  # Assuming some bounds for x2
+    addVariable(problem, Bounds{Int64}(0, 20)) 
+    addVariable(problem, Bounds{Int64}(0, 20))  
 
     f1 = x -> -1.0 * (x[1] + x[2])
     f2 = x -> x[1] + 3 * x[2]
@@ -20,3 +20,4 @@ function integerProblem()
 
     return problem
 end
+
