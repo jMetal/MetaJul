@@ -55,7 +55,7 @@ end
 struct PolynomialMutation <: MutationOperator
   probability::Float64
   distributionIndex::Float64
-  variableBounds::Vector{Bounds}
+  variableBounds::Vector{Bounds{T}} where {T <: Number}
 end
 
 function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Real}
@@ -121,7 +121,7 @@ function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation):
         end
         y = y + deltaq * (yu - yl)
       end
-      x[i] = floor(Int, y)
+      x[i] = round(Int, y)
     end
   end
   x = restrict(x, bounds)

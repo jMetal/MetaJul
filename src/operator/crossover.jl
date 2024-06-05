@@ -206,15 +206,15 @@ function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, cro
           end
           c2 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
 
-          c1 = restrict(floor(Int, c1), bounds[i])
-          c2 = restrict(floor(Int, c2), bounds[i])
+          c1 = restrict(round(Int, c1), bounds[i])
+          c2 = restrict(round(Int, c2), bounds[i])
 
           if rand() <= 0.5
-            child1.variables[i] = floor(Int, c2)
-            child2.variables[i] = floor(Int, c1)
+            child1.variables[i] = round(Int, c2)
+            child2.variables[i] = round(Int, c1)
           else
-            child1.variables[i] = floor(Int, c1)
-            child2.variables[i] = floor(Int, c2)
+            child1.variables[i] = round(Int, c1)
+            child2.variables[i] = round(Int, c2)
           end
         else
           child1.variables[i] = x1
