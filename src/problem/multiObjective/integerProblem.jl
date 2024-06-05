@@ -1,5 +1,5 @@
-function exampleProblem()
-    problem = ContinuousProblem{Int64}("exampleProblem")
+function integerProblem()
+    problem = ContinuousProblem{Int64}("integerProblem")
 
     addVariable(problem, Bounds{Int64}(0, 20))  # Assuming some bounds for x1
     addVariable(problem, Bounds{Int64}(0, 20))  # Assuming some bounds for x2

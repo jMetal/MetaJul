@@ -154,7 +154,7 @@ include("algorithm/NSGAII.jl")
 export toString
 include("util/toString.jl")
 
-export exampleProblem
-include("problem/multiObjective/exampleProblem.jl")
+export integerProblem
+include("problem/multiObjective/integerProblem.jl")
 end 
 # module metajul
