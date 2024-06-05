@@ -8,7 +8,7 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT4()
+    problem = ZDT1()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
