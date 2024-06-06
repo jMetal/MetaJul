@@ -14,7 +14,7 @@ function main()
     solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
     solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
 
-    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT4.csv"))
+    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT1.csv"))
     register!(getObservable(solver), observer)
 
     startingTime = Dates.now()
