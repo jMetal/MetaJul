@@ -7,12 +7,12 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT1()
+    problem = ZDT4()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
     solver.evaluation = SequentialEvaluation(problem)
-    solver.termination = TerminationByEvaluations(25000)
+    solver.termination = TerminationByEvaluations(50000)
 
     solver.globalBest = CrowdingDistanceArchive(swarmSize, ContinuousSolution{Float64})
 
@@ -41,7 +41,7 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT1.csv"))
+    observer = FrontPlotObserver(5000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT1.csv"))
     register!(getObservable(solver), observer)
 
     startingTime = Dates.now()
