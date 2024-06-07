@@ -34,10 +34,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   population = create(ea.solutionsCreation)
   population = evaluate(ea.evaluation, population)
 
-  evaluations = length(population)
-  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
-
-  notify(ea.observable, ea.status)
+  initStatus(ea, population, startingTime)
 
   while !isMet(ea.termination, ea.status)
     matingPool = select(ea.selection, population)
@@ -47,13 +44,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
 
     population = replace_(ea.replacement, population, offspringPopulation)
 
-    evaluations += length(offspringPopulation)
-    
-    ea.status["EVALUATIONS"] = evaluations
-    ea.status["POPULATION"] = population
-    ea.status["COMPUTING_TIME"] = Dates.now() - startingTime
-
-    notify(ea.observable, ea.status)
+    updateStatus(ea, population, offspringPopulation, startingTime)
   end
 
   ea.foundSolutions = population
@@ -62,6 +53,22 @@ end
 function optimize(algorithm::EvolutionaryAlgorithm)
   evolutionaryAlgorithm(algorithm)
 end
+
+function initStatus(ea::EvolutionaryAlgorithm, population, startingTime)
+  evaluations = length(population)
+  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
+
+  notify(ea.observable, ea.status)
+end
+
+function updateStatus(ea::EvolutionaryAlgorithm, population, offspringPopulation, startingTime)    
+  ea.status["EVALUATIONS"] += length(offspringPopulation)
+  ea.status["POPULATION"] = population
+  ea.status["COMPUTING_TIME"] = Dates.now() - startingTime
+
+  notify(ea.observable, ea.status)
+end
+
 
 function name(algorithm::EvolutionaryAlgorithm)
   return algorithm.name
