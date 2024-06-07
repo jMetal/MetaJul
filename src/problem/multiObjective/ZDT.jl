@@ -1,5 +1,5 @@
 
-function ZDT1(numberOfVariables::Int=30)
+function ZDT1(;numberOfVariables::Int=30)
   zdt1 = ContinuousProblem{Float64}("ZDT1")
 
   for _ in 1:numberOfVariables
@@ -25,7 +25,7 @@ function ZDT1(numberOfVariables::Int=30)
   return zdt1
 end
 
-function ZDT2(numberOfVariables::Int=30)
+function ZDT2(;numberOfVariables::Int=30)
   zdt2 = ContinuousProblem{Float64}("ZDT2")
 
   for _ in 1:numberOfVariables
@@ -51,7 +51,7 @@ function ZDT2(numberOfVariables::Int=30)
   return zdt2
 end
 
-function ZDT3(numberOfVariables::Int=30)
+function ZDT3(;numberOfVariables::Int=30)
   zdt3 = ContinuousProblem{Float64}("ZDT3")
 
   for _ in 1:numberOfVariables
@@ -82,7 +82,7 @@ function ZDT3(numberOfVariables::Int=30)
 end
 
 
-function ZDT4(numberOfVariables::Int=10)
+function ZDT4(;numberOfVariables::Int=10)
   zdt4 = ContinuousProblem{Float64}("ZDT4")
 
   addVariable(zdt4, Bounds{Float64}(0.0, 1.0))
@@ -169,7 +169,7 @@ struct ProblemZDT6 <: AbstractContinuousProblem{Float64}
   bounds::Vector{Bounds{Float64}}
 end
 
-function ZDT6(numberOfVariables::Int=10)
+function ZDT6(;numberOfVariables::Int=10)
   bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
 
   return ProblemZDT6(bounds)
