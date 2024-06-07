@@ -148,7 +148,7 @@ export optimize
 include("algorithm/particleSwarmOptimization.jl")
 
 export NSGAII
-export optimize
+export optimize, foundSolutions
 include("algorithm/NSGAII.jl")
 
 export toString

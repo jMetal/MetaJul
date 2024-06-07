@@ -3,9 +3,6 @@ using Dates
 mutable struct NSGAII <: Algorithm
   problem::Problem
   populationSize::Int
-  numberOfEvaluations::Int
-
-  foundSolutions::Vector
 
   termination::Termination
   mutation::MutationOperator
@@ -15,18 +12,24 @@ mutable struct NSGAII <: Algorithm
 
   dominanceComparator::Comparator
 
-  function NSGAII() 
+  function NSGAII(; populationSize = 100, termination = TerminationByEvaluations(25000), dominanceComparator = DefaultDominanceComparator())
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
+    algorithm.populationSize = populationSize
+    algorithm.dominanceComparator = dominanceComparator 
+    algorithm.termination = termination
 
-    algorithm.dominanceComparator = DefaultDominanceComparator()
     return algorithm
   end
 end
 
-function nsgaII(nsgaII::NSGAII)
-  solver = nsgaII.solver 
+function foundSolutions(nsgaII::NSGAII) 
+  return nsgaII.solver.foundSolutions
+end
+
+function optimize(nsgaII::NSGAII)
+  solver = nsgaII.solver
   problem = nsgaII.problem
 
   populationSize = nsgaII.populationSize
@@ -44,12 +47,6 @@ function nsgaII(nsgaII::NSGAII)
   solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, nsgaII.dominanceComparator)
 
   return evolutionaryAlgorithm(solver)
-end
-
-function optimize(algorithm::NSGAII)
-  algorithm.foundSolutions = nsgaII(algorithm)
-  
-  return Nothing
 end
 
 function name(nsgaII::NSGAII)
