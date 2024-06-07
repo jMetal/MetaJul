@@ -3,12 +3,12 @@ struct FrequencySelectionMutationBasedPerturbation <: Perturbation
     mutation::MutationOperator
 end
 
-function perturbate(perturbation::FrequencySelectionMutationBasedPerturbation, swarm)
+function perturbate!(perturbation::FrequencySelectionMutationBasedPerturbation, swarm)
     @assert length(swarm) > 0
 
     for i in 1:length(swarm)
         if i % perturbation.frequencyOfApplication == 0
-            mutate(swarm[i], perturbation.mutation)
+            mutate!(swarm[i], perturbation.mutation)
         end
     end
     

@@ -6,7 +6,7 @@
 function mutateABinarySolutionWithProbabilityZeroReturnASolutionWithTheSameVariables()
   solution = BinarySolution(initBitVector("1010"), [1.0, 2.0, 3.0], [-1], Dict())
   mutation = BitFlipMutation(0.0)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -14,7 +14,7 @@ end
 function mutateABinarySolutionWithProbabilityOneFlipsAllTheBits()
   solution = BinarySolution(initBitVector("10100"), [1.0, 2.0, 3.0], [-1], Dict())
   mutation = BitFlipMutation(1.0)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
   expectedSolution = BinarySolution(initBitVector("01011"), [1.0, 2.0, 3.0], [-1], Dict())
 
   return isequal(expectedSolution, newSolution)
@@ -42,7 +42,7 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityZeroReturnAS
   solution.variables = [1.2, 5.2]
 
   mutation = UniformMutation(0.0, 0.5, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -52,7 +52,7 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAl
   solution.variables = [1.2, 5.2]
 
   mutation = UniformMutation(1.0, 0.5, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end
@@ -80,7 +80,7 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroRetur
   solution.variables = [1.2, 5.2]
 
   mutation = PolynomialMutation(0.0, 20.0, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -90,7 +90,7 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChange
   solution.variables = [1.2, 5.2]
 
   mutation = PolynomialMutation(1.0, 15, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end

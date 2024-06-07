@@ -23,7 +23,7 @@ function perturbationOnlyModifiesTheRightParticle()
 
     perturbation = FrequencySelectionMutationBasedPerturbation(frequencyOfApplication, mutationOperator)
 
-    swarm = perturbate(perturbation, swarm)
+    swarm = perturbate!(perturbation, swarm)
 
     return particle2.variables != swarm[2].variables && isequal(particle1, swarm[1]) && isequal(particle3, swarm[3])
 end

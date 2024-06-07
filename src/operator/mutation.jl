@@ -9,7 +9,7 @@ struct BitFlipMutation <: MutationOperator
   probability::Float64
 end
 
-function mutate(solution::BinarySolution, mutationOperator::BitFlipMutation)::BinarySolution
+function mutate!(solution::BinarySolution, mutationOperator::BitFlipMutation)::BinarySolution
   solution.variables = bitFlipMutation(solution.variables, mutationOperator.probability)
   return solution
 end
@@ -46,7 +46,7 @@ function uniformMutation(x::Vector{T}, mutationOperator::UniformMutation)::Vecto
   return x
 end
 
-function mutate(solution::ContinuousSolution, mutationOperator::UniformMutation)::ContinuousSolution
+function mutate!(solution::ContinuousSolution, mutationOperator::UniformMutation)::ContinuousSolution
   solution.variables = uniformMutation(solution.variables, mutationOperator)
   return solution
 end
@@ -129,7 +129,7 @@ function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation):
 end
 
 
-function mutate(solution::ContinuousSolution, mutationOperator::PolynomialMutation)::ContinuousSolution
+function mutate!(solution::ContinuousSolution, mutationOperator::PolynomialMutation)::ContinuousSolution
   solution.variables = polynomialMutation(solution.variables, mutationOperator)
   return solution
 end

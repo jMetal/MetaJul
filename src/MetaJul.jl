@@ -35,7 +35,7 @@ export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
 
 export PolynomialMutation, BitFlipMutation, UniformMutation
-export mutate
+export mutate!
 include("operator/mutation.jl")
 
 export BinaryTournamentSelectionOperator, RandomSelectionOperator
@@ -97,7 +97,7 @@ export update
 include("component/particleSwarmOptimization/localBestUpdate.jl")
 
 export FrequencySelectionMutationBasedPerturbation
-export perturbate
+export perturbate!
 include("component/particleSwarmOptimization/perturbation.jl")
 
 export DefaultPositionUpdate

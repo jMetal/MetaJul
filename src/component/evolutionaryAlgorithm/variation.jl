@@ -27,7 +27,7 @@ function variate(variation::CrossoverAndMutationVariation, solutions::Vector{S},
 
     crossedSolutions = [recombine(parent[1], parent[2], crossover) for parent in parents]
     solutionsToMutate = collect(flatten(crossedSolutions))
-    offpring = [mutate(solutionsToMutate[i], mutation) for i in range(1, offspringPopulationSize)]
+    offpring = [mutate!(solutionsToMutate[i], mutation) for i in range(1, offspringPopulationSize)]
 
     return offpring
 end
