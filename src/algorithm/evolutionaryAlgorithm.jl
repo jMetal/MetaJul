@@ -1,9 +1,8 @@
 using Dates
 
 mutable struct EvolutionaryAlgorithm <: Algorithm
+  # Final fields
   name::String
-
-  foundSolutions::Vector
 
   solutionsCreation::SolutionsCreation
   evaluation::Evaluation
@@ -13,6 +12,12 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
   replacement::Replacement
 
   observable::Observable
+
+  # Updatable fields
+  foundSolutions::Vector
+  population
+  offspringPopulation
+  startingTime
 
   status::Dict
 
