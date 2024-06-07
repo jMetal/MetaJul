@@ -12,9 +12,7 @@ function main()
     solver.mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
     solver.crossover = SinglePointCrossover(1.0)
 
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     front = foundSolutions(solver)
 
@@ -28,5 +26,6 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, front)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", status(solver)["COMPUTING_TIME"])
+
 end

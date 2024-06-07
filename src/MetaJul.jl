@@ -140,7 +140,7 @@ export optimize
 include("algorithm/localSearch.jl")
 
 export EvolutionaryAlgorithm
-export optimize
+export optimize, status
 include("algorithm/evolutionaryAlgorithm.jl")
 
 export ParticleSwarmOptimization
@@ -148,7 +148,7 @@ export optimize
 include("algorithm/particleSwarmOptimization.jl")
 
 export NSGAII
-export optimize, foundSolutions
+export optimize, foundSolutions, observable
 include("algorithm/NSGAII.jl")
 
 export toString

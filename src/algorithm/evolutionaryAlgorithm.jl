@@ -29,53 +29,55 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
   end
 end
 
-function getObservable(algorithm::EvolutionaryAlgorithm)
+function observable(algorithm::EvolutionaryAlgorithm)
   return algorithm.observable
 end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
-  startingTime = Dates.now()
+  ea.startingTime = Dates.now()
 
-  population = create(ea.solutionsCreation)
-  population = evaluate(ea.evaluation, population)
+  ea.population = create(ea.solutionsCreation)
+  ea.population = evaluate(ea.evaluation, ea.population)
 
-  initStatus(ea, population, startingTime)
+  initStatus(ea)
 
   while !isMet(ea.termination, ea.status)
-    matingPool = select(ea.selection, population)
+    matingPool = select(ea.selection, ea.population)
     
-    offspringPopulation = variate(ea.variation, population, matingPool)
-    offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
+    ea.offspringPopulation = variate(ea.variation, ea.population, matingPool)
+    ea.offspringPopulation = evaluate(ea.evaluation, ea.offspringPopulation)
 
-    population = replace_(ea.replacement, population, offspringPopulation)
+    ea.population = replace_(ea.replacement, ea.population, ea.offspringPopulation)
 
-    updateStatus(ea, population, offspringPopulation, startingTime)
+    updateStatus(ea)
   end
 
-  ea.foundSolutions = population
+  ea.foundSolutions = ea.population
 end
 
 function optimize(algorithm::EvolutionaryAlgorithm)
   evolutionaryAlgorithm(algorithm)
 end
 
-function initStatus(ea::EvolutionaryAlgorithm, population, startingTime)
-  evaluations = length(population)
-  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
+function initStatus(ea::EvolutionaryAlgorithm)
+  evaluations = length(ea.population)
+  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => ea.population, "COMPUTING_TIME" => (Dates.now() - ea.startingTime))
 
   notify(ea.observable, ea.status)
 end
 
-function updateStatus(ea::EvolutionaryAlgorithm, population, offspringPopulation, startingTime)    
-  ea.status["EVALUATIONS"] += length(offspringPopulation)
-  ea.status["POPULATION"] = population
-  ea.status["COMPUTING_TIME"] = Dates.now() - startingTime
+function updateStatus(ea::EvolutionaryAlgorithm)    
+  ea.status["EVALUATIONS"] += length(ea.offspringPopulation)
+  ea.status["POPULATION"] = ea.population
+  ea.status["COMPUTING_TIME"] = Dates.now() - ea.startingTime
 
   notify(ea.observable, ea.status)
 end
 
+function status(ea::EvolutionaryAlgorithm)
+  return ea.status
+end
 
 function name(algorithm::EvolutionaryAlgorithm)
   return algorithm.name
 end
-

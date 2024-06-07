@@ -53,6 +53,10 @@ function name(nsgaII::NSGAII)
   return name(nsgaII.solver)
 end
 
-function getObservable(nsgaII::NSGAII)
-  return getObservable(nsgaII.solver)
+function status(nsgaII::NSGAII)
+  return status(nsgaII.solver)
+end
+
+function observable(nsgaII::NSGAII)
+  return observable(nsgaII.solver)
 end
