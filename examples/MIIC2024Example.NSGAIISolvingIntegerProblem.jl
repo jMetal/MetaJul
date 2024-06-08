@@ -37,9 +37,7 @@ optimize(solver)
 
 # Step 4: get found solutions
 front = foundSolutions(solver)
-for solution in front
-    solution.objectives[1] = -1 * solution.objectives[1]
-end
+map((solution) -> solution.objectives[1] = -1 .* solution.objectives[1], front)
 
 objectivesFileName = "FUN.csv"
 variablesFileName = "VAR.csv"
@@ -51,4 +49,6 @@ println("Objectives stored in file ", objectivesFileName)
 
 println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, front)
-    println("Computing time: ", (endTime - startingTime))
+
+println("Computing time: ", status(solver)["COMPUTING_TIME"])
+
