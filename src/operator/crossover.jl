@@ -61,7 +61,7 @@ end
 struct SBXCrossover <: CrossoverOperator
   probability::Float64
   distributionIndex:: Float64
-  bounds::Vector{Bounds} 
+  bounds::Vector{Bounds{T}} where {T <: Number}
 end
 
 function numberOfRequiredParents(crossover::SBXCrossover)
@@ -72,7 +72,7 @@ function numberOfDescendants(crossover::SBXCrossover)
   return 2
 end
 
-function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution}
+function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T}, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution{T}} where {T <: Real}
   EPSILON = 1.0e-14
   probability::Real = crossoverOperator.probability
   distributionIndex::Real = crossoverOperator.distributionIndex
@@ -144,21 +144,7 @@ function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, cro
   return [child1, child2]
 end
 
-struct IntegerSBXCrossover <: CrossoverOperator
-  probability::Float64
-  distributionIndex:: Float64
-  bounds::Vector{Bounds{Int64}} 
-end
-
-function numberOfRequiredParents(crossover::IntegerSBXCrossover)
-  return 2 
-end
-
-function numberOfDescendants(crossover::IntegerSBXCrossover)
-  return 2
-end
-
-function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, crossoverOperator::IntegerSBXCrossover)::Vector{ContinuousSolution}
+function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T}, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution{T}} where {T <: Int}
   EPSILON = 1.0e-14
   probability::Real = crossoverOperator.probability
   distributionIndex::Real = crossoverOperator.distributionIndex

@@ -30,13 +30,14 @@ solver::NSGAII = NSGAII(
     termination = TerminationByEvaluations(2500))
     
 solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-solver.crossover = IntegerSBXCrossover(1.0, 20.0, problem.bounds)
+solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
 
 # Step 3: optimize
 optimize(solver)
 
 # Step 4: get found solutions
 front = foundSolutions(solver)
+
 map((solution) -> solution.objectives[1] = -1 .* solution.objectives[1], front)
 
 objectivesFileName = "FUN.csv"

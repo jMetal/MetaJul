@@ -6,8 +6,7 @@ using Dates
 function main()
     problem = oneZeroMax(512)
 
-    solver::NSGAII = NSGAII()
-    solver.problem = problem
+    solver::NSGAII = NSGAII(problem)
 
     solver.mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
     solver.crossover = SinglePointCrossover(1.0)
