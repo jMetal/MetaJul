@@ -8,12 +8,11 @@ function main()
     problem = ZDT1()
 
     solver::NSGAII = NSGAII(
+        problem,
         populationSize = 50, 
-        termination = TerminationByComputingTime(Dates.Second(2)))
-    solver.problem = problem
-
-    solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-    solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+        termination = TerminationByComputingTime(Dates.Second(2)),
+        crossover = SBXCrossover(1.0, 20.0, problem.bounds),
+        mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds))
 
     startingTime = Dates.now()
     optimize(solver)

@@ -7,11 +7,7 @@ using Dates
 function main()
     problem = ZDT1()
 
-    solver::NSGAII = NSGAII()
-    solver.problem = problem
-
-    solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-    solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+    solver::NSGAII = NSGAII(problem)
 
     startingTime = Dates.now()
     optimize(solver)

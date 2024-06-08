@@ -12,17 +12,44 @@ mutable struct NSGAII <: Algorithm
 
   dominanceComparator::Comparator
 
-  function NSGAII(problem; populationSize = 100, termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator())
+  function NSGAII(
+    problem :: ContinuousProblem; 
+    populationSize = 100, 
+    termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
+    crossover = SBXCrossover(1.0, 20.0, problem.bounds),
+    mutation = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds))
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
     algorithm.problem = problem
     algorithm.populationSize = populationSize
     algorithm.dominanceComparator = dominanceComparator 
+    algorithm.crossover = crossover
+    algorithm.mutation = mutation
     algorithm.termination = termination
 
     return algorithm
   end
+
+  function NSGAII(
+    problem :: BinaryProblem; 
+    populationSize = 100, 
+    termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
+    crossover = SinglePointCrossover(0.9),
+    mutation = BitFlipMutation(1.0/problem.numberOfBits))
+    algorithm = new()
+    algorithm.solver = EvolutionaryAlgorithm()
+    algorithm.solver.name = "NSGA-II"
+    algorithm.problem = problem
+    algorithm.populationSize = populationSize
+    algorithm.dominanceComparator = dominanceComparator 
+    algorithm.crossover = crossover
+    algorithm.mutation = mutation
+    algorithm.termination = termination
+
+    return algorithm
+  end
+
 end
 
 function foundSolutions(nsgaII::NSGAII) 

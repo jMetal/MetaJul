@@ -9,10 +9,10 @@ function main()
     solver::NSGAII = NSGAII(
         problem, 
         populationSize = 50, 
-        termination = TerminationByEvaluations(2000))
-
-    solver.mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
-    solver.crossover = SinglePointCrossover(1.0)
+        termination = TerminationByEvaluations(2000),
+        mutation = BitFlipMutation(1.0 / problem.numberOfBits),
+        crossover = SinglePointCrossover(1.0)
+        )
 
     startingTime = Dates.now()
     optimize(solver)
