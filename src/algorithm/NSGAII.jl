@@ -12,10 +12,11 @@ mutable struct NSGAII <: Algorithm
 
   dominanceComparator::Comparator
 
-  function NSGAII(; populationSize = 100, termination = TerminationByEvaluations(25000), dominanceComparator = DefaultDominanceComparator())
+  function NSGAII(problem; populationSize = 100, termination = TerminationByEvaluations(25000), dominanceComparator = DefaultDominanceComparator())
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
+    algorithm.problem = problem
     algorithm.populationSize = populationSize
     algorithm.dominanceComparator = dominanceComparator 
     algorithm.termination = termination

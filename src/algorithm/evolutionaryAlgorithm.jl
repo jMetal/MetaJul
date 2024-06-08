@@ -15,8 +15,8 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
 
   # Updatable fields
   foundSolutions::Vector
-  population
-  offspringPopulation
+  population::Vector
+  offspringPopulation::Vector
   startingTime
 
   status::Dict

@@ -7,7 +7,9 @@ using Dates
 function main()
     problem = ZDT1()
 
-    solver::NSGAII = NSGAII(populationSize = 50, termination = TerminationByComputingTime(Dates.Second(2)))
+    solver::NSGAII = NSGAII(
+        populationSize = 50, 
+        termination = TerminationByComputingTime(Dates.Second(2)))
     solver.problem = problem
 
     solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
