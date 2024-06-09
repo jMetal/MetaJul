@@ -57,7 +57,7 @@ function sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheRetur
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
-sbxCrossover = SBXCrossover(0.054, 20.0, [])
+sbxCrossover = SBXCrossover(0.054, 20.0, [Bounds{Float64}(3.0, 5.0)])
 @testset "SBX crossover tests" begin
   @test sbxCrossover.probability == 0.054
   @test sbxCrossover.distributionIndex == 20.0
