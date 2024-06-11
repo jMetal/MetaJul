@@ -1,18 +1,17 @@
-using metajul
+using MetaJul
 using Dates
 
 # Local search example 
 function main()
     problem = sphere(20)
-    solution::Solution = createSolution(problem)
-    solution = evaluate(solution, problem)
+    startingSolution::Solution = createSolution(problem)
+    startingSolution = evaluate(startingSolution, problem)
 
-    solver::LocalSearch = LocalSearch()
-    solver.startingSolution = solution
-    solver.problem = problem
-    solver.numberOfIterations = 100000
-    solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    numberOfIterations = 100000
+    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
 
+    solver::LocalSearch = LocalSearch(startingSolution, problem, numberOfIterations, mutation)
+   
     startingTime = Dates.now()
     optimize(solver)
     endTime = Dates.now()
@@ -20,7 +19,7 @@ function main()
     foundSolution = solver.foundSolution
 
     println("Local search result: ", foundSolution)
-    println("Fitness of the starting solution: ", solution.objectives[1])
+    println("Fitness of the starting solution: ", startingSolution.objectives[1])
     println("Fitness of the found solution: ", foundSolution.objectives[1])
     println("Computing time: ", (endTime - startingTime))
 end

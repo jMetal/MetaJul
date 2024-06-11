@@ -17,7 +17,7 @@ function optimize(algorithm::LocalSearch)::Solution
 
   for _ in 1:numberOfIterations
     mutatedSolution = copySolution(currentSolution)
-    mutatedSolution = mutate(mutatedSolution, mutation)
+    mutatedSolution = mutate!(mutatedSolution, mutation)
     
     mutatedSolution = evaluate(mutatedSolution, problem)
 
