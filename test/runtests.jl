@@ -1,5 +1,4 @@
 using MetaJul
-
 using Test
 
 # Utility functions

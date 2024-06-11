@@ -49,7 +49,7 @@ export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover, IntegerSBXCrossove
 export recombine, numberOfDescendants, numberOfRequiredParents
 include("operator/crossover.jl")
 
-export SequentialEvaluation, SequentialEvaluationWithArchive
+export SequentialEvaluation, SequentialEvaluationWithArchive, MultithreadedEvaluation
 include("component/common/evaluation.jl")
 
 export DefaultSolutionsCreation
