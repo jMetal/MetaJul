@@ -25,7 +25,7 @@ function main()
 
     #observer = EvaluationObserver(4000)
     observer = FitnessObserver(500)
-    register!(getObservable(solver), observer)
+    register!(observable(solver), observer)
 
     startingTime = Dates.now()
     optimize(solver)

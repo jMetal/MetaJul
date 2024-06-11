@@ -7,10 +7,13 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
-    numberOfIterations = 100000
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
 
-    solver::LocalSearch = LocalSearch(startingSolution, problem, numberOfIterations, mutation)
+    solver::LocalSearch = LocalSearch(
+        startingSolution, 
+        problem,
+        numberOfIterations = 200000,
+        mutation)
    
     startingTime = Dates.now()
     optimize(solver)

@@ -8,10 +8,13 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
-    numberOfIterations = 10000
     mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
 
-    solver::LocalSearch = LocalSearch(startingSolution, problem, numberOfIterations, mutation)
+    solver::LocalSearch = LocalSearch(
+        startingSolution, 
+        problem, 
+        numberOfIterations = 10000, 
+        mutation = mutation)
 
     startingTime = Dates.now()
     optimize(solver)

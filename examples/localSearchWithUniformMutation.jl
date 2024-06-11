@@ -6,10 +6,13 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
-    numberOfIterations = 100000
     mutation = UniformMutation(0.1, 0.5, problem.bounds)
 
-    solver::LocalSearch = LocalSearch(startingSolution, problem, numberOfIterations, mutation)
+    solver::LocalSearch = LocalSearch(
+        startingSolution, 
+        problem, 
+        numberOfIterations = 100000, 
+        mutation = mutation)
     
     optimize(solver)
 

@@ -3,10 +3,26 @@ mutable struct LocalSearch <: Algorithm
   problem::Problem
   numberOfIterations::Int
   mutation::MutationOperator
+
   foundSolution::Solution
 
   LocalSearch() = new()
-  LocalSearch(startingSolution, problem, numberOfIterations, mutation) = new(startingSolution, problem, numberOfIterations, mutation, copySolution(startingSolution)) 
+  
+  function LocalSearch(
+    startingSolution::BinarySolution, 
+    problem::BinaryProblem; 
+    numberOfIterations = 10000,
+    mutation = BitFlipMutation(1.0 / problem.numberOfBits))
+      new(startingSolution, problem, numberOfIterations, mutation) 
+  end
+
+  function LocalSearch(
+      startingSolution::ContinuousSolution, 
+      problem::ContinuousProblem; 
+      numberOfIterations = 10000,
+      mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)) 
+        new(startingSolution, problem, numberOfIterations, mutation) 
+  end
 end
 
 function optimize(algorithm::LocalSearch)::Solution
