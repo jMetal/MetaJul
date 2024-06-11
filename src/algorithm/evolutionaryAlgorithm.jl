@@ -13,7 +13,6 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
 
   observable::Observable
 
-  # Updatable fields
   foundSolutions::Vector
   population::Vector
   offspringPopulation::Vector

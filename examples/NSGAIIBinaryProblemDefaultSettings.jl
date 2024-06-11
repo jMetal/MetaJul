@@ -8,9 +8,6 @@ function main()
 
     solver::NSGAII = NSGAII(problem)
 
-    solver.mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
-    solver.crossover = SinglePointCrossover(1.0)
-
     optimize(solver)
 
     front = foundSolutions(solver)

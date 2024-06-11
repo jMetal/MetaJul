@@ -84,7 +84,6 @@ for testProgram in solutionTests
     include(testProgram)
 end
 
-
 problemTests = [
     "problem/continuousProblemTest.jl",
     "problem/binaryProblemTest.jl",
