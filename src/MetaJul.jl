@@ -7,12 +7,16 @@ include("util/bounds.jl")
 export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
 include("core/coreTypes.jl")
 
-export ContinuousSolution, BinarySolution
-export initBitVector, copySolution, bitFlip
-include("core/solution.jl")
-
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
 include("core/constraintHandling.jl")
+
+export ContinuousSolution
+export copySolution
+include("solution/binarySolution.jl")
+
+export BinarySolution
+export initBitVector, copySolution, bitFlip
+include("solution/continuousSolution.jl")
 
 export DominanceRanking, DominanceRankingComparator
 export numberOfRanks, getSubFront, appendRank!, compute!, getRank, setRank

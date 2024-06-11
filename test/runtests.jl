@@ -14,8 +14,7 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
 end
 
 coreTests = [
-    "core/solutionTest.jl",
-    "core/constraintHandlingTest.jl",
+    "core/constraintHandlingTest.jl"
     ]
 
 for testProgram in coreTests
@@ -75,6 +74,16 @@ operatorTests = [
 for testProgram in operatorTests
     include(testProgram)
 end
+
+solutionTests = [
+    "solution/continuousSolutionTest.jl",
+    "solution/binarySolutionTest.jl"
+]
+
+for testProgram in solutionTests
+    include(testProgram)
+end
+
 
 problemTests = [
     "problem/continuousProblemTest.jl",
