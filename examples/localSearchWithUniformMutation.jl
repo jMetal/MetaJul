@@ -6,17 +6,18 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
+    termination = TerminationByIterations(100000) 
     mutation = UniformMutation(0.1, 0.5, problem.bounds)
 
     solver::LocalSearch = LocalSearch(
         startingSolution, 
         problem, 
-        numberOfIterations = 100000, 
+        termination = termination, 
         mutation = mutation)
     
     optimize(solver)
 
-    foundSolution = solver.foundSolution
+    foundSolution = solver.currentSolution
 
     println("Local search result: ", foundSolution)
     println("Fitness of the starting solution: ", startingSolution.objectives[1])

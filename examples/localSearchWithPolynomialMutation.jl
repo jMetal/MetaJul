@@ -8,18 +8,19 @@ function main()
     startingSolution = evaluate(startingSolution, problem)
 
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    termination = TerminationByIterations(10000) 
 
     solver::LocalSearch = LocalSearch(
         startingSolution, 
         problem,
-        numberOfIterations = 200000,
-        mutation)
+        termination = termination, 
+        mutation = mutation)
    
     startingTime = Dates.now()
     optimize(solver)
     endTime = Dates.now()
 
-    foundSolution = solver.foundSolution
+    foundSolution = solver.currentSolution
 
     println("Local search result: ", foundSolution)
     println("Fitness of the starting solution: ", startingSolution.objectives[1])

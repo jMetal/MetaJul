@@ -11,8 +11,15 @@ struct TerminationByComputingTime <: Termination
     computingTimeLimit
 end
 
-
 function isMet(termination::TerminationByComputingTime, algorithmAttributes::Dict)::Bool
     return get(algorithmAttributes, "COMPUTING_TIME", 0) >= termination.computingTimeLimit
+end
+
+struct TerminationByIterations <: Termination
+    maximumNumberOfIterations
+end
+
+function isMet(termination::TerminationByIterations, algorithmAttributes::Dict)::Bool
+    return get(algorithmAttributes, "ITERATIONS", 0) >= termination.maximumNumberOfIterations
 end
 

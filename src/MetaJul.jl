@@ -56,7 +56,7 @@ export DefaultSolutionsCreation
 export create
 include("component/common/solutionsCreation.jl")
 
-export TerminationByComputingTime, TerminationByEvaluations
+export TerminationByComputingTime, TerminationByEvaluations, TerminationByIterations
 export isMet
 include("component/common/termination.jl")
 
