@@ -126,7 +126,7 @@ include("problem/binaryProblem.jl")
 include("problem/continuousProblem.jl")
 
 export tanaka, osyczka2, srinivas, binh2, constrEx, golinski
-include("problem/constrainedProblem.jl")
+include("problem/multiObjective/constrainedProblems.jl")
 
 export oneMax, sphere
 include("problem/singleObjective/oneMax.jl")
