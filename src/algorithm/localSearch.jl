@@ -32,7 +32,7 @@ mutable struct LocalSearch <: Algorithm
   function LocalSearch(
     startingSolution::ContinuousSolution,
     problem::ContinuousProblem;
-    termination = TerminationByIterations(10000),
+    termination = TerminationByIterations(100000),
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds))
     ls = new(startingSolution, problem, termination, mutation)
     ls.observable = Observable("Local search observable")
