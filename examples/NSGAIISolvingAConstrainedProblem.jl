@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
@@ -18,9 +17,7 @@ function main()
 
     solver.dominanceComparator = ConstraintsAndDominanceComparator()
 
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     foundSolutions = solver.foundSolutions
 
@@ -34,5 +31,5 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

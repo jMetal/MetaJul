@@ -42,9 +42,7 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     foundSolutions = solver.foundSolutions
 
@@ -58,5 +56,5 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

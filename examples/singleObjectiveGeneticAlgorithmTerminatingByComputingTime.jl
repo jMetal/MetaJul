@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # Genetic algorithm example applied to problem Sphere
 function main()
@@ -28,9 +27,7 @@ function main()
 
     solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     foundSolutions = solver.foundSolutions
 
@@ -40,5 +37,5 @@ function main()
     printVariablesToCSVFile("VAR.csv", [foundSolutions[1]])
 
     println("Best solution found: ", foundSolutions[1].objectives[1])
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

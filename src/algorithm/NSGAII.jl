@@ -85,6 +85,10 @@ function status(nsgaII::NSGAII)
   return status(nsgaII.solver)
 end
 
+function computingTime(nsgaII::NSGAII)
+  return status(nsgaII)["COMPUTING_TIME"]
+end
+
 function observable(nsgaII::NSGAII)
   return observable(nsgaII.solver)
 end

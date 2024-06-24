@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 function main()
@@ -24,5 +23,5 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, front)
-    println("Computing time: ", status(solver)["COMPUTING_TIME"])
+    println("Computing time: ", computingTime(solver))
 end

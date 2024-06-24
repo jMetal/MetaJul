@@ -87,3 +87,10 @@ function updateStatus(ls::LocalSearch)
   notify(ls.observable, ls.status)
 end
 
+function status(ls::LocalSearch)
+  return ls.status
+end
+
+function computingTime(ls::LocalSearch)
+  return ls.status["COMPUTING_TIME"]
+end

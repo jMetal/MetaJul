@@ -29,9 +29,7 @@ function main()
 
     solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
     
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     foundSolutions = solver.foundSolutions
 
@@ -39,7 +37,7 @@ function main()
     variablesFileName = "VAR.csv"
 
     println("Algorithm: ", name(solver))
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 
     println("Objectives stored in file ", objectivesFileName)
     printObjectivesToCSVFile(objectivesFileName, foundSolutions)

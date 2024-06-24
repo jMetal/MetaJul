@@ -80,3 +80,7 @@ end
 function name(algorithm::EvolutionaryAlgorithm)
   return algorithm.name
 end
+
+function computingTime(ea::EvolutionaryAlgorithm)
+  return ea.status["COMPUTING_TIME"]
+end

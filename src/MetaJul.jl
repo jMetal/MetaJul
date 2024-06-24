@@ -140,15 +140,15 @@ include("problem/multiObjective/ZDT.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
 export LocalSearch
-export optimize
+export optimize, computingTime
 include("algorithm/localSearch.jl")
 
 export EvolutionaryAlgorithm
-export optimize, status
+export optimize, status, computingTime
 include("algorithm/evolutionaryAlgorithm.jl")
 
 export ParticleSwarmOptimization
-export optimize
+export optimize, computingTime
 include("algorithm/particleSwarmOptimization.jl")
 
 export NSGAII

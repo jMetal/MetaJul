@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # Genetic algorithm example applied to problem OneMax
 function main()
@@ -27,9 +26,7 @@ function main()
     observer = FitnessObserver(500)
     register!(observable(solver), observer)
 
-    startingTime = Dates.now()
     optimize(solver)
-    endTime = Dates.now()
 
     foundSolutions = solver.foundSolutions
 
@@ -40,5 +37,5 @@ function main()
 
     println("Fitness: ", -1.0 * foundSolutions[1].objectives[1])
     println("Solution: ", foundSolutions[1].variables)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

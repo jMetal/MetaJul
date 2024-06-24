@@ -22,4 +22,6 @@ function main()
     println("Local search result: ", foundSolution)
     println("Fitness of the starting solution: ", startingSolution.objectives[1])
     println("Fitness of the found solution: ", foundSolution.objectives[1])
+    println("Computing time: ", computingTime(solver))
+
 end
