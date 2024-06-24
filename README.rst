@@ -6,7 +6,7 @@ MetaJul Web site
     :target: https://github.com/jMetal/MetaJul/actions/workflows/unitTest.yml
 
 
-The MetaJul project is aimed at studying the implementation of metaheuristics in the Julia programming language. The implemented codes and unit tests are located, respectively, in the ``src`` and tests ``test`` folders. MetaJul is described in the paper [Experiences Using Julia for Implementing Multi-objective Evolutionary Algorithms, MIC 2024](https://link.springer.com/chapter/10.1007/978-3-031-62922-8_12]).
+The MetaJul project is aimed at studying the implementation of metaheuristics in the Julia programming language. The implemented codes and unit tests are located, respectively, in the ``src`` and tests ``test`` folders. MetaJul is described in the paper [Experiences Using Julia for Implementing Multi-objective Evolutionary Algorithms](https://link.springer.com/chapter/10.1007/978-3-031-62922-8_12]), presented at the MIC 2024 conference.
 
 Current features:
 
