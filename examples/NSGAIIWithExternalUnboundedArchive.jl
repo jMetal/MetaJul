@@ -29,7 +29,6 @@ function main()
 
     optimize(solver)
     foundSolutions = solver.foundSolutions
-
     
     foundSolutions = getSolutions(externalArchive)
 

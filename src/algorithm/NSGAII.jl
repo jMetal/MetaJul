@@ -35,7 +35,7 @@ mutable struct NSGAII <: Algorithm
     problem :: BinaryProblem; 
     populationSize = 100, 
     termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
-    crossover = SinglePointCrossover(0.9),
+    crossover = SinglePointCrossover(1.0),
     mutation = BitFlipMutation(1.0/problem.numberOfBits))
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()

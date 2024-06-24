@@ -144,7 +144,7 @@ export optimize, computingTime
 include("algorithm/localSearch.jl")
 
 export EvolutionaryAlgorithm
-export optimize, status, computingTime
+export optimize, status, computingTime, foundSolutions
 include("algorithm/evolutionaryAlgorithm.jl")
 
 export ParticleSwarmOptimization

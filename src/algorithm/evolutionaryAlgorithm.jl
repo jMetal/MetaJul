@@ -77,9 +77,14 @@ function status(ea::EvolutionaryAlgorithm)
   return ea.status
 end
 
-function name(algorithm::EvolutionaryAlgorithm)
-  return algorithm.name
+function name(ea::EvolutionaryAlgorithm)
+  return ea.name
 end
+
+function foundSolutions(ea::EvolutionaryAlgorithm) 
+  return ea.foundSolutions
+end
+
 
 function computingTime(ea::EvolutionaryAlgorithm)
   return ea.status["COMPUTING_TIME"]
