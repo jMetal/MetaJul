@@ -40,6 +40,6 @@ The ``examples`` folder contains, among others:
 * SMPSO
 * SMPSO using an (`FrontPlotObserver`) that plots the archive solutions when running the algorithm
 
-Jupyter notebooks with examples can be found in the ``notebooks`` folder.
+Jupyter notebooks with examples can be found in the ``notebooks`` folder. 
 
 The next steps to carry out are enumerated in the `open issues page <https://github.com/jMetal/MetaJul/issues>`_ of the project.
