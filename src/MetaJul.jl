@@ -151,6 +151,10 @@ export ParticleSwarmOptimization
 export optimize!, computingTime
 include("algorithm/particleSwarmOptimization.jl")
 
+export GeneticAlgorithm
+export optimize!, computingTime, foundSolution
+include("algorithm/geneticAlgorithm.jl")
+
 export NSGAII
 export optimize!, foundSolutions, observable
 include("algorithm/NSGAII.jl")
