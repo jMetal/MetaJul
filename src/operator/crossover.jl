@@ -8,9 +8,7 @@ struct BLXAlphaCrossover <: CrossoverOperator
   function BLXAlphaCrossover(;probability = 0.9, alpha = 0.5, bounds = [])
     @assert bounds != [] "The bounds list is empty"
 
-    crossover = new(probability, alpha, bounds)
-
-    return crossover
+    return new(probability, alpha, bounds)
   end
 end
 
@@ -57,6 +55,13 @@ struct SBXCrossover <: CrossoverOperator
   probability::Float64
   distributionIndex:: Float64
   bounds::Vector{Bounds{T}} where {T <: Number}
+
+  function SBXCrossover(;probability = 0.9, distributionIndex = 20.0, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+
+    return new(probability, distributionIndex, bounds)
+  end
+
 end
 
 function numberOfRequiredParents(crossover::SBXCrossover)

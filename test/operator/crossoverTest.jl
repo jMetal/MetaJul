@@ -38,7 +38,7 @@ function sbxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSoluti
   parent2 = createContinuousSolution(3)
   parent2.variables = [3.5, 8.6]
 
-  crossover = SBXCrossover(0.0, 20.0, parent1.bounds)
+  crossover = SBXCrossover(probability = 0.0, distributionIndex = 20.0, bounds = parent1.bounds)
   children = recombine(parent1, parent2, crossover)
 
   return isequal(parent1, children[1]) && isequal(parent2, children[2])
@@ -51,13 +51,17 @@ function sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheRetur
   parent2 = createContinuousSolution(3)
   parent2.variables = [3.5, 8.6]
 
-  crossover = SBXCrossover(1.0, 20.0, parent1.bounds)
+  crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = parent1.bounds)
   children = recombine(parent1, parent2, crossover)
 
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
-sbxCrossover = SBXCrossover(0.054, 20.0, [Bounds{Float64}(3.0, 5.0)])
+function SBXCrossoverWithAEmptyListOfBoundsRaiseAnException() 
+  return SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = [])
+end
+
+sbxCrossover = SBXCrossover(probability = 0.054, probability = 20.0, probability = [Bounds{Float64}(3.0, 5.0)])
 @testset "SBX crossover tests" begin
   @test sbxCrossover.probability == 0.054
   @test sbxCrossover.distributionIndex == 20.0
@@ -66,6 +70,7 @@ sbxCrossover = SBXCrossover(0.054, 20.0, [Bounds{Float64}(3.0, 5.0)])
 
   @test sbxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test sbxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
+  @test_throws "The bounds list is empty" SBXCrossoverWithAEmptyListOfBoundsRaiseAnException()
 end
 
 
