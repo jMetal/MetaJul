@@ -7,7 +7,7 @@ function main()
     startingSolution = evaluate(startingSolution, problem)
 
     termination = TerminationByIterations(100000) 
-    mutation = UniformMutation(0.1, 0.5, problem.bounds)
+    mutation = UniformMutation(probability = 0.1, perturbation = 0.5, bounds = problem.bounds)
 
     solver::LocalSearch = LocalSearch(
         startingSolution, 

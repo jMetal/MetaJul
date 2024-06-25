@@ -1,7 +1,7 @@
 function localSearchIsProperlyInitialized()
     problem = schaffer()
     startingSolution = createSolution(problem)
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     termination = TerminationByIterations(1000)
 
     algorithm = LocalSearch(startingSolution, problem, termination = termination, mutation = mutation)
@@ -12,7 +12,7 @@ end
 function localSearchWithZeroIterationsReturnsTheStartingSolution()
     problem = schaffer()
     startingSolution = createSolution(problem)
-    mutation = UniformMutation(0.01, 20.0, problem.bounds)
+    mutation = UniformMutation(probability = 0.01, perturbation = 20.0, bounds = problem.bounds)
 
     algorithm = LocalSearch()
     algorithm.problem = problem

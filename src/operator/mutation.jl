@@ -1,12 +1,11 @@
 
 # Mutation operators
-#function mutationProbability(mutationOperator::T)::Float64 where {T <: MutationOperator}
-#  return mutationOperator.probability
-#end
 
 # Bit flit mutation
 struct BitFlipMutation <: MutationOperator
   probability::Float64
+
+  BitFlipMutation(;probability = 0.01) = new(probability)
 end
 
 function mutate!(solution::BinarySolution, mutationOperator::BitFlipMutation)::BinarySolution
@@ -30,6 +29,15 @@ struct UniformMutation <: MutationOperator
   probability::Float64
   perturbation::Float64
   variableBounds::Vector{Bounds{Float64}}
+
+  function UniformMutation(;probability = 0.01, perturbation = 0.5, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert perturbation >= 0 string("The perturbation value ", perturbation, " cannot be negative")
+
+    return new(probability, perturbation, bounds)
+  end
+
 end
 
 function uniformMutation(x::Vector{T}, mutationOperator::UniformMutation)::Vector{T} where {T<:Real}
@@ -56,6 +64,15 @@ struct PolynomialMutation <: MutationOperator
   probability::Float64
   distributionIndex::Float64
   variableBounds::Vector{Bounds{T}} where {T <: Number}
+
+  function PolynomialMutation(;probability = 0.01, distributionIndex = 20.0, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert distributionIndex >= 0 string("The distributionIndex value ", perturbation, " cannot be negative")
+
+    return new(probability, distributionIndex, bounds)
+  end
+
 end
 
 function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Real}

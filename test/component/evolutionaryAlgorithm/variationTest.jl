@@ -4,7 +4,7 @@ function crossoverAndMutationVariationIsCorrectlyInitialized()
     offspringPopulationSize = 100
     solutionBounds = [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]
 
-    mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
+    mutation = PolynomialMutation(probability = 0.01, distributionIndex = 20.0, bounds = solutionBounds)
     crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
@@ -21,7 +21,7 @@ function theMatingPoolSizeWhenTheOffspringPopulationSizeIsOneMustBeTwo()
     offspringPopulationSize = 1
     solutionBounds = [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]
 
-    mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
+    mutation = PolynomialMutation(probability = 0.01, distributionIndex = 20.0, bounds = solutionBounds)
     crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
@@ -38,7 +38,7 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseA()
     matingPool = [createContinuousSolution(2) for _ in 1:100]
     solutionBounds = matingPool[1].bounds
 
-    mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
+    mutation = PolynomialMutation(probability = 0.01, distributionIndex = 20.0, bounds = solutionBounds)
     crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
@@ -48,14 +48,14 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseA()
     return length(offspringPopulation) == 100
 end
 
-# Case A: the offspringPopulation size is 1 
+# Case B: the offspringPopulation size is 1 
 function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseB()
     offspringPopulationSize = 1
 
     matingPool = [createContinuousSolution(2) for _ in 1:100]
     solutionBounds = matingPool[1].bounds
 
-    mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
+    mutation = PolynomialMutation(probability = 0.01, distributionIndex = 20.0, bounds = solutionBounds)
     crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)

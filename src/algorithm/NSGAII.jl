@@ -17,7 +17,7 @@ mutable struct NSGAII <: Algorithm
     populationSize = 100, 
     termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
     crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds),
-    mutation = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds))
+    mutation = PolynomialMutation(probability = 1.0/numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds))
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"
@@ -36,7 +36,7 @@ mutable struct NSGAII <: Algorithm
     populationSize = 100, 
     termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
     crossover = SinglePointCrossover(probability = 1.0),
-    mutation = BitFlipMutation(1.0/problem.numberOfBits))
+    mutation = BitFlipMutation(probability = 1.0/problem.numberOfBits))
     algorithm = new()
     algorithm.solver = EvolutionaryAlgorithm()
     algorithm.solver.name = "NSGA-II"

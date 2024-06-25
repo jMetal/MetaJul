@@ -2,7 +2,7 @@
 
 function constructorIsCorrectlyInitialized()
     frequencyOfApplication = 5 
-    mutationOperator = PolynomialMutation(0.5, 20.0, [Bounds{Float64}(1.0, 10.0)]) ;
+    mutationOperator = PolynomialMutation(probability = 0.5, distributionIndex = 20.0, bounds = [Bounds{Float64}(1.0, 10.0)]) ;
 
     perturbation = FrequencySelectionMutationBasedPerturbation(frequencyOfApplication, mutationOperator)
 
@@ -12,7 +12,7 @@ end
 
 function perturbationOnlyModifiesTheRightParticle()
     frequencyOfApplication = 2 
-    mutationOperator = PolynomialMutation(1.0, 20.0, [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]) ;
+    mutationOperator = PolynomialMutation(probability = 1.0, distributionIndex = 20.0, bounds = [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]) ;
 
     bounds = [Bounds{Float64}(1.0, 2.0), Bounds{Float64}(10, 20.0)]
     particle1 = ContinuousSolution{Float64}([1.0, 2.0], [1.5, 2.5], [], Dict(), bounds)

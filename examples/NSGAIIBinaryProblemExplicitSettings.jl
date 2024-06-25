@@ -8,7 +8,7 @@ function main()
         problem, 
         populationSize = 50, 
         termination = TerminationByEvaluations(2000),
-        mutation = BitFlipMutation(1.0 / problem.numberOfBits),
+        mutation = BitFlipMutation(probability = 1.0 / problem.numberOfBits),
         crossover = SinglePointCrossover(probability = 1.0)
         )
 

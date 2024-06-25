@@ -6,7 +6,7 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     termination = TerminationByIterations(10000) 
 
     solver::LocalSearch = LocalSearch(

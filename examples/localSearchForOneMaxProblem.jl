@@ -6,7 +6,7 @@ function main()
     startingSolution::Solution = createSolution(problem)
     startingSolution = evaluate(startingSolution, problem)
 
-    mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
+    mutation = BitFlipMutation(probability = 1.0 / numberOfVariables(problem))
     termination = TerminationByIterations(10000) 
 
     solver::LocalSearch = LocalSearch(

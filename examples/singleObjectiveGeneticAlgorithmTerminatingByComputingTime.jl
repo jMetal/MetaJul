@@ -17,7 +17,7 @@ function main()
 
     solver.termination = TerminationByComputingTime(Dates.Millisecond(6000))
 
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     """
     solver.crossover = BLXAlphaCrossover(probability=1.0, alpha=0.5, bounds=problem.bounds)
     """

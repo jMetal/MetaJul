@@ -25,10 +25,10 @@ function main()
 
     solver.inertiaWeightComputingStrategy = ConstantValueStrategy(0.1)
     
-    mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, bounds(problem))
+    mutationOperator = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     
     mutationFrequency = 6
-    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperarator)    
+    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperator)    
 
     solver.globalBestUpdate = DefaultGlobalBestUpdate()
     solver.localBestUpdate = DefaultLocalBestUpdate(DefaultDominanceComparator())

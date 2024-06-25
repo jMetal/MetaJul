@@ -15,7 +15,7 @@ function main()
 
     solver.termination = TerminationByEvaluations(40000)
 
-    mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
+    mutation = BitFlipMutation(probability = 1.0 / numberOfVariables(problem))
     crossover = SinglePointCrossover(probability = 1.0)
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
