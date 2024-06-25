@@ -76,7 +76,7 @@ function blxAlphaCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentS
   parent2 = createContinuousSolution(3)
   parent2.variables = [3.5, 8.6]
 
-  crossover = BLXAlphaCrossover(0.0, 0.5, parent1.bounds)
+  crossover = BLXAlphaCrossover(probability = 0.0, alpha = 0.5, bounds = parent1.bounds)
   children = recombine(parent1, parent2, crossover)
 
   return isequal(parent1, children[1]) && isequal(parent2, children[2])
@@ -89,18 +89,23 @@ function blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesInthe
   parent2 = createContinuousSolution(3)
   parent2.variables = [3.5, 8.6]
 
-  crossover = BLXAlphaCrossover(1.0, 0.5, parent1.bounds)
+  crossover = BLXAlphaCrossover(probability = 1.0, alpha= 0.5, bounds = parent1.bounds)
   children = recombine(parent1, parent2, crossover)
 
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
-blxAlphaCrossover = BLXAlphaCrossover(0.12, 0.5, [])
+function blxAlphaCrossoverWithAEmptyListOfBoundsRaiseAnException() 
+  BLXAlphaCrossover(probability = 1.0, alpha= 0.5, bounds = [])
+end
+
+blxAlphaCrossover = BLXAlphaCrossover(probability = 0.12, alpha = 0.5, bounds = [Bounds{Float64}(1.0, 10.0)])
 @testset "BLX-alpha crossover tests" begin
   @test blxAlphaCrossover.probability == 0.12
   @test blxAlphaCrossover.alpha == 0.5
   @test numberOfDescendants(blxAlphaCrossover) == 2
   @test numberOfRequiredParents(blxAlphaCrossover) == 2
+  @test_throws "The bounds list is empty" blxAlphaCrossoverWithAEmptyListOfBoundsRaiseAnException()
 
   @test blxAlphaCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()

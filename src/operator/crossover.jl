@@ -1,22 +1,17 @@
 
-# Crossover operators
-#function crossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.parameters.probability
-#end
-
-#function numberOfRequiredParents(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.numberOfRequiredParents
-#end
-
-#function numberOfDescendants(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.numberOfDescendants
-#end
-
 # BLX-Alpha crossover
 struct BLXAlphaCrossover <: CrossoverOperator
   probability::Float64
   alpha::Float64
   bounds::Vector{Bounds{Float64}} 
+
+  function BLXAlphaCrossover(;probability = 0.9, alpha = 0.5, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+
+    crossover = new(probability, alpha, bounds)
+
+    return crossover
+  end
 end
 
 function numberOfRequiredParents(crossover::BLXAlphaCrossover)
