@@ -18,7 +18,7 @@ Current features:
      - Constrained problems: Srinivas, ConstrEx, Bihn2, Tanaka, Osyczka2, Golinski
 
 * Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
-* Algorithms: local search, evolutionary algorithm, NSGA-II, SMPSO (multi-objective PSO)
+* Algorithms: local search, evolutionary algorithm, genetic algorithm, NSGA-II, SMPSO (multi-objective PSO)
 * Encodings: continuous (float, integer), binary
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
 * Observers: ``EvaluationObserver``, ``FitnessObserver``, ``FrontPlotObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
