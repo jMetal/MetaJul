@@ -54,7 +54,7 @@ function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
   ea.foundSolutions = ea.population
 end
 
-function optimize(algorithm::EvolutionaryAlgorithm)
+function optimize!(algorithm::EvolutionaryAlgorithm)
   evolutionaryAlgorithm(algorithm)
 end
 

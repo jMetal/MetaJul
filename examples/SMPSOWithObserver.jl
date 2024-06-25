@@ -43,7 +43,7 @@ function main()
     observer = FrontPlotObserver(5000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT6.csv"))
     register!(getObservable(solver), observer)
 
-    optimize(solver)
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 

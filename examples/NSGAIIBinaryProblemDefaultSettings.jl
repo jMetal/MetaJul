@@ -8,7 +8,7 @@ function main()
 
     solver::NSGAII = NSGAII(problem)
 
-    optimize(solver)
+    optimize!(solver)
 
     front = foundSolutions(solver)
 

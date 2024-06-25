@@ -140,19 +140,19 @@ include("problem/multiObjective/ZDT.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
 export LocalSearch
-export optimize, computingTime
+export optimize!, computingTime
 include("algorithm/localSearch.jl")
 
 export EvolutionaryAlgorithm
-export optimize, status, computingTime, foundSolutions
+export optimize!, status, computingTime, foundSolutions
 include("algorithm/evolutionaryAlgorithm.jl")
 
 export ParticleSwarmOptimization
-export optimize, computingTime
+export optimize!, computingTime
 include("algorithm/particleSwarmOptimization.jl")
 
 export NSGAII
-export optimize, foundSolutions, observable
+export optimize!, foundSolutions, observable
 include("algorithm/NSGAII.jl")
 
 export toString

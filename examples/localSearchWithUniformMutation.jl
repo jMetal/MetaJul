@@ -15,7 +15,7 @@ function main()
         termination = termination, 
         mutation = mutation)
     
-    optimize(solver)
+    optimize!(solver)
 
     foundSolution = solver.currentSolution
 

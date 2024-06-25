@@ -12,7 +12,7 @@ function main()
         crossover = SinglePointCrossover(probability = 1.0)
         )
 
-    optimize(solver)
+    optimize!(solver)
 
     front = foundSolutions(solver)
 

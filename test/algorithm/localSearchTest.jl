@@ -20,7 +20,7 @@ function localSearchWithZeroIterationsReturnsTheStartingSolution()
     algorithm.startingSolution = startingSolution
     algorithm.mutation = mutation
 
-    optimize(algorithm)
+    optimize!(algorithm)
 
     return startingSolution == algorithm.currentSolution
 end

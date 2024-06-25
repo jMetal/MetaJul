@@ -42,7 +42,7 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    optimize(solver)
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 

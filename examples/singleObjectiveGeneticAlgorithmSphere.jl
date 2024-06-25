@@ -25,7 +25,7 @@ function main()
 
     solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
-    optimize(solver)
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 

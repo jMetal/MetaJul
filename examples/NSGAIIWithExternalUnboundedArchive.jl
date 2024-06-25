@@ -27,7 +27,7 @@ function main()
 
     solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
-    optimize(solver)
+    optimize!(solver)
     foundSolutions = solver.foundSolutions
     
     foundSolutions = getSolutions(externalArchive)

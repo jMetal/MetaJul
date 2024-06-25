@@ -1,4 +1,5 @@
 using MetaJul
+using Dates
 
 # Genetic algorithm example applied to problem Sphere
 function main()
@@ -27,7 +28,7 @@ function main()
 
     solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
-    optimize(solver)
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 

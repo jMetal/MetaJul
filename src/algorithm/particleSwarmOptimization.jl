@@ -74,7 +74,7 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
   return pso.foundSolutions
 end
 
-function optimize(algorithm::ParticleSwarmOptimization)
+function optimize!(algorithm::ParticleSwarmOptimization)
   particleSwarmOptimization(algorithm)
   
   return Nothing

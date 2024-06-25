@@ -1,4 +1,5 @@
 using MetaJul
+using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
@@ -12,7 +13,7 @@ function main()
         crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds),
         mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds))
 
-    optimize(solver)
+    optimize!(solver)
 
     front = foundSolutions(solver)
 

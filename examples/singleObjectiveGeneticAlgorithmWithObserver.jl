@@ -15,7 +15,7 @@ function main()
     solver.termination = TerminationByEvaluations(40000)
 
     mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
-    crossover = SinglePointCrossover(1.0)
+    crossover = SinglePointCrossover(probability = 1.0)
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
     solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, IthObjectiveComparator(1))
@@ -26,7 +26,7 @@ function main()
     observer = FitnessObserver(500)
     register!(observable(solver), observer)
 
-    optimize(solver)
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 

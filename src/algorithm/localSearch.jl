@@ -41,7 +41,7 @@ mutable struct LocalSearch <: Algorithm
   end
 end
 
-function optimize(ls::LocalSearch)::Solution
+function optimize!(ls::LocalSearch)::Solution
   ls.startingTime = Dates.now()
 
   ls.currentSolution = ls.startingSolution

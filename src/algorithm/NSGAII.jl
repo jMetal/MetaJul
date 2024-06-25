@@ -56,7 +56,7 @@ function foundSolutions(nsgaII::NSGAII)
   return nsgaII.solver.foundSolutions
 end
 
-function optimize(nsgaII::NSGAII)
+function optimize!(nsgaII::NSGAII)
   solver = nsgaII.solver
   problem = nsgaII.problem
 
