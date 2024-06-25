@@ -13,7 +13,7 @@ function main()
     solver.termination = TerminationByEvaluations(25000)
 
     solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-    solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+    solver.crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds)
 
     solver.dominanceComparator = ConstraintsAndDominanceComparator()
 

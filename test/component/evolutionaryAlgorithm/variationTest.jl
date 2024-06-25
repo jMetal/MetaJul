@@ -5,7 +5,7 @@ function crossoverAndMutationVariationIsCorrectlyInitialized()
     solutionBounds = [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]
 
     mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
-    crossover = SBXCrossover(0.9, 30.0, solutionBounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
@@ -22,7 +22,7 @@ function theMatingPoolSizeWhenTheOffspringPopulationSizeIsOneMustBeTwo()
     solutionBounds = [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)]
 
     mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
-    crossover = SBXCrossover(0.9, 30.0, solutionBounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
@@ -39,7 +39,7 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseA()
     solutionBounds = matingPool[1].bounds
 
     mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
-    crossover = SBXCrossover(0.9, 30.0, solutionBounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
@@ -56,7 +56,7 @@ function crossoverAndMutationVariationReturnTheCorrectNumberOfSolutionsCaseB()
     solutionBounds = matingPool[1].bounds
 
     mutation = PolynomialMutation(0.01, 20.0, solutionBounds)
-    crossover = SBXCrossover(0.9, 30.0, solutionBounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 30.0, bounds = solutionBounds)
 
     variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 

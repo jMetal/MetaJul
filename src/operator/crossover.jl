@@ -7,6 +7,8 @@ struct BLXAlphaCrossover <: CrossoverOperator
 
   function BLXAlphaCrossover(;probability = 0.9, alpha = 0.5, bounds = [])
     @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert alpha >= 0 string("The alpha value ", alpha, " cannot be negative")
 
     return new(probability, alpha, bounds)
   end
@@ -58,6 +60,8 @@ struct SBXCrossover <: CrossoverOperator
 
   function SBXCrossover(;probability = 0.9, distributionIndex = 20.0, bounds = [])
     @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert distributionIndex >= 0 string("The distributionIndex value ", alpha, " cannot be negative")
 
     return new(probability, distributionIndex, bounds)
   end
@@ -220,6 +224,13 @@ end
 # Single point crossover
 struct SinglePointCrossover <: CrossoverOperator
   probability::Real 
+
+  function SinglePointCrossover(;probability = 0.9)
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+
+    return new(probability)
+  end
+
 end
 
 function numberOfRequiredParents(crossover::SinglePointCrossover)

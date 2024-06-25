@@ -19,7 +19,7 @@ function main()
 
     mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
 
-    crossover = SBXCrossover(0.9, 20.0, problem.bounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 20.0, bounds = problem.bounds)
 
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 

@@ -6,7 +6,7 @@ function singlePointCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToThePare
   parent1 = BinarySolution(initBitVector("101000"), [], [], Dict())
   parent2 = BinarySolution(initBitVector("010011"), [], [], Dict())
 
-  crossover = SinglePointCrossover(0.0)
+  crossover = SinglePointCrossover(probability = 0.0)
   children = recombine(parent1, parent2, crossover)
 
   return isequal(parent1, children[1]) && isequal(parent2, children[2])
@@ -16,16 +16,16 @@ function singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIn
   parent1 = BinarySolution(initBitVector("101000"), [], [], Dict())
   parent2 = BinarySolution(initBitVector("010011"), [], [], Dict())
 
-  crossover = SinglePointCrossover(1.0)
+  crossover = SinglePointCrossover(probability = 1.0)
   children = recombine(parent1, parent2, crossover)
 
   return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
 end
 
 @testset "Single point crossover tests" begin
-  @test SinglePointCrossover(0.1).probability == 0.1
-  @test numberOfRequiredParents(SinglePointCrossover(0.1)) == 2
-  @test numberOfDescendants(SinglePointCrossover(0.1)) == 2
+  @test SinglePointCrossover(probability = 0.1).probability == 0.1
+  @test numberOfRequiredParents(SinglePointCrossover(probability = 0.1)) == 2
+  @test numberOfDescendants(SinglePointCrossover(probability = 0.1)) == 2
    
   @test singlePointCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test singlePointCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
@@ -61,7 +61,7 @@ function SBXCrossoverWithAEmptyListOfBoundsRaiseAnException()
   return SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = [])
 end
 
-sbxCrossover = SBXCrossover(probability = 0.054, probability = 20.0, probability = [Bounds{Float64}(3.0, 5.0)])
+sbxCrossover = SBXCrossover(probability = 0.054, distributionIndex = 20.0, bounds = [Bounds{Float64}(3.0, 5.0)])
 @testset "SBX crossover tests" begin
   @test sbxCrossover.probability == 0.054
   @test sbxCrossover.distributionIndex == 20.0

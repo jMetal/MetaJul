@@ -9,7 +9,7 @@ function main()
         populationSize = 50, 
         termination = TerminationByEvaluations(2000),
         mutation = BitFlipMutation(1.0 / problem.numberOfBits),
-        crossover = SinglePointCrossover(1.0)
+        crossover = SinglePointCrossover(probability = 1.0)
         )
 
     optimize(solver)

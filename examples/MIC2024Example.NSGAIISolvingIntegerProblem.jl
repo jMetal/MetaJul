@@ -30,7 +30,7 @@ solver::NSGAII = NSGAII(
     termination = TerminationByEvaluations(2500))
     
 solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+solver.crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds)
 
 # Step 3: optimize
 optimize(solver)
