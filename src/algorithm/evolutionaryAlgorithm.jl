@@ -1,9 +1,8 @@
 using Dates
 
 mutable struct EvolutionaryAlgorithm <: Algorithm
+  # Final fields
   name::String
-
-  foundSolutions::Vector
 
   solutionsCreation::SolutionsCreation
   evaluation::Evaluation
@@ -13,6 +12,11 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
   replacement::Replacement
 
   observable::Observable
+
+  foundSolutions::Vector
+  population::Vector
+  offspringPopulation::Vector
+  startingTime
 
   status::Dict
 
@@ -24,51 +28,64 @@ mutable struct EvolutionaryAlgorithm <: Algorithm
   end
 end
 
-function getObservable(algorithm::EvolutionaryAlgorithm)
+function observable(algorithm::EvolutionaryAlgorithm)
   return algorithm.observable
 end
 
 function evolutionaryAlgorithm(ea::EvolutionaryAlgorithm)
-  startingTime = Dates.now()
+  ea.startingTime = Dates.now()
 
-  population = create(ea.solutionsCreation)
-  population = evaluate(ea.evaluation, population)
+  ea.population = create(ea.solutionsCreation)
+  ea.population = evaluate(ea.evaluation, ea.population)
 
-  evaluations = length(population)
-  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => population, "COMPUTING_TIME" => (Dates.now() - startingTime))
-
-  notify(ea.observable, ea.status)
+  initStatus(ea)
 
   while !isMet(ea.termination, ea.status)
-    matingPool = select(ea.selection, population)
+    matingPool = select(ea.selection, ea.population)
     
-    offspringPopulation = variate(ea.variation, population, matingPool)
-    offspringPopulation = evaluate(ea.evaluation, offspringPopulation)
+    ea.offspringPopulation = variate(ea.variation, ea.population, matingPool)
+    ea.offspringPopulation = evaluate(ea.evaluation, ea.offspringPopulation)
 
-    #println(toString(population, "Population N"))
-    #println(toString(offspringPopulation, "Offspring population"))
+    ea.population = replace_(ea.replacement, ea.population, ea.offspringPopulation)
 
-    population = replace_(ea.replacement, population, offspringPopulation)
-
-    #println(toString(population, "Population N + 1"))
-    #println(toString(population, "P", CrowdingDistanceDensityEstimator()))
-
-    evaluations += length(offspringPopulation)
-    ea.status["EVALUATIONS"] = evaluations
-    ea.status["POPULATION"] = population
-    ea.status["COMPUTING_TIME"] = Dates.now() - startingTime
-
-    notify(ea.observable, ea.status)
+    updateStatus(ea)
   end
 
-  ea.foundSolutions = population
+  ea.foundSolutions = ea.population
 end
 
-function optimize(algorithm::EvolutionaryAlgorithm)
+function optimize!(algorithm::EvolutionaryAlgorithm)
   evolutionaryAlgorithm(algorithm)
 end
 
-function name(algorithm::EvolutionaryAlgorithm)
-  return algorithm.name
+function initStatus(ea::EvolutionaryAlgorithm)
+  evaluations = length(ea.population)
+  ea.status = Dict("EVALUATIONS" => evaluations, "POPULATION" => ea.population, "COMPUTING_TIME" => (Dates.now() - ea.startingTime))
+
+  notify(ea.observable, ea.status)
 end
 
+function updateStatus(ea::EvolutionaryAlgorithm)    
+  ea.status["EVALUATIONS"] += length(ea.offspringPopulation)
+  ea.status["POPULATION"] = ea.population
+  ea.status["COMPUTING_TIME"] = Dates.now() - ea.startingTime
+
+  notify(ea.observable, ea.status)
+end
+
+function status(ea::EvolutionaryAlgorithm)
+  return ea.status
+end
+
+function name(ea::EvolutionaryAlgorithm)
+  return ea.name
+end
+
+function foundSolutions(ea::EvolutionaryAlgorithm) 
+  return ea.foundSolutions
+end
+
+
+function computingTime(ea::EvolutionaryAlgorithm)
+  return ea.status["COMPUTING_TIME"]
+end

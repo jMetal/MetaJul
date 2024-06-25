@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.
 
@@ -18,9 +17,9 @@ function main()
 
     solver.termination = TerminationByEvaluations(25000)
 
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
 
-    crossover = SBXCrossover(0.9, 20.0, problem.bounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 20.0, bounds = problem.bounds)
 
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
@@ -28,11 +27,9 @@ function main()
 
     solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
-    startingTime = Dates.now()
-    optimize(solver)
+    optimize!(solver)
     foundSolutions = solver.foundSolutions
-    endTime = Dates.now()
-
+    
     foundSolutions = getSolutions(externalArchive)
 
     objectivesFileName = "FUN.csv"
@@ -45,5 +42,5 @@ function main()
 
     println("Variavbles stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

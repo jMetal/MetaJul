@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # NSGA-II algorithm example configured from the NSGA-II template
 
@@ -7,22 +6,16 @@ function main()
 
     problem = srinivas()
 
-    solver::NSGAII = NSGAII()
-    solver.problem = problem
-    solver.populationSize = 100
-
-    solver.termination = TerminationByEvaluations(25000)
-
-    solver.mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-    solver.crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+    solver::NSGAII = NSGAII(
+        problem,
+        populationSize = 50, 
+        termination = TerminationByEvaluations(20000),
+        crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds),
+        mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds))
 
     solver.dominanceComparator = ConstraintsAndDominanceComparator()
 
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
-
-    foundSolutions = solver.foundSolutions
+    optimize!(solver)
 
     objectivesFileName = "FUN.csv"
     variablesFileName = "VAR.csv"
@@ -30,9 +23,9 @@ function main()
     println("Algorithm: ", name(solver))
 
     println("Objectives stored in file ", objectivesFileName)
-    printObjectivesToCSVFile(objectivesFileName, foundSolutions)
+    printObjectivesToCSVFile(objectivesFileName, foundSolutions(solver))
 
     println("Variables stored in file ", variablesFileName)
-    printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    printVariablesToCSVFile(variablesFileName, foundSolutions(solver))
+    println("Computing time: ", computingTime(solver))
 end

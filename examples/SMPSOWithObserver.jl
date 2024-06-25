@@ -1,5 +1,4 @@
 using MetaJul
-using Dates
 
 # SMPSO algorithm configured from the ParticleSwarmOptimization template
 
@@ -7,12 +6,12 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT1()
+    problem = ZDT6()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
     solver.evaluation = SequentialEvaluation(problem)
-    solver.termination = TerminationByEvaluations(25000)
+    solver.termination = TerminationByEvaluations(20000)
 
     solver.globalBest = CrowdingDistanceArchive(swarmSize, ContinuousSolution{Float64})
 
@@ -24,10 +23,10 @@ function main()
 
     solver.inertiaWeightComputingStrategy = ConstantValueStrategy(0.1)
     
-    mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, bounds(problem))
+    mutationOperator = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     
     mutationFrequency = 6
-    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperarator)    
+    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperator)    
 
     solver.globalBestUpdate = DefaultGlobalBestUpdate()
     solver.localBestUpdate = DefaultLocalBestUpdate(DefaultDominanceComparator())
@@ -41,12 +40,10 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT2.csv"))
+    observer = FrontPlotObserver(5000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT6.csv"))
     register!(getObservable(solver), observer)
 
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 
@@ -60,5 +57,5 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

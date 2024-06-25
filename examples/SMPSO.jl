@@ -8,7 +8,7 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT4()
+    problem = ZDT1()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
@@ -25,10 +25,10 @@ function main()
 
     solver.inertiaWeightComputingStrategy = ConstantValueStrategy(0.1)
     
-    mutationOperarator = PolynomialMutation(1.0/numberOfVariables(problem), 20.0, bounds(problem))
+    mutationOperator = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     
     mutationFrequency = 6
-    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperarator)    
+    solver.perturbation = FrequencySelectionMutationBasedPerturbation(mutationFrequency, mutationOperator)    
 
     solver.globalBestUpdate = DefaultGlobalBestUpdate()
     solver.localBestUpdate = DefaultLocalBestUpdate(DefaultDominanceComparator())
@@ -42,9 +42,7 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 
@@ -58,5 +56,5 @@ function main()
 
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

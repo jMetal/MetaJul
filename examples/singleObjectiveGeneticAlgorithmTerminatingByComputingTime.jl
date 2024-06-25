@@ -17,20 +17,18 @@ function main()
 
     solver.termination = TerminationByComputingTime(Dates.Millisecond(6000))
 
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     """
-    solver.crossover = BLXAlphaCrossover((probability=1.0, alpha=0.5, bounds=problem.bounds))
+    solver.crossover = BLXAlphaCrossover(probability=1.0, alpha=0.5, bounds=problem.bounds)
     """
-    crossover = SBXCrossover(1.0, 20.0, problem.bounds)
+    crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds)
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
 
     solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, IthObjectiveComparator(1))
 
     solver.replacement = MuPlusLambdaReplacement(IthObjectiveComparator(1))
 
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 
@@ -40,5 +38,5 @@ function main()
     printVariablesToCSVFile("VAR.csv", [foundSolutions[1]])
 
     println("Best solution found: ", foundSolutions[1].objectives[1])
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 end

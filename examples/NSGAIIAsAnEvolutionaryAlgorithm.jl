@@ -16,12 +16,12 @@ function main()
     solver.evaluation = SequentialEvaluation(problem)
     solver.termination = TerminationByEvaluations(25000)
 
-    mutation = PolynomialMutation(1.0 / numberOfVariables(problem), 20.0, problem.bounds)
-    crossover = SBXCrossover(0.9, 20.0, problem.bounds)
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
+    crossover = SBXCrossover(probability = 0.9, distributionIndex = 20.0, bounds = problem.bounds)
 
     """
     mutation = UniformMutation(1.0/numberOfVariables(problem), 20.0, problem.bounds)
-    crossover = BLXAlphaCrossover(1.0, 0.5, problem.bounds)
+    crossover = BLXAlphaCrossover(probability = 1.0, alpha = 0.5, bounds = problem.bounds)
     """
 
     solver.variation = CrossoverAndMutationVariation(offspringPopulationSize, crossover, mutation)
@@ -29,9 +29,7 @@ function main()
 
     solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
     
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
+    optimize!(solver)
 
     foundSolutions = solver.foundSolutions
 
@@ -39,7 +37,7 @@ function main()
     variablesFileName = "VAR.csv"
 
     println("Algorithm: ", name(solver))
-    println("Computing time: ", (endTime - startingTime))
+    println("Computing time: ", computingTime(solver))
 
     println("Objectives stored in file ", objectivesFileName)
     printObjectivesToCSVFile(objectivesFileName, foundSolutions)

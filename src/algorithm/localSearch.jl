@@ -1,32 +1,96 @@
 mutable struct LocalSearch <: Algorithm
   startingSolution::Solution
   problem::Problem
-  numberOfIterations::Int
+  termination::Termination
   mutation::MutationOperator
-  foundSolution::Solution
 
-  LocalSearch() = new()
-  LocalSearch(startingSolution, problem, numberOfIterations, mutation) = new(startingSolution, problem, numberOfIterations, mutation, copySolution(startingSolution)) 
-end
+  currentSolution::Solution
+  startingTime
 
-function optimize(algorithm::LocalSearch)::Solution
-  currentSolution = algorithm.startingSolution
-  problem = algorithm.problem
-  numberOfIterations = algorithm.numberOfIterations
-  mutation = algorithm.mutation
+  status::Dict
 
-  for _ in 1:numberOfIterations
-    mutatedSolution = copySolution(currentSolution)
-    mutatedSolution = mutate(mutatedSolution, mutation)
-    
-    mutatedSolution = evaluate(mutatedSolution, problem)
+  observable::Observable
 
-    if (mutatedSolution.objectives[1] < currentSolution.objectives[1])
-      currentSolution = mutatedSolution
-    end
+  function LocalSearch() 
+    ls = new()
+    ls.observable = Observable("Local search observable")
+
+    return ls
   end
 
-  algorithm.foundSolution = currentSolution
+  function LocalSearch(
+    startingSolution::BinarySolution,
+    problem::BinaryProblem;
+    termination = TerminationByIterations(10000),
+    mutation=BitFlipMutation(probability = 1.0 / problem.numberOfBits))
+    ls = new(startingSolution, problem, termination, mutation)
+    ls.observable = Observable("Local search observable")
 
-  return currentSolution
+    return ls
+  end
+
+  function LocalSearch(
+    startingSolution::ContinuousSolution,
+    problem::ContinuousProblem;
+    termination = TerminationByIterations(100000),
+    mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds))
+    ls = new(startingSolution, problem, termination, mutation)
+    ls.observable = Observable("Local search observable")
+
+    return ls
+  end
+end
+
+function optimize!(ls::LocalSearch)::Solution
+  ls.startingTime = Dates.now()
+
+  ls.currentSolution = ls.startingSolution
+  problem = ls.problem
+  mutation = ls.mutation
+
+  initStatus(ls)
+
+  while !isMet(ls.termination, ls.status)
+    mutatedSolution = copySolution(ls.currentSolution)
+    mutatedSolution = mutate!(mutatedSolution, mutation)
+
+    mutatedSolution = evaluate(mutatedSolution, problem)
+
+    if (mutatedSolution.objectives[1] < ls.currentSolution.objectives[1])
+      ls.currentSolution = mutatedSolution
+    end
+
+    updateStatus(ls)
+  end
+
+  return ls.currentSolution
+end
+
+function observable(algorithm::LocalSearch)
+  return algorithm.observable
+end
+
+function initStatus(ls::LocalSearch)
+    ls.status = Dict(
+      "ITERATIONS" => 1, 
+      "CURRENT_SOLUTION" => ls.currentSolution, 
+      "COMPUTING_TIME" => (Dates.now() - ls.startingTime))
+
+  notify(ls.observable, ls.status)
+end
+
+function updateStatus(ls::LocalSearch)    
+  ls.status["ITERATIONS"] += 1
+  ls.status["CURRENT_SOLUTION"] = ls.currentSolution
+  ls.status["COMPUTING_TIME"] = Dates.now() - ls.startingTime
+
+  notify(ls.observable, ls.status)
+end
+
+function status(ls::LocalSearch)
+  return ls.status
+end
+
+function computingTime(ls::LocalSearch)
+  return ls.status["COMPUTING_TIME"]
 end

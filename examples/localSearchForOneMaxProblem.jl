@@ -1,27 +1,26 @@
 using MetaJul
 
-using Dates
-
 # Local search example 
 function main()
     problem = oneMax(512)
-    solution::Solution = createSolution(problem)
-    solution = evaluate(solution, problem)
+    startingSolution::Solution = createSolution(problem)
+    startingSolution = evaluate(startingSolution, problem)
 
-    solver::LocalSearch = LocalSearch()
-    solver.startingSolution = solution
-    solver.problem = problem
-    solver.numberOfIterations = 20000
-    solver.mutation = BitFlipMutation(1.0 / numberOfVariables(problem))
+    mutation = BitFlipMutation(probability = 1.0 / numberOfVariables(problem))
+    termination = TerminationByIterations(10000) 
 
-    startingTime = Dates.now()
-    optimize(solver)
-    endTime = Dates.now()
+    solver::LocalSearch = LocalSearch(
+        startingSolution, 
+        problem, 
+        termination = termination, 
+        mutation = mutation)
 
-    foundSolution = solver.foundSolution
+    optimize!(solver)
+
+    foundSolution = solver.currentSolution
 
     println("Local search result: ", foundSolution)
-    println("Fitness of the starting solution: ", solution.objectives[1])
-    println("Fitness of the found solution: ", foundSolution.objectives[1])
-    println("Computing time: ", (endTime - startingTime))
+    println("Fitness of the starting solution: ", -1.0startingSolution.objectives[1])
+    println("Fitness of the found solution: ", -1.0 * foundSolution.objectives[1])
+    println("Computing time: ", computingTime(solver))
 end

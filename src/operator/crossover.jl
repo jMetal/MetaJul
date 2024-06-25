@@ -1,22 +1,17 @@
 
-# Crossover operators
-#function crossoverProbability(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.parameters.probability
-#end
-
-#function numberOfRequiredParents(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.numberOfRequiredParents
-#end
-
-#function numberOfDescendants(crossoverOperator::T)::Float64 where {T <: CrossoverOperator}
-#  return crossoverOperator.numberOfDescendants
-#end
-
 # BLX-Alpha crossover
 struct BLXAlphaCrossover <: CrossoverOperator
   probability::Float64
   alpha::Float64
   bounds::Vector{Bounds{Float64}} 
+
+  function BLXAlphaCrossover(;probability = 0.9, alpha = 0.5, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert alpha >= 0 string("The alpha value ", alpha, " cannot be negative")
+
+    return new(probability, alpha, bounds)
+  end
 end
 
 function numberOfRequiredParents(crossover::BLXAlphaCrossover)
@@ -61,7 +56,16 @@ end
 struct SBXCrossover <: CrossoverOperator
   probability::Float64
   distributionIndex:: Float64
-  bounds::Vector{Bounds{Float64}} 
+  bounds::Vector{Bounds{T}} where {T <: Number}
+
+  function SBXCrossover(;probability = 0.9, distributionIndex = 20.0, bounds = [])
+    @assert bounds != [] "The bounds list is empty"
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+    @assert distributionIndex >= 0 string("The distributionIndex value ", alpha, " cannot be negative")
+
+    return new(probability, distributionIndex, bounds)
+  end
+
 end
 
 function numberOfRequiredParents(crossover::SBXCrossover)
@@ -72,7 +76,7 @@ function numberOfDescendants(crossover::SBXCrossover)
   return 2
 end
 
-function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution}
+function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T}, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution{T}} where {T <: Real}
   EPSILON = 1.0e-14
   probability::Real = crossoverOperator.probability
   distributionIndex::Real = crossoverOperator.distributionIndex
@@ -144,9 +148,89 @@ function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, cro
   return [child1, child2]
 end
 
+function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T}, crossoverOperator::SBXCrossover)::Vector{ContinuousSolution{T}} where {T <: Int}
+  EPSILON = 1.0e-14
+  probability::Real = crossoverOperator.probability
+  distributionIndex::Real = crossoverOperator.distributionIndex
+  bounds = crossoverOperator.bounds
+
+  child1 = copySolution(parent1)
+  child2 = copySolution(parent2)
+
+  if rand() <= probability  
+    for i in range(1, length(parent1.variables))
+      x1 = parent1.variables[i]
+      x2 = parent2.variables[i]
+
+      y1 = 0.0
+      y2 = 0.0
+      if (rand() <= 0.5)
+        if (abs(x1 - x2) > EPSILON)
+          if (x1 < x2)
+            y1 = x1
+            y2 = x2
+          else
+            y1 = x2
+            y2 = x1
+          end
+
+          random = rand()
+          beta = 1.0 + (2.0 * (y1 - bounds[i].lowerBound) / (y2 - y1))
+          alpha = 2.0 - ^(beta, -(distributionIndex + 1.0))
+        
+          betaq = 0.0
+          if random <= (1.0 / alpha)
+            betaq = ^(random * alpha, (1.0 / distributionIndex + 1.0))
+          else
+            betaq = ^(1.0 / (2.0 - random * alpha), 1.0 / (distributionIndex + 1.0))
+          end
+          c1 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
+
+          beta = 1.0 + (2.0 * (bounds[i].upperBound - y2) / (y2 - y1))
+          alpha = 2.0 - ^(beta, -(distributionIndex + 1.0))
+
+          if random <= (1.0 / alpha)
+            betaq = ^(random * alpha, (1.0 / distributionIndex + 1.0))
+          else
+            betaq = ^(1.0 / (2.0 - random * alpha), 1.0 / (distributionIndex + 1.0))
+          end
+          c2 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
+
+          c1 = restrict(round(Int, c1), bounds[i])
+          c2 = restrict(round(Int, c2), bounds[i])
+
+          if rand() <= 0.5
+            child1.variables[i] = round(Int, c2)
+            child2.variables[i] = round(Int, c1)
+          else
+            child1.variables[i] = round(Int, c1)
+            child2.variables[i] = round(Int, c2)
+          end
+        else
+          child1.variables[i] = x1
+          child2.variables[i] = x2
+        end
+      else
+        child1.variables[i] = x2
+        child2.variables[i] = x1
+      end
+    end
+  end
+
+  return [child1, child2]
+end
+
+
 # Single point crossover
 struct SinglePointCrossover <: CrossoverOperator
   probability::Real 
+
+  function SinglePointCrossover(;probability = 0.9)
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+
+    return new(probability)
+  end
+
 end
 
 function numberOfRequiredParents(crossover::SinglePointCrossover)

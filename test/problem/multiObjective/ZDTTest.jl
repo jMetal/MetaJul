@@ -2,7 +2,8 @@ zdt1 = ZDT1()
 solutionZDT1 = createSolution(zdt1)
 
 const ZDT1DefaultNumberOfVariables::Int = 30 
-zdt1_100 = ZDT1(100)
+
+zdt1_100 = ZDT1(numberOfVariables = 100)
 @testset "ZDT1 problem tests" begin    
     @test numberOfVariables(zdt1) == ZDT1DefaultNumberOfVariables
     @test numberOfObjectives(zdt1) == 2
@@ -26,7 +27,7 @@ zdt2 = ZDT2()
 solutionZDT2 = createSolution(zdt2)
 
 const ZDT2DefaultNumberOfVariables::Int = 30 
-zdt2_100 = ZDT2(100)
+zdt2_100 = ZDT2(numberOfVariables = 100)
 @testset "ZDT2 problem tests" begin    
     @test numberOfVariables(zdt2) == ZDT2DefaultNumberOfVariables
     @test numberOfObjectives(zdt2) == 2
@@ -50,7 +51,7 @@ zdt3 = ZDT3()
 solutionZDT3 = createSolution(zdt3)
 
 const ZDT3DefaultNumberOfVariables::Int = 30 
-zdt3_100 = ZDT3(100)
+zdt3_100 = ZDT3(numberOfVariables = 100)
 @testset "ZDT2 problem tests" begin    
     @test numberOfVariables(zdt3) == ZDT2DefaultNumberOfVariables
     @test numberOfObjectives(zdt3) == 2
@@ -74,7 +75,7 @@ zdt4 = ZDT4()
 solutionZDT4 = createSolution(zdt4)
 
 const ZDT4DefaultNumberOfVariables::Int = 10 
-zdt4_25 = ZDT4(25)
+zdt4_25 = ZDT4(numberOfVariables = 25)
 @testset "ZDT4 problem tests" begin    
     @test numberOfVariables(zdt4) == ZDT4DefaultNumberOfVariables
     @test numberOfObjectives(zdt4) == 2
@@ -99,7 +100,7 @@ zdt6 = ZDT6()
 solutionZDT6 = createSolution(zdt6)
 
 const ZDT6DefaultNumberOfVariables::Int = 10 
-zdt6_200 = ZDT6(200)
+zdt6_200 = ZDT6(numberOfVariables = 200)
 @testset "ZDT6 problem tests" begin    
     @test numberOfVariables(zdt6) == ZDT6DefaultNumberOfVariables
     @test numberOfObjectives(zdt6) == 2

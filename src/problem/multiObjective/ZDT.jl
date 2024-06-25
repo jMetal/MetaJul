@@ -1,5 +1,5 @@
 
-function ZDT1(numberOfVariables::Int=30)
+function ZDT1(;numberOfVariables::Int=30)
   zdt1 = ContinuousProblem{Float64}("ZDT1")
 
   for _ in 1:numberOfVariables
@@ -25,7 +25,7 @@ function ZDT1(numberOfVariables::Int=30)
   return zdt1
 end
 
-function ZDT2(numberOfVariables::Int=30)
+function ZDT2(;numberOfVariables::Int=30)
   zdt2 = ContinuousProblem{Float64}("ZDT2")
 
   for _ in 1:numberOfVariables
@@ -51,7 +51,7 @@ function ZDT2(numberOfVariables::Int=30)
   return zdt2
 end
 
-function ZDT3(numberOfVariables::Int=30)
+function ZDT3(;numberOfVariables::Int=30)
   zdt3 = ContinuousProblem{Float64}("ZDT3")
 
   for _ in 1:numberOfVariables
@@ -82,7 +82,7 @@ function ZDT3(numberOfVariables::Int=30)
 end
 
 
-function ZDT4(numberOfVariables::Int=10)
+function ZDT4(;numberOfVariables::Int=10)
   zdt4 = ContinuousProblem{Float64}("ZDT4")
 
   addVariable(zdt4, Bounds{Float64}(0.0, 1.0))
@@ -90,7 +90,7 @@ function ZDT4(numberOfVariables::Int=10)
     addVariable(zdt4, Bounds{Float64}(-5.0, 5.0))
   end
 
-  function evalG(x::Vector{Float64})
+  @inline function evalG(x::Vector{Float64})
     """
     g = 0.0
 
@@ -103,18 +103,24 @@ function ZDT4(numberOfVariables::Int=10)
 
     return g + constant
     """
+
+    gx = 1.0 + 10*(length(x)-1) + sum( x[2:end].^2 - 10cos.(4π*x[2:end]))
+
+
     return 1.0 + 10.0 * (length(x) - 1)+ sum([(^(x[i],2.0) -10.0 * cos(4.0*π*x[i])) for i in range(2,length(x))])
 
   end
 
-  function evalH(v::Float64, g::Float64)
+  @inline function evalH(v::Float64, g::Float64)
     return 1.0 - sqrt(v/g)
   end
 
   f1 = x -> x[1]
   f2 = x -> begin
-    g = evalG(x)
-    h = evalH(x[1], g)
+    #g = evalG(x)
+    #h = evalH(x[1], g)
+    g = 1.0 + 10*(length(x)-1) + sum( x[2:end].^2 - 10cos.(4π*x[2:end]))
+    h = 1.0 - sqrt(x[1]/g)
 
     return h * g
   end
@@ -163,7 +169,7 @@ struct ProblemZDT6 <: AbstractContinuousProblem{Float64}
   bounds::Vector{Bounds{Float64}}
 end
 
-function ZDT6(numberOfVariables::Int=10)
+function ZDT6(;numberOfVariables::Int=10)
   bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
 
   return ProblemZDT6(bounds)

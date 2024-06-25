@@ -5,16 +5,16 @@
 
 function mutateABinarySolutionWithProbabilityZeroReturnASolutionWithTheSameVariables()
   solution = BinarySolution(initBitVector("1010"), [1.0, 2.0, 3.0], [-1], Dict())
-  mutation = BitFlipMutation(0.0)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = BitFlipMutation(probability = 0.0)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
 
 function mutateABinarySolutionWithProbabilityOneFlipsAllTheBits()
   solution = BinarySolution(initBitVector("10100"), [1.0, 2.0, 3.0], [-1], Dict())
-  mutation = BitFlipMutation(1.0)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = BitFlipMutation(probability = 1.0)
+  newSolution = mutate!(copySolution(solution), mutation)
   expectedSolution = BinarySolution(initBitVector("01011"), [1.0, 2.0, 3.0], [-1], Dict())
 
   return isequal(expectedSolution, newSolution)
@@ -30,7 +30,7 @@ function uniformMutationIsCorrectlyInitialiazed()
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = UniformMutation(0.01, 0.5, solution.bounds)
+  mutation = UniformMutation(probability = 0.01, perturbation = 0.5, bounds = solution.bounds)
 
   return 0.01 == mutation.probability &&
   0.5 == mutation.perturbation &&
@@ -41,8 +41,8 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityZeroReturnAS
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = UniformMutation(0.0, 0.5, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = UniformMutation(probability = 0.0, perturbation = 0.5, bounds = solution.bounds)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -51,8 +51,8 @@ function mutateAContinuousSolutionWithUniformMutationWithProbabilityOneChangesAl
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = UniformMutation(1.0, 0.5, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = UniformMutation(probability = 1.0, perturbation = 0.5, bounds = solution.bounds)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end
@@ -68,7 +68,7 @@ function polynomialMutationIsCorrectlyInitialiazed()
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = PolynomialMutation(0.01, 15, solution.bounds)
+  mutation = PolynomialMutation(probability = 0.01, distributionIndex = 15, bounds = solution.bounds)
 
   return 0.01 == mutation.probability &&
   15 == mutation.distributionIndex &&
@@ -79,8 +79,8 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroRetur
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = PolynomialMutation(0.0, 20.0, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = PolynomialMutation(probability = 0.0, distributionIndex = 15, bounds = solution.bounds)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return isequal(solution, newSolution)
 end
@@ -89,8 +89,8 @@ function mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChange
   solution = createContinuousSolution(3)
   solution.variables = [1.2, 5.2]
 
-  mutation = PolynomialMutation(1.0, 15, solution.bounds)
-  newSolution = mutate(copySolution(solution), mutation)
+  mutation = PolynomialMutation(probability = 1.0, distributionIndex = 15, bounds = solution.bounds)
+  newSolution = mutate!(copySolution(solution), mutation)
 
   return !isequal(solution.variables[1], newSolution.variables[1]) && !isequal(solution.variables[2], newSolution.variables[2])
 end

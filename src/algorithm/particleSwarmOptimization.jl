@@ -56,7 +56,7 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
     speed = update(pso.velocityUpdate, swarm, speed, localBest, globalBest, pso.globalBestSelection, pso.inertiaWeightComputingStrategy)
 
     swarm = update(pso.positionUpdate, swarm, speed)
-    swarm = perturbate(pso.perturbation, swarm)
+    swarm = perturbate!(pso.perturbation, swarm)
     swarm = evaluate(pso.evaluation, swarm)
   
     globalBest = update(pso.globalBestUpdate, swarm, globalBest)
@@ -74,7 +74,7 @@ function particleSwarmOptimization(pso::ParticleSwarmOptimization)
   return pso.foundSolutions
 end
 
-function optimize(algorithm::ParticleSwarmOptimization)
+function optimize!(algorithm::ParticleSwarmOptimization)
   particleSwarmOptimization(algorithm)
   
   return Nothing
@@ -84,3 +84,10 @@ function name(algorithm::ParticleSwarmOptimization)
   return algorithm.name
 end
 
+function status(pso::ParticleSwarmOptimization)
+  return pso.status
+end
+
+function computingTime(pso::ParticleSwarmOptimization)
+  return pso.status["COMPUTING_TIME"]
+end

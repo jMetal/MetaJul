@@ -1,4 +1,5 @@
 using Random
+using Base.Threads
 
 struct SequentialEvaluation <: Evaluation
     problem::Problem
@@ -20,5 +21,18 @@ function evaluate(evaluation::SequentialEvaluationWithArchive, solutions::Vector
         evaluate(solution, problem)
         add!(archive, solution)
     end
+    return solutions
+end
+
+struct MultithreadedEvaluation <: Evaluation
+    problem::Problem
+end
+
+function evaluate(evaluation::MultithreadedEvaluation, solutions::Vector{S}) where {S<:Solution}
+    
+    @threads for solution in solutions
+        evaluate(solution, evaluation.problem)
+    end
+
     return solutions
 end
