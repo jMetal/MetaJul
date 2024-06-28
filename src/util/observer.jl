@@ -63,7 +63,6 @@ struct FrontPlotObserver <: Observer
 end
 
 function update(observer::FrontPlotObserver, data::Dict)
-
   evaluations = data["EVALUATIONS"]
   population = data["POPULATION"]
   if mod(evaluations, observer.frequency) == 0
