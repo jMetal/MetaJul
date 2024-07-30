@@ -15,14 +15,16 @@ end
 struct CrowdingDistanceComparator <: Comparator end
 
 function compare(comparator::CrowdingDistanceComparator, solution1::Solution, solution2::Solution)::Int
-    result = 0
-    if getCrowdingDistance(solution1) > getCrowdingDistance(solution2)
-        result = -1
-    elseif getCrowdingDistance(solution1) < getCrowdingDistance(solution2)
-        result = 1
+    distance1 = getCrowdingDistance(solution1)
+    distance2 = getCrowdingDistance(solution2)
+    
+    if distance1 > distance2
+        return -1
+    elseif distance1 < distance2
+        return 1
+    else
+        return 0
     end
-
-    return result
 end
 
 """

@@ -11,11 +11,11 @@ struct ElementAtComparator <: Comparator
 end
 
 function compare(comparator::ElementAtComparator, solution1, solution2)
-  return compare(comparator, solution1.objectives, solution2.objectives) 
+  return compare(comparator, solution1.objectives, solution2.objectives)
 end
 
 function compare(comparator::ElementAtComparator, x::Vector, y::Vector)
-  index = comparator.index 
+  index = comparator.index
 
   @assert length(x) == length(y) "The vectors have a different length"
   @assert index in range(1, length(x)) "The index is out of range"
@@ -43,8 +43,8 @@ function compare(comparator::DefaultDominanceComparator, solution1, solution2)
   return compare(comparator, solution1.objectives, solution2.objectives)
 end
 
-function compare(comparator::DefaultDominanceComparator, x::Vector{T}, y::Vector{T})::Int where {T<:Number}
-  @assert length(x) == length(y) "The vectors have a different length"
+function compare(comparator::DefaultDominanceComparator, vector1::Vector{T}, vector2::Vector{T})::Int where {T<:Number}
+  @assert length(vector1) == length(vector2) "The vectors have a different length"
 
   """
   x==y && return 0
@@ -53,31 +53,29 @@ function compare(comparator::DefaultDominanceComparator, x::Vector{T}, y::Vector
   all(t->(t[1]≤t[2]), zip(y, x)) && return  1
   return 0
   """
-  
-  bestIsSolution1 = 0
-  bestIsSolution2 = 0
 
-  for i in 1:length(x)
-    if x[i] != y[i]
-      if x[i] < y[i]
-          bestIsSolution1 = 1
-      end
-      if x[i] > y[i]
-          bestIsSolution2 = 1
-      end
+  vector1_dominates = false
+  vector2_dominates = false
+
+  @inbounds for i in eachindex(vector1, vector2)
+    if vector1[i] < vector2[i]
+      vector1_dominates = true
+    elseif vector1[i] > vector2[i]
+      vector2_dominates = true
+    end
+
+    if vector1_dominates && vector2_dominates
+      return 0  # Neither dominates
     end
   end
 
-  result = 0
-  if bestIsSolution2 < bestIsSolution1
-      result = -1
-  elseif bestIsSolution2 > bestIsSolution1
-      result = 1
+  if vector1_dominates
+    return -1  # vector1 dominates
+  elseif vector2_dominates
+    return 1   # vector2 dominates
   else
-      result = 0
+    return 0   # Vectors are equal
   end
-
-  return result
 end
 
 mutable struct IthObjectiveComparator <: Comparator
@@ -95,13 +93,13 @@ function compare(comparator::IthObjectiveComparator, solution1::Solution, soluti
   return compare(comparator.elementAtComparator, solution1.objectives, solution2.objectives)
 end
 
-struct OverallConstraintViolationDegreeComparator <: Comparator end 
+struct OverallConstraintViolationDegreeComparator <: Comparator end
 
 function compare(comparator::OverallConstraintViolationDegreeComparator, solution1::Solution, solution2::Solution)::Int
   constraintViolationSolution1 = overallConstraintViolationDegree(solution1)
   constraintViolationSolution2 = overallConstraintViolationDegree(solution2)
 
-  result = 0 
+  result = 0
   if constraintViolationSolution1 == 0.0 && constraintViolationSolution2 < 0.0
     result = -1
   elseif constraintViolationSolution1 < 0.0 && constraintViolationSolution2 == 0.0
@@ -128,10 +126,10 @@ function compare(constraintsAndDominanceComparator::ConstraintsAndDominanceCompa
     result = compare(constraintsAndDominanceComparator.dominanceComparator, solution1, solution2)
   end
 
-  return result ;
+  return result
 end
 
-struct RankingAndCrowdingDistanceComparator <: Comparator 
+struct RankingAndCrowdingDistanceComparator <: Comparator
   rankingComparator::Comparator
   crowdingDistanceComparator::CrowdingDistanceComparator
 

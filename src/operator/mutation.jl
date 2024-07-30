@@ -106,8 +106,7 @@ function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation):
       x[i] = y
     end
   end
-  x = restrict(x, bounds)
-  return x
+  return restrict(x, bounds)
 end
 
 function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation)::Vector{T} where {T<:Int}
@@ -141,8 +140,7 @@ function polynomialMutation(x::Vector{T}, mutationOperator::PolynomialMutation):
       x[i] = round(Int, y)
     end
   end
-  x = restrict(x, bounds)
-  return x
+  return restrict(x, bounds)
 end
 
 
