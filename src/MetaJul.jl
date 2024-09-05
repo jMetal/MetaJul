@@ -167,5 +167,11 @@ include("util/toString.jl")
 
 export integerProblem
 include("problem/multiObjective/integerProblem.jl")
+
+export Point, ArrayPoint, IdealPoint
+export dimension, values, value, value!, update!, set!
+include("util/point.jl")
+
+
 end 
 # module metajul
