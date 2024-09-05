@@ -4,12 +4,12 @@ using Dates
 # NSGA-II algorithm example configured from the NSGA-II template
 
 function main()
-    problem = ZDT1()
+    problem = subasi2016()
 
     solver::NSGAII = NSGAII(
         problem,
-        populationSize = 50, 
-        termination = TerminationByComputingTime(Dates.Second(2)),
+        populationSize = 100, 
+        termination = TerminationByEvaluations(25000),
         crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds),
         mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds))
 

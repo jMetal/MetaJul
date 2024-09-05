@@ -139,6 +139,9 @@ include("problem/multiObjective/kursawe.jl")
 include("problem/multiObjective/ZDT.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
+export subasi2016
+include("problem/multiObjective/rwa.jl")
+
 export LocalSearch
 export optimize!, computingTime
 include("algorithm/localSearch.jl")
