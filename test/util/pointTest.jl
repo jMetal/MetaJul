@@ -337,7 +337,7 @@ function updateModifiesTheLastValueOfANadirPoint()
     originalValues = [2.0, 4.1, -1.5]
     point = NadirPoint(originalValues)
 
-    newValues = [2.1, 6.2, 1.5]
+    newValues = [1.1, 2.2, 1.5]
     update!(point, newValues)
 
     return [2.0, 4.1, 1.5] == values(point)

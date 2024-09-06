@@ -172,6 +172,10 @@ export Point, ArrayPoint, IdealPoint, NadirPoint
 export dimension, values, value, value!, update!, set!
 include("util/point.jl")
 
+export AggregationFunction, WeightedSum
+export compute
+include("util/aggregationFunction.jl")
+
 
 end 
 # module metajul
