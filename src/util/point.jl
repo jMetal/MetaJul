@@ -66,12 +66,40 @@ end
 ##################
 struct IdealPoint <: Point
     point::Vector{Float64}
+
+    IdealPoint() = new()
+    IdealPoint(dimension::Int) = new(zeros(dimension))
     
     IdealPoint(dimension::Int) = begin
-        p = ArrayPoint(dimension)
-        fill!(p.point, Inf)
-        new(p.point)
+        values = zeros(dimension)
+        fill!(values, Inf)
+        new(values)
     end
+
+    IdealPoint(p::Point) = begin
+        new([value(p, i) for i in 1:dimension(p)])
+    end
+    
+    IdealPoint(point::Vector{Float64}) = begin
+        new(copy(point))
+    end
+
+end
+
+function dimension(p::IdealPoint)::Int
+    return length(p.point)
+end
+
+function values(p::IdealPoint)::Vector{Float64}
+    return p.point
+end
+
+function value(p::IdealPoint, index::Int)::Float64
+    return p.point[index]  
+end
+
+function value!(p::IdealPoint, index::Int, val::Float64)
+    p.point[index] = val 
 end
 
 function update!(p::IdealPoint, point::Vector{Float64})
@@ -80,5 +108,61 @@ function update!(p::IdealPoint, point::Vector{Float64})
             p.point[i] = point[i]
         end
     end
+end
+
+function set!(p::IdealPoint, point::Vector{Float64})
+    copyto!(p.point, point)
+end
+
+
+##################
+struct NadirPoint <: Point
+    point::Vector{Float64}
+
+    NadirPoint() = new()
+    NadirPoint(dimension::Int) = new(zeros(dimension))
+    
+    NadirPoint(dimension::Int) = begin
+        values = zeros(dimension)
+        fill!(values, -Inf)
+        new(values)
+    end
+    
+    NadirPoint(p::Point) = begin
+        new([value(p, i) for i in 1:dimension(p)])
+    end
+    
+    NadirPoint(point::Vector{Float64}) = begin
+        new(copy(point))
+    end
+
+end
+
+function dimension(p::NadirPoint)::Int
+    return length(p.point)
+end
+
+function values(p::NadirPoint)::Vector{Float64}
+    return p.point
+end
+
+function value(p::NadirPoint, index::Int)::Float64
+    return p.point[index]  
+end
+
+function value!(p::NadirPoint, index::Int, val::Float64)
+    p.point[index] = val 
+end
+
+function update!(p::NadirPoint, point::Vector{Float64})
+    for i in 1:length(point)
+        if p.point[i] < point[i]
+            p.point[i] = point[i]
+        end
+    end
+end
+
+function set!(p::NadirPoint, point::Vector{Float64})
+    copyto!(p.point, point)
 end
 
