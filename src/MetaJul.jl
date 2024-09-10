@@ -176,6 +176,8 @@ export AggregationFunction, WeightedSum
 export compute
 include("util/aggregationFunction.jl")
 
-
+export Neighborhood
+export minFastSort
+include("util/neighborhood.jl")
 end 
 # module metajul
