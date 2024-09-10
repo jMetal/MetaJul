@@ -25,4 +25,14 @@ function select(x::Vector, selectionOperator::BinaryTournamentSelectionOperator)
   return result
 end
 
+struct NaryRandomSelectionOperator <: SelectionOperator
+  numberOfSolutionsToBeReturned::Int
+  # Constructor to handle default value
+  NaryRandomSelectionOperator(n::Int = 1) = new(n)
+end
 
+function select(x::Vector, selectionOperator::NaryRandomSelectionOperator)
+  @assert length(x) >= selectionOperator.numberOfSolutionsToBeReturned "Solution list size ($length(x)) is less than the number of requested solutions ($(selectionOperator.numberOfSolutionsToBeReturned))"
+
+  return x[randperm(length(x))[1:selectionOperator.numberOfSolutionsToBeReturned]]
+end
