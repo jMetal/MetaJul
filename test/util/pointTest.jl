@@ -110,7 +110,6 @@ function constructorCreatesAnIdealPointWithAGivenDimension()
     return dimension == length(values(point))
 end
 
-
 function constructorCreatesAnIdealPointFillOfIntValues()
     dimension = 4
     point = IdealPoint(dimension)
