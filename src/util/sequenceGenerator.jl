@@ -1,0 +1,115 @@
+###########################################
+# IntegerBoundedSequenceGenerator
+###########################################
+
+"""
+This struct generates a bounded sequence of consecutive integer numbers. When the last number is generated,
+the sequence starts again.
+"""
+struct IntegerBoundedSequenceGenerator
+    index::Int
+    size::Int
+
+    function IntegerBoundedSequenceGenerator(size::Int)
+        @assert size > 0 "Size $size is not a positive number greater than zero"
+        new(0, size)
+    end
+end
+
+"""
+Returns the current value in the sequence.
+"""
+function getValue(generator::IntegerBoundedSequenceGenerator)::Int
+    # Julia starting index is 1, not 0
+    return generator.index + 1
+end
+
+"""
+Generates the next value in the sequence. Wraps around to 0 when reaching the specified size.
+"""
+function generateNext!(generator::IntegerBoundedSequenceGenerator)
+    generator.index += 1
+    if generator.index == generator.size
+        generator.index = 0
+    end
+end
+
+"""
+Returns the length of the sequence.
+"""
+function getSequenceLength(generator::IntegerBoundedSequenceGenerator)::Int
+    return generator.size
+end
+
+
+###########################################
+# IntegerPermutationGenerator
+###########################################
+
+"""
+This struct generates a sequence of randomly permuted integers from 0 to size-1. When the sequence is exhausted,
+a new random permutation is generated.
+"""
+struct IntegerPermutationGenerator
+    sequence::Vector{Int}
+    index::Int
+    size::Int
+
+    function IntegerPermutationGenerator(size::Int)
+        @assert size > 0 "Size $size is not a positive number greater than zero"
+        new(randomPermutation(size), 0, size)
+    end
+end
+
+"""
+Returns the current value in the sequence.
+"""
+function getValue(generator::IntegerPermutationGenerator)::Int
+    # Julia starting index is 1, not 0
+    return generator.sequence[generator.index + 1]
+end
+
+"""
+Generates the next value in the sequence. If the sequence is exhausted, a new random permutation is generated.
+"""
+function generateNext!(generator::IntegerPermutationGenerator)
+    generator.index += 1
+    if generator.index == length(generator.sequence)
+        generator.sequence = randomPermutation(generator.size)
+        generator.index = 0
+    end
+end
+
+"""
+Generates a random permutation of integers from 0 to size-1.
+"""
+function randomPermutation(size::Int)::Vector{Int}
+    permutation = collect(0:(size-1))
+    flag = fill(true, size)
+    result = Vector{Int}(undef, size)
+
+    num = 0
+    while num < size
+        # Julia starting index is 1, not 0
+        start = rand(1:size)
+        while true
+            if flag[start]
+                # Julia starting index is 1, not 0
+                result[num + 1] = permutation[start]
+                flag[start] = false
+                num += 1
+                break
+            end
+            start = (start == size) ? 1 : start + 1
+        end
+    end
+
+    return result
+end
+
+"""
+Returns the length of the sequence.
+"""
+function getSequenceLength(generator::IntegerPermutationGenerator)::Int
+    return generator.size
+end
