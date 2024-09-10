@@ -100,8 +100,6 @@ function givenAnAggFunctionWhenNormalizeThenTheResultIsCorrect_PBI()
 
     aggFunction = PenaltyBoundaryIntersection(5.0, true)
     result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
-    println(result)
-    println(0.5 * (1 + 5.0))
     
     return isapprox(result, 0.707109609610844)  # Expected value based on normalization and theta
 end
@@ -115,8 +113,6 @@ function givenAnAggFunctionWhenNotNormalizeThenTheResultIsCorrect_PBI()
 
     aggFunction = PenaltyBoundaryIntersection(5.0, false)
     result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
-    println(result)
-    println(0.5 * (1 + 5.0))
 
     return isapprox(result, 0.7071067811865482)  # Expected value without normalization
 end
@@ -130,8 +126,6 @@ function givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect_PBI(
 
     aggFunction = PenaltyBoundaryIntersection(5.0, true)
     result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
-    println(result)
-    println(0.5 * (1 + 5.0))
 
     return isapprox(result, 2.4253556440274)  # Expected result with different weights
 end
@@ -145,7 +139,6 @@ function givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect_PBI(
 
     aggFunction = PenaltyBoundaryIntersection(5.0, true)
     result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
-    println(result)
 
     return isapprox(result, 2.8284264176430627)  # Expected result based on vector variation
 end
