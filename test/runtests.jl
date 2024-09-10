@@ -69,6 +69,7 @@ end
 operatorTests = [
     "operator/mutationTest.jl"
     "operator/crossoverTest.jl"
+    "operator/selectionTest.jl"
 ]
 
 for testProgram in operatorTests

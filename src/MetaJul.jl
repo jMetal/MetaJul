@@ -42,7 +42,7 @@ export PolynomialMutation, BitFlipMutation, UniformMutation
 export mutate!
 include("operator/mutation.jl")
 
-export BinaryTournamentSelectionOperator, RandomSelectionOperator
+export BinaryTournamentSelectionOperator, RandomSelectionOperator, NaryRandomSelectionOperator
 include("operator/selection.jl")
 
 export BLXAlphaCrossover, SBXCrossover, SinglePointCrossover, IntegerSBXCrossover
@@ -60,7 +60,7 @@ export TerminationByComputingTime, TerminationByEvaluations, TerminationByIterat
 export isMet
 include("component/common/termination.jl")
 
-export RandomSelection, BinaryTournamentSelection
+export RandomSelection, BinaryTournamentSelection, Neighborhood, PopulationAndNeighborhoodSelection
 export select
 include("component/evolutionaryAlgorithm/selection.jl")
 
