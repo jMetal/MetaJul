@@ -64,7 +64,7 @@ export TerminationByComputingTime, TerminationByEvaluations, TerminationByIterat
 export isMet
 include("component/common/termination.jl")
 
-export RandomSelection, BinaryTournamentSelection, Neighborhood, PopulationAndNeighborhoodSelection
+export RandomSelection, BinaryTournamentSelection, PopulationAndNeighborhoodSelection
 export select
 include("component/evolutionaryAlgorithm/selection.jl")
 
@@ -176,7 +176,7 @@ export Point, ArrayPoint, IdealPoint, NadirPoint
 export dimension, values, value, value!, update!, set!
 include("util/point.jl")
 
-export AggregationFunction, WeightedSum
+export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
 export compute
 include("util/aggregationFunction.jl")
 
