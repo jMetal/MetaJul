@@ -52,7 +52,7 @@ end
     ARCHIVE
 end
 
-abstract type Neighborhood{S} end
+#abstract type Neighborhood{S} end
 
 struct PopulationAndNeighborhoodSelection{T} <: Selection
     matingPoolSize::Int

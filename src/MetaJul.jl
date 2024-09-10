@@ -34,6 +34,10 @@ export CrowdingDistanceComparator
 export compare
 include("util/comparator.jl")
 
+export Neighborhood
+export minFastSort
+include("util/neighborhood.jl")
+
 export NonDominatedArchive, CrowdingDistanceArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
@@ -176,8 +180,5 @@ export AggregationFunction, WeightedSum
 export compute
 include("util/aggregationFunction.jl")
 
-export Neighborhood
-export minFastSort
-include("util/neighborhood.jl")
 end 
 # module metajul

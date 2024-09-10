@@ -1,4 +1,4 @@
-abstract type Neighborhood end
+abstract type Neighborhood{S} end
 
 function minFastSort(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
     for i in 1:m
