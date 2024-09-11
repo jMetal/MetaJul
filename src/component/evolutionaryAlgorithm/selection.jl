@@ -52,8 +52,6 @@ end
     ARCHIVE
 end
 
-#abstract type Neighborhood{S} end
-
 struct PopulationAndNeighborhoodSelection{T} <: Selection
     matingPoolSize::Int
     solutionIndexGenerator::Function
