@@ -79,7 +79,7 @@ function initializeNeighborhood(weightVectorNeighborhood::WeightVectorNeighborho
     end
 end
 
-function getNeighbors(weightVectorNeighborhood::WeightVectorNeighborhood, solutionList::Vector{S}, solutionIndex::Int)
+function getNeighbors(weightVectorNeighborhood::WeightVectorNeighborhood, solutionList::Vector{S}, solutionIndex::Int) where {S}
     neighbourSolutions = Vector{S}()
     for neighborIndex in weightVectorNeighborhood.neighborhood[solutionIndex, :]
         push!(neighbourSolutions, solutionList[neighborIndex])
