@@ -38,3 +38,25 @@ weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neigh
     @test weightVectorNeighborhood.neighborhood[1,:] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     @test weightVectorNeighborhood.neighborhood[70,:] == [70, 71, 69, 72, 68, 73, 67, 74, 66, 65, 75, 76, 64, 77, 63, 78, 62, 79, 61, 80]
 end
+
+
+function getNeighboursOfSolution1OfASolutionList()
+    solutionList = [createContinuousSolution(2) for _ in 1:numberOfWeightVectors]
+
+    neighbors = getNeighbors(weightVectorNeighborhood, solutionList, 1)
+    
+    return solutionList[1] == neighbors[1] && solutionList[20] == neighbors[20]
+end
+
+function getNeighboursOfSolution70OfASolutionList()
+    solutionList = [createContinuousSolution(2) for _ in 1:numberOfWeightVectors]
+
+    neighbors = getNeighbors(weightVectorNeighborhood, solutionList, 70)
+    
+    return solutionList[70] == neighbors[1] && solutionList[80] == neighbors[20]
+end
+
+@testset "Method getNeighbors() Tests" begin
+    @test getNeighboursOfSolution1OfASolutionList() 
+    @test getNeighboursOfSolution70OfASolutionList() 
+end

@@ -180,7 +180,7 @@ export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
 export compute
 include("util/aggregationFunction.jl")
 
-export WeightVectorNeighborhood
+export WeightVectorNeighborhood, getNeighbors
 include("util/neighborhood.jl")
 
 end 
