@@ -52,10 +52,10 @@ end
     ARCHIVE
 end
 
-struct PopulationAndNeighborhoodSelection{T} <: Selection
+struct PopulationAndNeighborhoodSelection <: Selection
     matingPoolSize::Int
     solutionIndexGenerator::Function
-    neighborhood::Neighborhood{T}
+    neighborhood::Neighborhood
     neighborhoodSelectionProbability::Float64
     selectCurrentSolution::Bool
     selectionOperator::SelectionOperator
@@ -64,15 +64,15 @@ end
 # Constructor for PopulationAndNeighborhoodSelection
 function PopulationAndNeighborhoodSelection(matingPoolSize::Int,
                                              solutionIndexGenerator::Function,
-                                             neighborhood::Neighborhood{T},
+                                             neighborhood::Neighborhood,
                                              neighborhoodSelectionProbability::Float64,
-                                             selectCurrentSolution::Bool) where T
+                                             selectCurrentSolution::Bool)
     selectionOperator = NaryRandomSelection(selectCurrentSolution ? matingPoolSize - 1 : matingPoolSize)
     return PopulationAndNeighborhoodSelection(matingPoolSize, solutionIndexGenerator, neighborhood, neighborhoodSelectionProbability, selectCurrentSolution, selectionOperator)
 end
 
 # Selection method for PopulationAndNeighborhoodSelection
-function select(selection::PopulationAndNeighborhoodSelection{T}, solutionList::Vector{T})::Vector{T} where T
+function select(selection::PopulationAndNeighborhoodSelection, solutionList::Vector{T})::Vector{T} where T
     matingPool = Vector{T}()
     randomValue = rand()
 

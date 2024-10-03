@@ -1,7 +1,7 @@
-abstract type Neighborhood{S} end
+abstract type Neighborhood end
 
 # ChatGPT code
-function minFastSort(x::Vector{Float64}, idx::Vector{Int}, numberOfWeightVectors::Int, neighborhoodSize::Int)
+function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, numberOfWeightVectors::Int, neighborhoodSize::Int)
     for i in 1:neighborhoodSize
         for j in (i+1):numberOfWeightVectors
             if x[i] > x[j]
@@ -26,23 +26,23 @@ function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
                 x[i], x[j] = x[j], x[i]
                 idx[i], idx[j] = idx[j], idx[i]
             end
-        end
+        end 
     end
 end
 =#
 
-struct WeightVectorNeighborhood{S <: Solution} <: Neighborhood{S}
+struct WeightVectorNeighborhood <: Neighborhood
     numberOfWeightVectors::Int
     weightVectorSize::Int
-    neighborhood::Array{Int,2}
-    weightVector::Array{Float64,2}
     neighborhoodSize::Int
+    neighborhood::Array
+    weightVector::Array{Float64,2}
 
     function WeightVectorNeighborhood(numberOfWeightVectors::Int, neighborhoodSize::Int)
         weightVectorSize = 2
 
-        neighborhood = Array{Int,2}(undef, numberOfWeightVectors, neighborhoodSize)
-        weightVector = Array{Float64,2}(undef, numberOfWeightVectors, weightVectorSize)
+        neighborhood = Array{Int}(undef, numberOfWeightVectors, neighborhoodSize)
+        weightVector = Array{Float64}(undef, numberOfWeightVectors, weightVectorSize)
 
         for n in 1:numberOfWeightVectors
             a = 1.0 * (n - 1) / (numberOfWeightVectors - 1)
@@ -50,9 +50,11 @@ struct WeightVectorNeighborhood{S <: Solution} <: Neighborhood{S}
             weightVector[n, 2] = 1 - a
         end
 
-        weightVectorNeighborhood = new{S}(numberOfWeightVectors, weightVectorSize, neighborhood, weightVector, neighborhoodSize)
+
+        weightVectorNeighborhood = new(numberOfWeightVectors, weightVectorSize, neighborhoodSize, neighborhood, weightVector)
         initializeNeighborhood(weightVectorNeighborhood)
-        return obj
+
+        return weightVectorNeighborhood
     end
 end
 
@@ -79,7 +81,7 @@ function initializeNeighborhood(weightVectorNeighborhood::WeightVectorNeighborho
     end
 end
 
-function getNeighbors(weightVectorNeighborhood::WeightVectorNeighborhood, solutionList::Vector{S}, solutionIndex::Int) where {S}
+function getNeighbors(weightVectorNeighborhood::WeightVectorNeighborhood, solutionList::Vector{S}, solutionIndex::Int) where {S <: Solution}
     neighbourSolutions = Vector{S}()
     for neighborIndex in weightVectorNeighborhood.neighborhood[solutionIndex, :]
         push!(neighbourSolutions, solutionList[neighborIndex])

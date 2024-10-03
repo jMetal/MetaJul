@@ -35,7 +35,7 @@ export compare
 include("util/comparator.jl")
 
 export Neighborhood
-export minFastSort
+export minFastSort!
 include("util/neighborhood.jl")
 
 export NonDominatedArchive, CrowdingDistanceArchive
