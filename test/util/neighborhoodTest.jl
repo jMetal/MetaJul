@@ -18,3 +18,19 @@
     @test x == [1.0, 2.0, 3.0]
     @test idx == [1, 2, 3]
 end
+
+
+weightVectorNeighborhood = WeightVectorNeighborhood{ContinuousSolution{Float64}}(100, 20)
+
+function ()
+    dimension = 4
+    point = ArrayPoint(dimension)
+
+    return values(point) == zeros(dimension)
+end
+
+
+@testset "WeightVectorNeighborhood initialization Tests" begin
+    #@test constructorCreatesAnIdealPointWithAGivenDimension()
+
+end
