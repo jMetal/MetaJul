@@ -1,6 +1,7 @@
 abstract type Neighborhood end
 
 # ChatGPT code
+#=
 function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, numberOfWeightVectors::Int, neighborhoodSize::Int)
     for i in 1:neighborhoodSize
         for j in (i+1):numberOfWeightVectors
@@ -16,9 +17,9 @@ function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, numberOfWeightVector
         end
     end
 end
+=#
 
-
-#= Gemini and Claude code
+# Gemini and Claude code
 function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
     for i in 1:m
         for j in i+1:n
@@ -29,7 +30,7 @@ function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
         end 
     end
 end
-=#
+
 
 struct WeightVectorNeighborhood <: Neighborhood
     numberOfWeightVectors::Int
@@ -49,7 +50,6 @@ struct WeightVectorNeighborhood <: Neighborhood
             weightVector[n, 1] = a
             weightVector[n, 2] = 1 - a
         end
-
 
         weightVectorNeighborhood = new(numberOfWeightVectors, weightVectorSize, neighborhoodSize, neighborhood, weightVector)
         initializeNeighborhood(weightVectorNeighborhood)
