@@ -1,24 +1,5 @@
 abstract type Neighborhood end
 
-# ChatGPT code
-#=
-function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, numberOfWeightVectors::Int, neighborhoodSize::Int)
-    for i in 1:neighborhoodSize
-        for j in (i+1):numberOfWeightVectors
-            if x[i] > x[j]
-                temp = x[i]
-                x[i] = x[j]
-                x[j] = temp
-
-                id = idx[i]
-                idx[i] = idx[j]
-                idx[j] = id
-            end
-        end
-    end
-end
-=#
-
 # Gemini and Claude code
 function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
     for i in 1:m
