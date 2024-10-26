@@ -12,13 +12,14 @@ function minFastSort!(x::Vector{Float64}, idx::Vector{Int}, n::Int, m::Int)
     end
 end
 
-
 struct WeightVectorNeighborhood <: Neighborhood
     numberOfWeightVectors::Int
     weightVectorSize::Int
     neighborhoodSize::Int
     neighborhood::Array
     weightVector::Array{Float64,2}
+    # false=Population, true=Neighbor
+    neighborType::Bool
 
     function WeightVectorNeighborhood(numberOfWeightVectors::Int, neighborhoodSize::Int)
         weightVectorSize = 2
@@ -32,7 +33,7 @@ struct WeightVectorNeighborhood <: Neighborhood
             weightVector[n, 2] = 1 - a
         end
 
-        weightVectorNeighborhood = new(numberOfWeightVectors, weightVectorSize, neighborhoodSize, neighborhood, weightVector)
+        weightVectorNeighborhood = new(numberOfWeightVectors, weightVectorSize, neighborhoodSize, neighborhood, weightVector, false)
         initializeNeighborhood(weightVectorNeighborhood)
 
         return weightVectorNeighborhood
