@@ -21,12 +21,12 @@ end
 
 
 numberOfWeightVectors = 100
-neightborhoodSize = 20
-weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neightborhoodSize)
+neighborhoodSize = 20
+weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
 
 @testset "WeightVectorNeighborhood initialization Tests" begin
     @test weightVectorNeighborhood.numberOfWeightVectors ==  numberOfWeightVectors
-    @test weightVectorNeighborhood.neighborhoodSize == neightborhoodSize
+    @test weightVectorNeighborhood.neighborhoodSize == neighborhoodSize
     @test weightVectorNeighborhood.weightVectorSize == 2
     @test weightVectorNeighborhood.weightVector[1, 1] == 0.0
     @test weightVectorNeighborhood.weightVector[1, 2] == 1.0
@@ -37,6 +37,8 @@ weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neigh
 
     @test weightVectorNeighborhood.neighborhood[1,:] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     @test weightVectorNeighborhood.neighborhood[70,:] == [70, 71, 69, 72, 68, 73, 67, 74, 66, 65, 75, 76, 64, 77, 63, 78, 62, 79, 61, 80]
+
+    @test weightVectorNeighborhood.neighborType == false
 end
 
 
