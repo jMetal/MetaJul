@@ -4,7 +4,7 @@ export Bounds
 export restrict, createBounds, valueIsWithinBounds
 include("util/bounds.jl")
 
-export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
+export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive, Selection
 include("core/coreTypes.jl")
 
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
@@ -64,6 +64,10 @@ include("component/common/solutionsCreation.jl")
 export TerminationByComputingTime, TerminationByEvaluations, TerminationByIterations
 export isMet
 include("component/common/termination.jl")
+
+export SequenceGenerator, IntegerBoundedSequenceGenerator, IntegerPermutationGenerator
+export getValue, generateNext!, getSequenceLength
+include("util/sequenceGenerator.jl")
 
 export RandomSelection, BinaryTournamentSelection, PopulationAndNeighborhoodSelection
 export select

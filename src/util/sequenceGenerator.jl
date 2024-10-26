@@ -1,3 +1,5 @@
+abstract type SequenceGenerator end
+
 ###########################################
 # IntegerBoundedSequenceGenerator
 ###########################################
@@ -6,7 +8,7 @@
 This struct generates a bounded sequence of consecutive integer numbers. When the last number is generated,
 the sequence starts again.
 """
-struct IntegerBoundedSequenceGenerator
+struct IntegerBoundedSequenceGenerator <: SequenceGenerator
     index::Int
     size::Int
 
@@ -50,7 +52,7 @@ end
 This struct generates a sequence of randomly permuted integers from 0 to size-1. When the sequence is exhausted,
 a new random permutation is generated.
 """
-struct IntegerPermutationGenerator
+struct IntegerPermutationGenerator <: SequenceGenerator
     sequence::Vector{Int}
     index::Int
     size::Int
