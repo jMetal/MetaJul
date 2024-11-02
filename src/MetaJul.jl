@@ -77,8 +77,16 @@ export CrossoverAndMutationVariation
 export variate
 include("component/evolutionaryAlgorithm/variation.jl")
 
-export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement
-export replace_
+export Point, ArrayPoint, IdealPoint, NadirPoint
+export dimension, values, value, value!, update!, set!
+include("util/point.jl")
+
+export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
+export compute
+include("util/aggregationFunction.jl")
+
+export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement, MOEADReplacement
+export replace_, replace_!, update_ideal_point!, update_nadir_point!
 include("component/evolutionaryAlgorithm/replacement.jl")
 
 export ConstantValueStrategy
@@ -176,14 +184,6 @@ include("util/toString.jl")
 
 export integerProblem
 include("problem/multiObjective/integerProblem.jl")
-
-export Point, ArrayPoint, IdealPoint, NadirPoint
-export dimension, values, value, value!, update!, set!
-include("util/point.jl")
-
-export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
-export compute
-include("util/aggregationFunction.jl")
 
 end 
 # module metajul
