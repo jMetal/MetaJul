@@ -43,3 +43,87 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
     sort!(jointVector, lt=((x, y) -> compare(replacement.rankingAndDensityEstimatorComparator, x, y) < 0))
     return jointVector[1:length(x)]
 end
+
+struct MOEADReplacement{S <: Solution} <: Replacement
+    matingPoolSelection::PopulationAndNeighborhoodSelection{S}
+    weightVectorNeighborhood::WeightVectorNeighborhood{S}
+    aggregationFunction::AggregationFunction
+    sequenceGenerator::SequenceGenerator{Int}
+    maximumNumberOfReplacedSolutions::Int
+    normalize::Bool
+    idealPoint::IdealPoint
+    nadirPoint::NadirPoint
+    nonDominatedArchive::NonDominatedArchive{S}
+    firstReplacement::Bool
+
+    MOEADReplacement(matingPoolSelection, weightVectorNeighborhood, aggregationFunction, sequenceGenerator, maxReplaced, normalize) = new(
+        matingPoolSelection,
+        weightVectorNeighborhood,
+        aggregationFunction,
+        sequenceGenerator,
+        maxReplaced,
+        normalize,
+        IdealPoint(),
+        NadirPoint(),
+        NonDominatedArchive{S}(),
+        true
+    )
+end
+
+function replace!(replacement::MOEADReplacement{T}, population::Vector{T}, offspring::Vector{T}) where {T <: Solution}
+    new_solution = offspring[1]
+
+    update_ideal_point!(replacement, population, new_solution)
+    update_nadir_point!(replacement, population, new_solution)
+
+    neighbor_type = getNeighborType(replacement.matingPoolSelection)
+    # NeighborType Neighbor = true
+    random_permutation = if neighbor_type == true
+        IntegerPermutationGenerator(size(replacement.weightVectorNeighborhood.neighborhood.neighborhoodSize, 1))
+    else
+        IntegerPermutationGenerator(length(population))
+    end
+
+    replacements = 0
+    while replacements < replacement.maximumNumberOfReplacedSolutions && hasnext(random_permutation)
+        # NeighborType Neighbor = true
+        k = if neighbor_type == true
+            replacement.weightVectorNeighborhood.neighborhood[replacement.sequenceGenerator.currentValue][generateNext!(random_permutation)]
+        else
+            generateNext!(random_permutation)
+        end
+
+        f1 = compute(replacement.aggregationFunction, population[k].objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
+        f2 = compute(replacement.aggregationFunction, new_solution.objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
+
+        if f2 < f1
+            population[k] = copySolution(new_solution)
+            replacements += 1
+        end
+    end
+
+    generateNext!(replacement.sequenceGenerator)
+    return population
+end
+
+function update_ideal_point!(replacement::MOEADReplacement, population::Vector{S}, new_solution::S) where {S <: Solution}
+    if replacement.firstReplacement
+        replacement.idealPoint = IdealPoint(length(new_solution.objectives))
+        if replacement.normalize
+            add_all!(replacement.nonDominatedArchive, population)
+            add!(replacement.nonDominatedArchive, new_solution)
+        end
+        replacement.firstReplacement = false
+    end
+    update!(replacement.idealPoint, new_solution.objectives)
+end
+
+function update_nadir_point!(replacement::MOEADReplacement, population::Vector{S}, new_solution::S) where {S <: Solution}
+    if replacement.normalize
+        replacement.nadirPoint = NadirPoint(length(new_solution.objectives))
+        add!(replacement.nonDominatedArchive, new_solution)
+        for solution in replacement.nonDominatedArchive.solutions
+            update!(replacement.nadirPoint, solution.objectives)
+        end
+    end
+end
