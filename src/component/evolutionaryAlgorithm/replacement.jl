@@ -44,16 +44,16 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
     return jointVector[1:length(x)]
 end
 
-struct MOEADReplacement{S <: Solution} <: Replacement
-    matingPoolSelection::PopulationAndNeighborhoodSelection{S}
-    weightVectorNeighborhood::WeightVectorNeighborhood{S}
+struct MOEADReplacement <: Replacement
+    matingPoolSelection::PopulationAndNeighborhoodSelection
+    weightVectorNeighborhood::WeightVectorNeighborhood
     aggregationFunction::AggregationFunction
-    sequenceGenerator::SequenceGenerator{Int}
+    sequenceGenerator::SequenceGenerator
     maximumNumberOfReplacedSolutions::Int
     normalize::Bool
     idealPoint::IdealPoint
     nadirPoint::NadirPoint
-    nonDominatedArchive::NonDominatedArchive{S}
+    nonDominatedArchive::NonDominatedArchive
     firstReplacement::Bool
 
     MOEADReplacement(matingPoolSelection, weightVectorNeighborhood, aggregationFunction, sequenceGenerator, maxReplaced, normalize) = new(
@@ -70,7 +70,7 @@ struct MOEADReplacement{S <: Solution} <: Replacement
     )
 end
 
-function replace!(replacement::MOEADReplacement{T}, population::Vector{T}, offspring::Vector{T}) where {T <: Solution}
+function replace_!(replacement::MOEADReplacement, population::Vector{T}, offspring::Vector{T}) where {T <: Solution}
     new_solution = offspring[1]
 
     update_ideal_point!(replacement, population, new_solution)
