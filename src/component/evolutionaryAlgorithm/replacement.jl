@@ -44,7 +44,7 @@ function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{
     return jointVector[1:length(x)]
 end
 
-struct MOEADReplacement <: Replacement
+mutable struct MOEADReplacement <: Replacement
     matingPoolSelection::PopulationAndNeighborhoodSelection
     weightVectorNeighborhood::WeightVectorNeighborhood
     aggregationFunction::AggregationFunction
@@ -65,7 +65,7 @@ struct MOEADReplacement <: Replacement
         normalize,
         IdealPoint(),
         NadirPoint(),
-        NonDominatedArchive{S}(),
+        NonDominatedArchive(ContinuousSolution{Float64}),
         true
     )
 end
@@ -125,5 +125,11 @@ function update_nadir_point!(replacement::MOEADReplacement, population::Vector{S
         for solution in replacement.nonDominatedArchive.solutions
             update!(replacement.nadirPoint, solution.objectives)
         end
+    end
+end
+
+function add_all!(archive::NonDominatedArchive, solutions::Vector{S}) where {S <: Solution}
+    for solution in solutions
+        add!(archive, solution)
     end
 end
