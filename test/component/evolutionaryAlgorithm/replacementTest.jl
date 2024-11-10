@@ -435,7 +435,7 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     replace_!(replacement, population, offspring)
 
     # Validate ideal point update
-    updatedIdeal = replacement.idealPoint.coordinates
+    updatedIdeal = replacement.idealPoint.point
     return updatedIdeal[1] == min(solution1.objectives[1], solution2.objectives[1]) &&
            updatedIdeal[2] == min(solution1.objectives[2], solution2.objectives[2])
 end
@@ -470,8 +470,8 @@ function moeadReplacementWorksProperlySingleSolution()
     resultPopulation = replace_!(replacement, population, offspring)
 
     # Expecting population to contain offspring if it has a better aggregation score
-    f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
-    f2 = compute(aggregationFunction, solution2.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
+    f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1, :], replacement.idealPoint, replacement.nadirPoint)
+    f2 = compute(aggregationFunction, solution2.objectives, weightVectorNeighborhood.weightVector[1, :], replacement.idealPoint, replacement.nadirPoint)
 
     return length(resultPopulation) == 1 && (f2 < f1 ? isequal(resultPopulation[1], solution2) : isequal(resultPopulation[1], solution1))
 end
