@@ -18,6 +18,9 @@ export BinarySolution
 export initBitVector, copySolution, bitFlip
 include("solution/continuousSolution.jl")
 
+export PermutationSolution
+include("solution/permutationSolution.jl")
+
 export DominanceRanking, DominanceRankingComparator
 export numberOfRanks, getSubFront, appendRank!, compute!, getRank, setRank
 export compare, computeCrowdingDistanceEstimator!, getCrowdingDistance

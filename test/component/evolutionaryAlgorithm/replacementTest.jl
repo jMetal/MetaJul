@@ -342,13 +342,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase9()
     population = solutions[1:8]
     offspringPopulation = solutions[9:16]
 
-    #println(toString(population, "population"))
-    #println(toString(offspringPopulation, "offspringPopulation"))
     resultPopulation = replace_(replacement, population, offspringPopulation)
-
-    #println(toString(ranking))
-
-    #println(toString(resultPopulation, "", densityEstimator))
 
     return length(resultPopulation) == 8
 end
@@ -428,10 +422,6 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     # Create sample solutions
     solution1 = createContinuousSolution([1.0, 1.0])
     solution2 = createContinuousSolution([0.5, 0.5])
-
-    print("-----------")
-    print(solution1)
-    print(solution2)
 
     population = [solution1]
     offspring = [solution2]
