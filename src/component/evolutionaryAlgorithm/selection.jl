@@ -45,19 +45,10 @@ function select(selection::BinaryTournamentSelection, solutions::Vector{S})::Vec
     return [select(solutions, selectionOperator) for _ in range(1, matingPoolSize)]
 end
 
-# Enum for NeighborType
-@enum NeighborType begin
-    NEIGHBOR
-    POPULATION
-    ARCHIVE
-end
-
-abstract type Neighborhood{S} end
-
-struct PopulationAndNeighborhoodSelection{T} <: Selection
+struct PopulationAndNeighborhoodSelection <: Selection
     matingPoolSize::Int
-    solutionIndexGenerator::Function
-    neighborhood::Neighborhood{T}
+    solutionIndexGenerator::SequenceGenerator
+    neighborhood::Neighborhood
     neighborhoodSelectionProbability::Float64
     selectCurrentSolution::Bool
     selectionOperator::SelectionOperator
@@ -65,33 +56,33 @@ end
 
 # Constructor for PopulationAndNeighborhoodSelection
 function PopulationAndNeighborhoodSelection(matingPoolSize::Int,
-                                             solutionIndexGenerator::Function,
-                                             neighborhood::Neighborhood{T},
+                                             solutionIndexGenerator::SequenceGenerator,
+                                             neighborhood::Neighborhood,
                                              neighborhoodSelectionProbability::Float64,
-                                             selectCurrentSolution::Bool) where T
-    selectionOperator = NaryRandomSelection(selectCurrentSolution ? matingPoolSize - 1 : matingPoolSize)
+                                             selectCurrentSolution::Bool)
+    selectionOperator = NaryRandomSelectionOperator(selectCurrentSolution ? matingPoolSize - 1 : matingPoolSize)
     return PopulationAndNeighborhoodSelection(matingPoolSize, solutionIndexGenerator, neighborhood, neighborhoodSelectionProbability, selectCurrentSolution, selectionOperator)
 end
 
 # Selection method for PopulationAndNeighborhoodSelection
-function select(selection::PopulationAndNeighborhoodSelection{T}, solutionList::Vector{T})::Vector{T} where T
+function select(selection::PopulationAndNeighborhoodSelection, solutionList::Vector{T})::Vector{T} where T
     matingPool = Vector{T}()
     randomValue = rand()
 
     if randomValue < selection.neighborhoodSelectionProbability
         # Select from neighborhood
-        neighborType = NEIGHBOR
-        neighbors = selection.neighborhood.getNeighbors(solutionList, selection.solutionIndexGenerator())
-        matingPool = selection.selectionOperator.execute(neighbors, selectionOperator)
+        neighborType = true
+        neighbors = getNeighbors(selection.neighborhood, solutionList, getValue(selection.solutionIndexGenerator))
+        matingPool = select(neighbors, selection.selectionOperator)
     else
         # Select from population
-        neighborType = POPULATION
-        matingPool = selection.selectionOperator.execute(solutionList, selection.selectionOperator)
+        neighborType = false
+        matingPool = select(solutionList, selection.selectionOperator)
     end
 
     if selection.selectCurrentSolution
         # Add the current solution to the mating pool
-        currentSolution = solutionList[selection.solutionIndexGenerator()]
+        currentSolution = solutionList[getValue(selection.solutionIndexGenerator)]
         push!(matingPool, currentSolution)
     end
 

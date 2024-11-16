@@ -26,7 +26,7 @@ componentTests = [
     "component/common/terminationTest.jl",
     "component/evolutionaryAlgorithm/selectionTest.jl",
     "component/evolutionaryAlgorithm/variationTest.jl",
-   "component/evolutionaryAlgorithm/replacementTest.jl",
+    "component/evolutionaryAlgorithm/replacementTest.jl",
     "component/particleSwarmOptimization/inertiaWeightComputingStrategyTest.jl",
     "component/particleSwarmOptimization/velocityInitializationTest.jl",
     "component/particleSwarmOptimization/globalBestInitializationTest.jl",
@@ -106,5 +106,7 @@ for testProgram in algorithmTests
 end
 
 include("util/pointTest.jl")
-
 include("util/aggregationFunctionTest.jl")
+
+include("util/neighborhoodTest.jl")
+

@@ -367,3 +367,122 @@ end
     @test rankingAndDensityEstimatorReplacementWorksProperlyCase9()
 end
 
+#######################################################
+# MOEAD Replacement unit tests
+#######################################################
+
+# Test that MOEADReplacement is correctly initialized with all expected fields
+function moeadReplacementIsCorrectlyInitialized()
+    numberOfWeightVectors = 100
+    neighborhoodSize = 20
+    neighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    matingPoolSelection = PopulationAndNeighborhoodSelection(3, IntegerBoundedSequenceGenerator(1), neighborhood, 0.5, true)
+    weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    aggregationFunction = PenaltyBoundaryIntersection()
+    sequenceGenerator = IntegerPermutationGenerator(1)
+    maxReplaced = 5
+    normalize = true
+
+    replacement = MOEADReplacement(
+        matingPoolSelection,
+        weightVectorNeighborhood,
+        aggregationFunction,
+        sequenceGenerator,
+        maxReplaced,
+        normalize
+    )
+
+    return replacement.matingPoolSelection == matingPoolSelection &&
+           replacement.weightVectorNeighborhood == weightVectorNeighborhood &&
+           replacement.aggregationFunction == aggregationFunction &&
+           replacement.sequenceGenerator == sequenceGenerator &&
+           replacement.maximumNumberOfReplacedSolutions == maxReplaced &&
+           replacement.normalize == normalize &&
+           replacement.idealPoint != nothing &&
+           replacement.nadirPoint != nothing &&
+           replacement.nonDominatedArchive != nothing &&
+           replacement.firstReplacement == true
+end
+
+# Test updating of ideal and nadir points on replacement
+function moeadReplacementUpdatesIdealAndNadirPoints()
+    numberOfWeightVectors = 100
+    neighborhoodSize = 20
+    neighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    matingPoolSelection = PopulationAndNeighborhoodSelection(3, IntegerBoundedSequenceGenerator(1), neighborhood, 0.5, true)
+    weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    aggregationFunction = PenaltyBoundaryIntersection()
+    sequenceGenerator = IntegerPermutationGenerator(1)
+    maxReplaced = 5
+    normalize = true
+
+    replacement = MOEADReplacement(
+        matingPoolSelection,
+        weightVectorNeighborhood,
+        aggregationFunction,
+        sequenceGenerator,
+        maxReplaced,
+        normalize
+    )
+
+    # Create sample solutions
+    solution1 = createContinuousSolution([1.0, 1.0])
+    solution2 = createContinuousSolution([0.5, 0.5])
+
+    print("-----------")
+    print(solution1)
+    print(solution2)
+
+    population = [solution1]
+    offspring = [solution2]
+
+    # Perform replacement
+    replace_!(replacement, population, offspring)
+
+    # Validate ideal point update
+    updatedIdeal = replacement.idealPoint.coordinates
+    return updatedIdeal[1] == min(solution1.objectives[1], solution2.objectives[1]) &&
+           updatedIdeal[2] == min(solution1.objectives[2], solution2.objectives[2])
+end
+
+# Test replacement behavior for a population with one solution and one offspring
+function moeadReplacementWorksProperlySingleSolution()
+    numberOfWeightVectors = 100
+    neighborhoodSize = 20
+    neighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    matingPoolSelection = PopulationAndNeighborhoodSelection(3, IntegerBoundedSequenceGenerator(1), neighborhood, 0.5, true)
+    weightVectorNeighborhood = WeightVectorNeighborhood(numberOfWeightVectors, neighborhoodSize)
+    aggregationFunction = PenaltyBoundaryIntersection()
+    sequenceGenerator = IntegerPermutationGenerator(1)
+    maxReplaced = 1
+    normalize = true
+
+    replacement = MOEADReplacement(
+        matingPoolSelection,
+        weightVectorNeighborhood,
+        aggregationFunction,
+        sequenceGenerator,
+        maxReplaced,
+        normalize
+    )
+
+    solution1 = createContinuousSolution([1.0, 2.0])
+    solution2 = createContinuousSolution([0.5, 1.5])
+
+    population = [solution1]
+    offspring = [solution2]
+
+    resultPopulation = replace_!(replacement, population, offspring)
+
+    # Expecting population to contain offspring if it has a better aggregation score
+    f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
+    f2 = compute(aggregationFunction, solution2.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
+
+    return length(resultPopulation) == 1 && (f2 < f1 ? isequal(resultPopulation[1], solution2) : isequal(resultPopulation[1], solution1))
+end
+
+@testset "MOEAD Replacement tests" begin
+    @test moeadReplacementIsCorrectlyInitialized()
+    @test moeadReplacementUpdatesIdealAndNadirPoints()
+    @test moeadReplacementWorksProperlySingleSolution()
+end

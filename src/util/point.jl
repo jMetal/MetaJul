@@ -68,7 +68,6 @@ struct IdealPoint <: Point
     point::Vector{Float64}
 
     IdealPoint() = new()
-    IdealPoint(dimension::Int) = new(zeros(dimension))
     
     IdealPoint(dimension::Int) = begin
         values = zeros(dimension)
@@ -120,7 +119,6 @@ struct NadirPoint <: Point
     point::Vector{Float64}
 
     NadirPoint() = new()
-    NadirPoint(dimension::Int) = new(zeros(dimension))
     
     NadirPoint(dimension::Int) = begin
         values = zeros(dimension)

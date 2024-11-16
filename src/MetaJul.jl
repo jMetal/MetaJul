@@ -4,7 +4,7 @@ export Bounds
 export restrict, createBounds, valueIsWithinBounds
 include("util/bounds.jl")
 
-export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive
+export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive, Selection
 include("core/coreTypes.jl")
 
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
@@ -37,6 +37,11 @@ export CrowdingDistanceComparator
 export compare
 include("util/comparator.jl")
 
+export Neighborhood
+export minFastSort!
+export WeightVectorNeighborhood, getNeighbors
+include("util/neighborhood.jl")
+
 export NonDominatedArchive, CrowdingDistanceArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
@@ -63,7 +68,11 @@ export TerminationByComputingTime, TerminationByEvaluations, TerminationByIterat
 export isMet
 include("component/common/termination.jl")
 
-export RandomSelection, BinaryTournamentSelection, Neighborhood, PopulationAndNeighborhoodSelection
+export SequenceGenerator, IntegerBoundedSequenceGenerator, IntegerPermutationGenerator
+export getValue, generateNext!, getSequenceLength
+include("util/sequenceGenerator.jl")
+
+export RandomSelection, BinaryTournamentSelection, PopulationAndNeighborhoodSelection
 export select
 include("component/evolutionaryAlgorithm/selection.jl")
 
@@ -71,8 +80,16 @@ export CrossoverAndMutationVariation
 export variate
 include("component/evolutionaryAlgorithm/variation.jl")
 
-export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement
-export replace_
+export Point, ArrayPoint, IdealPoint, NadirPoint
+export dimension, values, value, value!, update!, set!
+include("util/point.jl")
+
+export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
+export compute
+include("util/aggregationFunction.jl")
+
+export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement, MOEADReplacement
+export replace_, replace_!, update_ideal_point!, update_nadir_point!
 include("component/evolutionaryAlgorithm/replacement.jl")
 
 export ConstantValueStrategy
@@ -170,15 +187,6 @@ include("util/toString.jl")
 
 export integerProblem
 include("problem/multiObjective/integerProblem.jl")
-
-export Point, ArrayPoint, IdealPoint, NadirPoint
-export dimension, values, value, value!, update!, set!
-include("util/point.jl")
-
-export AggregationFunction, WeightedSum
-export compute
-include("util/aggregationFunction.jl")
-
 
 end 
 # module metajul

@@ -23,6 +23,6 @@ function copySolution(solution::PermutationSolution)::PermutationSolution
     )
 end
 
-function Base.isequal(solution1::ContinuousSolution, solution2::ContinuousSolution)::Bool
+function Base.isequal(solution1::PermutationSolution, solution2::PermutationSolution)::Bool
     return Base.isequal(solution1.variables, solution2.variables)
 end
