@@ -19,6 +19,7 @@ export initBitVector, copySolution, bitFlip
 include("solution/continuousSolution.jl")
 
 export PermutationSolution
+export checkIfPermutationIsValid
 include("solution/permutationSolution.jl")
 
 export DominanceRanking, DominanceRankingComparator

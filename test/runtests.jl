@@ -77,7 +77,8 @@ end
 
 solutionTests = [
     "solution/continuousSolutionTest.jl",
-    "solution/binarySolutionTest.jl"
+    "solution/binarySolutionTest.jl",
+    "solution/permutationSolutionTest.jl"
 ]
 
 for testProgram in solutionTests
