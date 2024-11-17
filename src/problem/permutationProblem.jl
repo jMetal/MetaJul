@@ -7,39 +7,39 @@ mutable struct PermutationProblem <: AbstractPermutationProblem
   name::String
 end
 
-function PermutationProblem{T}(problemName::String) where {T<:Number}
-  return PermutationProblem{T}([], [], [], problemName)
+function PermutationProblem(problemName::String) 
+  return PermutationProblem([], [], [], problemName)
 end
 
-function numberOfVariables(problem::PermutationProblem{T}) where {T}
+function numberOfVariables(problem::PermutationProblem) 
   return problem.permutationLength
 end
 
-function numberOfObjectives(problem::PermutationProblem{T}) where {T}
+function numberOfObjectives(problem::PermutationProblem) 
   return length(problem.objectives)
 end
 
-function numberOfConstraints(problem::PermutationProblem{T}) where {T}
+function numberOfConstraints(problem::PermutationProblem) 
   return length(problem.constraints)
 end
 
-function name(problem::PermutationProblem{T}) where {T}
+function name(problem::PermutationProblem) 
   return problem.name
 end
 
-function addObjective(problem::PermutationProblem{T}, objective::Function) where {T<:Number}
+function addObjective(problem::PermutationProblem, objective::Function)
   push!(problem.objectives, objective)
 
   return Nothing
 end
 
-function addConstraint(problem::PermutationProblem{T}, constraint::Function) where {T<:Number}
+function addConstraint(problem::PermutationProblem, constraint::Function)
   push!(problem.constraints, constraint)
 
   return Nothing
 end
 
-function setName(problem::Problem{T}, name::String) where {T}
+function setName(problem::PermutationProblem, name::String) 
   problem.name = name
 
   return Nothing

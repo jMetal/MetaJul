@@ -58,7 +58,9 @@ for testProgram in utilTests
 end
 
 problemTests = [
-    "problem/continuousProblemTest.jl"
+    "problem/continuousProblemTest.jl",
+    "problem/binaryProblemTest.jl",
+    "problem/permutationProblemTest.jl"
 ]
 
 for testProgram in problemTests

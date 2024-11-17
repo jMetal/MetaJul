@@ -139,7 +139,7 @@ include("util/utils.jl")
 export Observable, EvaluationObserver, FitnessObserver, getObservable, FrontPlotObserver, register!
 include("util/observer.jl")
 
-export BinaryProblem, ContinuousProblem, constrainedProblem
+export BinaryProblem, ContinuousProblem, constrainedProblem, PermutationProblem
 export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
 export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints

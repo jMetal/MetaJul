@@ -48,7 +48,7 @@ function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T<
   return Nothing
 end
 
-function setName(problem::Problem{T}, name::String) where {T}
+function setName(problem::ContinuousProblem{T}, name::String) where {T}
   problem.name = name
 
   return Nothing
