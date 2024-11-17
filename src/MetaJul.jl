@@ -145,6 +145,7 @@ export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/binaryProblem.jl")
 include("problem/continuousProblem.jl")
+include("problem/permutationProblem.jl")
 
 export tanaka, osyczka2, srinivas, binh2, constrEx, golinski
 include("problem/multiObjective/constrainedProblems.jl")
