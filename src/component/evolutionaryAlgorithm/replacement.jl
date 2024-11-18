@@ -75,18 +75,18 @@ function replace_!(replacement::MOEADReplacement, population::Vector{T}, offspri
     update_ideal_point!(replacement, population, new_solution)
     update_nadir_point!(replacement, population, new_solution)
 
-    neighbor_type = getNeighborType(replacement.matingPoolSelection)
+    neighborType = replacement.matingPoolSelection.neighborhood.neighborType
     # NeighborType Neighbor = true
-    random_permutation = if neighbor_type == true
+    random_permutation = if neighborType == true
         IntegerPermutationGenerator(size(replacement.weightVectorNeighborhood.neighborhood.neighborhoodSize, 1))
     else
         IntegerPermutationGenerator(length(population))
     end
 
     replacements = 0
-    while replacements < replacement.maximumNumberOfReplacedSolutions && hasnext(random_permutation)
+    while replacements < replacement.maximumNumberOfReplacedSolutions && hasNext(random_permutation)
         # NeighborType Neighbor = true
-        k = if neighbor_type == true
+        k = if neighborType == true
             replacement.weightVectorNeighborhood.neighborhood[replacement.sequenceGenerator.currentValue][generateNext!(random_permutation)]
         else
             generateNext!(random_permutation)

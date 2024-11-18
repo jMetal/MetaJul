@@ -19,6 +19,7 @@ export initBitVector, copySolution, bitFlip
 include("solution/continuousSolution.jl")
 
 export PermutationSolution
+export checkIfPermutationIsValid
 include("solution/permutationSolution.jl")
 
 export DominanceRanking, DominanceRankingComparator
@@ -138,12 +139,13 @@ include("util/utils.jl")
 export Observable, EvaluationObserver, FitnessObserver, getObservable, FrontPlotObserver, register!
 include("util/observer.jl")
 
-export BinaryProblem, ContinuousProblem, constrainedProblem
+export BinaryProblem, ContinuousProblem, constrainedProblem, PermutationProblem
 export addObjective, addVariable, addConstraint, createSolution, evaluate, setName, name
 export bounds
 export numberOfVariables, numberOfObjectives, numberOfConstraints
 include("problem/binaryProblem.jl")
 include("problem/continuousProblem.jl")
+include("problem/permutationProblem.jl")
 
 export tanaka, osyczka2, srinivas, binh2, constrEx, golinski
 include("problem/multiObjective/constrainedProblems.jl")

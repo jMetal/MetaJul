@@ -342,13 +342,7 @@ function rankingAndDensityEstimatorReplacementWorksProperlyCase9()
     population = solutions[1:8]
     offspringPopulation = solutions[9:16]
 
-    #println(toString(population, "population"))
-    #println(toString(offspringPopulation, "offspringPopulation"))
     resultPopulation = replace_(replacement, population, offspringPopulation)
-
-    #println(toString(ranking))
-
-    #println(toString(resultPopulation, "", densityEstimator))
 
     return length(resultPopulation) == 8
 end
@@ -429,10 +423,6 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     solution1 = createContinuousSolution([1.0, 1.0])
     solution2 = createContinuousSolution([0.5, 0.5])
 
-    print("-----------")
-    print(solution1)
-    print(solution2)
-
     population = [solution1]
     offspring = [solution2]
 
@@ -440,7 +430,7 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     replace_!(replacement, population, offspring)
 
     # Validate ideal point update
-    updatedIdeal = replacement.idealPoint.coordinates
+    updatedIdeal = replacement.idealPoint.point
     return updatedIdeal[1] == min(solution1.objectives[1], solution2.objectives[1]) &&
            updatedIdeal[2] == min(solution1.objectives[2], solution2.objectives[2])
 end
@@ -475,8 +465,8 @@ function moeadReplacementWorksProperlySingleSolution()
     resultPopulation = replace_!(replacement, population, offspring)
 
     # Expecting population to contain offspring if it has a better aggregation score
-    f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
-    f2 = compute(aggregationFunction, solution2.objectives, weightVectorNeighborhood.weightVector[1], replacement.idealPoint, replacement.nadirPoint)
+    f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1, :], replacement.idealPoint, replacement.nadirPoint)
+    f2 = compute(aggregationFunction, solution2.objectives, weightVectorNeighborhood.weightVector[1, :], replacement.idealPoint, replacement.nadirPoint)
 
     return length(resultPopulation) == 1 && (f2 < f1 ? isequal(resultPopulation[1], solution2) : isequal(resultPopulation[1], solution1))
 end

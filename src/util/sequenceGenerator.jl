@@ -52,7 +52,7 @@ end
 This struct generates a sequence of randomly permuted integers from 0 to size-1. When the sequence is exhausted,
 a new random permutation is generated.
 """
-struct IntegerPermutationGenerator <: SequenceGenerator
+mutable struct IntegerPermutationGenerator <: SequenceGenerator
     sequence::Vector{Int}
     index::Int
     size::Int
@@ -114,4 +114,8 @@ Returns the length of the sequence.
 """
 function getSequenceLength(generator::IntegerPermutationGenerator)::Int
     return generator.size
+end
+
+function hasNext(generator::IntegerPermutationGenerator)::Bool
+    return generator.index < generator.size - 1
 end
