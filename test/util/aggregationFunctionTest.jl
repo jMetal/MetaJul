@@ -64,13 +64,18 @@ function givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect()
 end
 
 
+<<<<<<< HEAD
 @testset "WeightedSum tests" begin
+=======
+@testset "ArrayPoint tests" begin
+>>>>>>> 051cb88bf465aca22a497d4acae295a39cbd5de3
     @test constructorInitializesTheStructCorrectlyWithDefaultValues()
     @test constructorInitializesTheStructCorrectlyWithSpecificValues()
     @test givenAnAggFunctionWhenNormalizeThenTheResultIsCorrect()
     @test givenAnAggFunctionWhenNotNormalizeThenTheResultIsCorrect()
     @test givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect()
     @test givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect()
+<<<<<<< HEAD
 end
 
 
@@ -152,3 +157,6 @@ end
     @test givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect_PBI()
     @test givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect_PBI()
 end
+=======
+end
+>>>>>>> 051cb88bf465aca22a497d4acae295a39cbd5de3

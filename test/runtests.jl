@@ -112,4 +112,3 @@ include("util/pointTest.jl")
 include("util/aggregationFunctionTest.jl")
 
 include("util/neighborhoodTest.jl")
-
