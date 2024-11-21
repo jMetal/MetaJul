@@ -115,3 +115,49 @@ blxAlphaCrossover = BLXAlphaCrossover(probability = 0.12, alpha = 0.5, bounds = 
   @test blxAlphaCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
   @test blxAlphaCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
 end
+
+
+function pmxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
+  parent1 = PermutationSolution(5)
+  parent1.variables = [1, 5, 2, 3, 4]
+
+  parent2 = PermutationSolution(5)
+  parent2.variables = [5, 4, 3, 2, 1]
+
+  crossover = PMXCrossover(probability = 0.0)
+  children = recombine(parent1, parent2, crossover)
+
+  return isequal(parent1, children[1]) && isequal(parent2, children[2])
+end
+
+function pmxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
+  parent1 = PermutationSolution(10)
+  parent2 = PermutationSolution(10)
+
+  crossover = PMXCrossover(probability = 1.0)
+  children = recombine(parent1, parent2, crossover)
+
+  return !isequal(parent1, children[1]) && !isequal(parent2, children[2])
+end
+
+function pmxCrossoverProduceCorrectPermutations()
+  parent1 = PermutationSolution(20)
+  parent2 = PermutationSolution(20)
+
+  crossover = PMXCrossover(probability = 1.0)
+  children = recombine(parent1, parent2, crossover)
+
+  return checkIfPermutationIsValid(children[1].variables) && checkIfPermutationIsValid(children[2].variables)
+end
+
+
+pmxCrossover = PMXCrossover(probability = 0.9)
+@testset "PMX crossover tests" begin
+  @test pmxCrossover.probability == 0.9
+  @test numberOfDescendants(pmxCrossover) == 2
+  @test numberOfRequiredParents(pmxCrossover) == 2
+
+  @test pmxCrossoverWithProbabilityZeroReturnTwoSolutionsEqualToTheParentSolutions()
+  @test pmxCrossoverWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolutions()
+  @test pmxCrossoverProduceCorrectPermutations()
+end

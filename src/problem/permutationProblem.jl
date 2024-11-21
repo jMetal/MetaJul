@@ -59,6 +59,7 @@ function evaluate(solution::PermutationSolution, problem::PermutationProblem)::P
 end
 """
 
+
 function evaluate(solution::PermutationSolution, problem::PermutationProblem)::PermutationSolution
   solution.objectives .= map(obj -> obj(solution.variables), problem.objectives)
   solution.constraints .= map(constr -> constr(solution.variables), problem.constraints)

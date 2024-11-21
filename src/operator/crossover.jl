@@ -230,7 +230,6 @@ struct SinglePointCrossover <: CrossoverOperator
 
     return new(probability)
   end
-
 end
 
 function numberOfRequiredParents(crossover::SinglePointCrossover)
@@ -265,3 +264,88 @@ function recombine(parent1::BinarySolution, parent2::BinarySolution, crossoverOp
 
   return [child1, child2]
 end
+
+# PMX crossover
+struct PMXCrossover <: CrossoverOperator
+  probability::Real 
+
+  function PMXCrossover(;probability = 0.9)
+    @assert probability >= 0.0 string("The probability ", probability, " must be equal or greater than zero")
+
+    return new(probability)
+  end
+end
+
+function numberOfRequiredParents(crossover::PMXCrossover)
+  return 2 
+end
+
+function numberOfDescendants(crossover::PMXCrossover)
+  return 2
+end
+
+function recombine(parent1::PermutationSolution, parent2::PermutationSolution, crossoverOperator::PMXCrossover)::Vector{PermutationSolution}
+  @assert length(parent1.variables) == length(parent2.variables) "The length of the two permutation solutions to recombine is not equal"
+
+  probability::Real = crossoverOperator.probability
+  permutationLength = length(parent1.variables)
+
+  child1 = copySolution(parent1)
+  child2 = copySolution(parent2)
+
+  if rand() < probability
+    # STEP 1: Get two cutting points
+    cuttingPoint1 = rand(1:permutationLength)
+    cuttingPoint2 = rand(1:permutationLength)
+    while (cuttingPoint1 == cuttingPoint2)
+      cuttingPoint2 = rand(1:permutationLength)
+    end
+
+    if cuttingPoint1 > cuttingPoint2
+      cuttingPoint1, cuttingPoint2 = cuttingPoint2, cuttingPoint1
+    end
+
+    # STEP 2: Get the sub-chains to interchange
+    replacement1 = fill(-1, permutationLength)
+    replacement2 = fill(-1, permutationLength)
+
+    # STEP 3: Interchange
+    for i in cuttingPoint1:cuttingPoint2
+      child1.variables[i] = parent2.variables[i]
+      child2.variables[i] = parent1.variables[i]
+
+      replacement1[parent2.variables[i]] = parent1.variables[i]
+      replacement2[parent1.variables[i]] = parent2.variables[i]
+    end
+
+    # Step 4: Repair children
+    for i in 1:permutationLength
+      if i >= cuttingPoint1 && i <= cuttingPoint2
+        continue
+      end
+
+      n1 = parent1.variables[i]
+      m1 = replacement1[n1]
+
+      n2 = parent2.variables[i]
+      m2 = replacement2[n2]
+
+      while (m1 != -1)
+        n1 = m1
+        m1 = replacement1[m1]
+      end
+
+      while (m2 != -1)
+        n2 = m2
+        m2 = replacement2[m2]
+      end
+
+      child1.variables[i] = n1
+      child2.variables[i] = n2
+
+    end
+  end
+  
+  return [child1, child2]
+end
+
