@@ -148,3 +148,37 @@ function mutate!(solution::ContinuousSolution, mutationOperator::PolynomialMutat
   solution.variables = polynomialMutation(solution.variables, mutationOperator)
   return solution
 end
+
+struct PermutationSwapMutation <: MutationOperator
+  probability::Float64
+
+  PermutationSwapMutation(;probability = 0.01) = new(probability)
+end
+
+function mutate!(solution::PermutationSolution, mutationOperator::PermutationSwapMutation)::PermutationSolution
+  solution.variables = permutationSwapMutation(solution.variables, mutationOperator.probability)
+  return solution
+end
+
+function permutationSwapMutation(x::Vector{Int64}, probability::Float64)::Vector{Int64}
+  permutationLength = length(x)
+
+  if permutationLength > 2
+    if rand() < probability
+      cuttingPoint1 = rand(1:permutationLength)
+      cuttingPoint2 = rand(1:permutationLength)
+
+      while cuttingPoint1 == cuttingPoint2
+        if cuttingPoint1 == (permutationLength - 1)
+          cuttingPoint2 = rand(1:(permutationLength - 1))
+        else
+          cuttingPoint2 = rand(cuttingPoint1:permutationLength)
+        end
+      end
+
+      x[cuttingPoint1], x[cuttingPoint2] = x[cuttingPoint2], x[cuttingPoint1]
+    end
+  end
+
+  return x
+end

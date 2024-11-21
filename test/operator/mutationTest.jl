@@ -100,3 +100,46 @@ end
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityZeroReturnASolutionWithTheSameVariables()
   @test mutateAContinuousSolutionWithPolynomialMutationWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
 end
+
+
+function permutationSwapMutationIsCorrectlyInitialiazed()
+  mutation = PermutationSwapMutation(probability = 0.01)
+
+  return 0.01 == mutation.probability
+end
+
+function mutateAPermutationSolutionWithWithProbabilityZeroReturnASolutionWithTheSameVariables()
+  solution = PermutationSolution(15)
+
+  mutation = PermutationSwapMutation(probability = 0.0)
+  newSolution = mutate!(copySolution(solution), mutation)
+
+  return solution.variables == newSolution.variables
+end
+
+function mutateAPermutationSolutionWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
+  solution = PermutationSolution(15)
+
+  mutation = PermutationSwapMutation(probability = 1.0)
+  newSolution = mutate!(copySolution(solution), mutation)
+
+  return solution.variables != newSolution.variables
+end
+
+function mutateAPermutationSolutionProducesAValidPermutation()
+  solution = PermutationSolution(15)
+
+  mutation = PermutationSwapMutation(probability = 1.0)
+  mutate!(solution, mutation)
+
+  return checkIfPermutationIsValid(solution.variables)
+end
+
+
+@testset "Permutation swap mutation tests" begin
+  @test permutationSwapMutationIsCorrectlyInitialiazed()
+  @test mutateAPermutationSolutionWithWithProbabilityZeroReturnASolutionWithTheSameVariables()
+  @test mutateAPermutationSolutionWithWithProbabilityOneChangesAllTheVariableValuesIntheReturnedSolution()
+  @test mutateAPermutationSolutionProducesAValidPermutation()
+end
+

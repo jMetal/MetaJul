@@ -47,7 +47,7 @@ export NonDominatedArchive, CrowdingDistanceArchive
 export add!, isEmpty, contain, getSolutions
 include("util/archive.jl")
 
-export PolynomialMutation, BitFlipMutation, UniformMutation
+export PolynomialMutation, BitFlipMutation, UniformMutation, PermutationSwapMutation
 export mutate!
 include("operator/mutation.jl")
 
