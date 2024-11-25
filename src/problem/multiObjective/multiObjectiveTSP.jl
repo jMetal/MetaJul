@@ -1,4 +1,10 @@
-function multiObjectiveTSP(fileNames::Vector{String})
+struct MultiObjectiveTSP <: AbstractPermutationProblem
+  name::string
+  tourLength::Int
+  distanceMatrices = Vector{Matrix{Float64}}()
+end
+
+function multiObjectiveTSP(name, fileNames::Vector{String})
   distanceMatrices = Vector{Matrix{Float64}}()
 
   for fileName in fileNames
@@ -6,11 +12,37 @@ function multiObjectiveTSP(fileNames::Vector{String})
     push!(distanceMatrices, distanceMatrix)
   end
 
-  problem = PermutationProblem()
-  problem.name = "MTSP"
-  problem.permutationLength = numberOfCities(length(distanceMatrices[0]))
-  problem.constraints = []
-  
+  tourLength = length(distanceMatrices[0])
+
+  return MultiObjectiveTSP(name, tourLength, distanceMatrices)
+end
+
+function numberOfVariables(problem::MultiObjectiveTSP)
+  return problem.tourLength
+end
+
+function numberOfObjectives(problem::MultiObjectiveTSP)
+  return length(problem.distanceMatrices)
+end
+
+function numberOfConstraints(problem::MultiObjectiveTSP)
+  return 0 ;
+end
+
+function name(problem::MultiObjectiveTSP)
+  return problem.name
+end
+
+function evaluate(solution::PermutationSolution, problem::MultiObjectiveTSP)::PermutationSolution
+  objectives = []
+
+  for distanceMatrix in problem.distanceMatrices
+    push!(objectives, computeTourDistance(distanceMatrix, solution.variables))
+  end
+
+  solution.objectives = objectives
+
+  return solution
 end
 
 function computeTourDistance(distanceMatrix, permutation::PermutationSolution)
