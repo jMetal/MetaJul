@@ -187,6 +187,9 @@ include("algorithm/NSGAII.jl")
 export toString
 include("util/toString.jl")
 
+export readTSPLibFile, computeTourDistance
+include("util/tspUtils.jl")
+
 export integerProblem
 include("problem/multiObjective/integerProblem.jl")
 

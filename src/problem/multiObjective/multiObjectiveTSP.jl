@@ -45,7 +45,7 @@ function evaluate(solution::PermutationSolution, problem::MultiObjectiveTSP)::Pe
   return solution
 end
 
-function computeTourDistance(distanceMatrix, permutation::PermutationSolution)
+function computeTourDistance(distanceMatrix, permutation::Vector{Int})
   numberOfCities = length(permutation.variables)
 
   totalDistance = 0 
@@ -65,7 +65,7 @@ function computeTourDistance(distanceMatrix, permutation::PermutationSolution)
   return totalDistance
 end
 
-function readTSPLibFile(fileName)
+function readTSPLibFile(fileName)::Matrix{Float64}
   lines = readlines(fileName)
   numberOfCities = length(lines) - 7
   nodes = lines[7:length(lines)-1]
