@@ -61,7 +61,8 @@ end
 problemTests = [
     "problem/continuousProblemTest.jl",
     "problem/binaryProblemTest.jl",
-    "problem/permutationProblemTest.jl"
+    "problem/permutationProblemTest.jl",
+    "problem/multiObjective/multiObjectiveTSPTest.jl"
 ]
 
 for testProgram in problemTests

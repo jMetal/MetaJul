@@ -66,7 +66,7 @@ function evaluate(solution::PermutationSolution, problem::PermutationProblem)::P
   return solution
 end
 
-function createSolution(problem::PermutationProblem)::PermutationSolution
+function createSolution(problem::T)::PermutationSolution where {T <: PermutationProblem}
   solution = PermutationSolution(problem.permutationLength)
   solution.objectives = zeros(numberOfObjectives(problem))
   solution.constraints = zeros(numberOfConstraints(problem))

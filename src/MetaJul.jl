@@ -161,6 +161,9 @@ include("problem/multiObjective/kursawe.jl")
 include("problem/multiObjective/ZDT.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
+export MultiObjectiveTSP, multiObjectiveTSP
+include("problem/multiObjective/multiObjectiveTSP.jl")
+
 export subasi2016
 include("problem/multiObjective/rwa.jl")
 
