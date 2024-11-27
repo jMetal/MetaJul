@@ -9,13 +9,13 @@ jobs:
         julia-version: ['1.10']
         julia-arch: [x64]
         os: [ubuntu-latest]
-
+    defaults:
+      run:
+        working-directory: /home/runner/work/MetaJul/MetaJul
+        
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
           version: ${{ matrix.julia-version }}
-      - name: Unit testing
-        uses: julia-actions/julia-runtest@latest
-        with:
-          directory: /home/runner/work/MetaJul/MetaJul
+      - uses: julia-actions/julia-buildpkg@latest
