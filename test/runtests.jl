@@ -1,7 +1,7 @@
 using MetaJul
 using Test
 
-tsp_data_dir = joinpath(@__DIR__, "../..", "resources/tspDataFiles")
+tsp_data_dir = joinpath(@__DIR__, "..", "resources/tspDataFiles")
 
 # Utility functions
 
