@@ -1,4 +1,4 @@
-name: Test
+name: Build
 on: [push, pull_request]
 
 jobs:
@@ -9,9 +9,6 @@ jobs:
         julia-version: ['1.10']
         julia-arch: [x64]
         os: [ubuntu-latest]
-    defaults:
-      run:
-        working-directory: /home/runner/work/MetaJul/MetaJul
         
     steps:
       - uses: actions/checkout@v2

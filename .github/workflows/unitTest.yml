@@ -17,5 +17,3 @@ jobs:
           version: ${{ matrix.julia-version }}
       - name: Unit testing
         uses: julia-actions/julia-runtest@latest
-        with:
-          directory: /home/runner/work/MetaJul/MetaJul

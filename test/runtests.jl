@@ -1,6 +1,8 @@
 using MetaJul
 using Test
 
+tsp_data_dir = joinpath(@__DIR__, "../..", "resources/tspDataFiles")
+
 # Utility functions
 
 function createContinuousSolution(objectives::Vector{Float64})::ContinuousSolution{Float64}

@@ -3,14 +3,14 @@
 #########################################################################
 
 function readFourCitiesTSPWorksProperly()
-  distanceMatrix = readTSPLibFile("resources/tspDataFiles/fourCitiesTSP.tsp")
+  distanceMatrix = readTSPLibFile(joinpath(tsp_data_dir, "fourCitiesTSP.tsp"))
   numberOfRows = size(distanceMatrix, 1)
 
   return 4 == numberOfRows
 end
 
 function theDistanceForAnOrderedPermutationIsFour()
-  distanceMatrix = readTSPLibFile("resources/tspDataFiles/fourCitiesTSP.tsp")
+  distanceMatrix = readTSPLibFile(joinpath(tsp_data_dir, "fourCitiesTSP.tsp"))
 
   permutation = [1,2,3,4]
 
@@ -18,7 +18,7 @@ function theDistanceForAnOrderedPermutationIsFour()
 end
 
 function readKroA100ProblemProperly()
-  distanceMatrix = readTSPLibFile("resources/tspDataFiles/kroA100.tsp")
+  distanceMatrix = readTSPLibFile(joinpath(tsp_data_dir, "kroA100.tsp"))
   numberOfRows = size(distanceMatrix, 1)
 
   return 100 == numberOfRows

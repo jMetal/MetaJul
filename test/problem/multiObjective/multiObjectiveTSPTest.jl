@@ -1,4 +1,7 @@
-problem100Cities = multiObjectiveTSP("kroAB100", ["resources/tspDataFiles/kroA100.tsp", "resources/tspDataFiles/kroB100.tsp"])
+
+println(joinpath(tsp_data_dir, "kroA100.tsp"))
+
+problem100Cities = multiObjectiveTSP("kroAB100", [joinpath(tsp_data_dir, "kroA100.tsp"), joinpath(tsp_data_dir, "kroB100.tsp")])
 
 function createSolutionReturnsAValidSolutionForKroAB100Problem() 
     solution = createSolution(problem100Cities)
@@ -15,7 +18,7 @@ end
     @test createSolutionReturnsAValidSolutionForKroAB100Problem()
 end
 
-problem4Cities = multiObjectiveTSP("simpleProblem", ["resources/tspDataFiles/fourCitiesTSP.tsp"])
+problem4Cities = multiObjectiveTSP("simpleProblem", [joinpath(tsp_data_dir, "fourCitiesTSP.tsp")])
 
 function evaluatingASolutionReturnsTheRightDistance()
     solution = createSolution(problem4Cities)
