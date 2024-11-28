@@ -10,16 +10,15 @@ The MetaJul project is aimed at studying the implementation of metaheuristics in
 
 Current features:
 
-* Encoding: continuous, binary
+* Encoding: continuous (float, integer), binary, permutation
 * Problems: 
   
      - Single-objective problems: continuous (Sphere), binary (OneMax)
-     - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark), binary (OneZeroMax)
+     - Multi-objective problems: continuous (Fonseca, Schaffer, Kursawe, ZDT benchmark), binary (OneZeroMax), multi-objective TSP
      - Constrained problems: Srinivas, ConstrEx, Bihn2, Tanaka, Osyczka2, Golinski
 
-* Operators: mutation (uniform, polynomial, bit-flip), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point), selection (random, binary tournament)
+* Operators: mutation (uniform, polynomial, bit-flip, permutation swap), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point, PMX), selection (random, binary tournament)
 * Algorithms: local search, evolutionary algorithm, genetic algorithm, NSGA-II, SMPSO (multi-objective PSO)
-* Encodings: continuous (float, integer), binary
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
 * Observers: ``EvaluationObserver``, ``FitnessObserver``, ``FrontPlotObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
