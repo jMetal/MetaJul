@@ -41,7 +41,7 @@ function main()
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
     observer = FrontPlotObserver(5000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT6.csv"))
-    register!(getObservable(solver), observer)
+    register!(observable(solver), observer)
 
     optimize!(solver)
 
