@@ -169,7 +169,7 @@ function permutationSwapMutation(x::Vector{Int64}, probability::Float64)::Vector
       cuttingPoint2 = rand(1:permutationLength)
 
       while cuttingPoint1 == cuttingPoint2
-        if cuttingPoint1 == (permutationLength - 1)
+        if cuttingPoint1 == permutationLength
           cuttingPoint2 = rand(1:(permutationLength - 1))
         else
           cuttingPoint2 = rand(cuttingPoint1:permutationLength)
