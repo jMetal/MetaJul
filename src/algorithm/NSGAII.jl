@@ -50,6 +50,25 @@ mutable struct NSGAII <: Algorithm
     return algorithm
   end
 
+  function NSGAII(
+    problem :: Problem{PermutationSolution}; 
+    populationSize = 100, 
+    termination = TerminationByEvaluations(25000), dominanceComparator = numberOfConstraints(problem) == 0 ? DefaultDominanceComparator() : ConstraintsAndDominanceComparator(),
+    crossover = PMXCrossover(probability = 1.0),
+    mutation = PermutationSwapMutation(probability = 1.0 / numberOfVariables(problem)))
+    algorithm = new()
+    algorithm.solver = EvolutionaryAlgorithm()
+    algorithm.solver.name = "NSGA-II"
+    algorithm.problem = problem
+    algorithm.populationSize = populationSize
+    algorithm.dominanceComparator = dominanceComparator 
+    algorithm.crossover = crossover
+    algorithm.mutation = mutation
+    algorithm.termination = termination
+
+    return algorithm
+  end
+
 end
 
 function foundSolutions(nsgaII::NSGAII) 
