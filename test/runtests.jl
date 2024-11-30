@@ -60,17 +60,6 @@ for testProgram in utilTests
     include(testProgram)
 end
 
-problemTests = [
-    "problem/continuousProblemTest.jl",
-    "problem/binaryProblemTest.jl",
-    "problem/permutationProblemTest.jl",
-    "problem/multiObjective/multiObjectiveTSPTest.jl"
-]
-
-for testProgram in problemTests
-    include(testProgram)
-end
-
 operatorTests = [
     "operator/mutationTest.jl"
     "operator/crossoverTest.jl"
@@ -94,10 +83,13 @@ end
 problemTests = [
     "problem/continuousProblemTest.jl",
     "problem/binaryProblemTest.jl",
+    "problem/permutationProblemTest.jl",
     "problem/singleObjective/oneMaxTest.jl",
     "problem/multiObjective/oneZeroMaxTest.jl",
     "problem/multiObjective/schafferTest.jl",
-    "problem/multiObjective/ZDTTest.jl"
+    "problem/multiObjective/ZDTTest.jl",
+    "problem/multiObjective/multiObjectiveTSPTest.jl",
+    "problem/multiObjective/multiObjectiveKnapsackTest.jl"
 ]
 
 for testProgram in problemTests

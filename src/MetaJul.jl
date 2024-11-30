@@ -164,6 +164,9 @@ include("problem/multiObjective/oneZeroMax.jl")
 export MultiObjectiveTSP, multiObjectiveTSP
 include("problem/multiObjective/multiObjectiveTSP.jl")
 
+export multiObjectiveKnapsak
+include("problem/multiObjective/multiObjectiveKnapsack.jl")
+
 export subasi2016
 include("problem/multiObjective/rwa.jl")
 
