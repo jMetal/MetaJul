@@ -1,8 +1,23 @@
-function multiObjectiveKnapsak(profits::Matrix{Int}, weights::Matrix{Int}, capacities::Vector{Int}) 
+"""
+    multiObjectiveKnapsack(profits::Matrix{Int}, weights::Matrix{Int}, capacities::Vector{Int}) -> BinaryProblem
+
+Create a multi-objective knapsack problem instance.
+
+# Arguments
+- `profits::Matrix{Int}`: A matrix where each row represents the profits for each item in a different objective.
+- `weights::Matrix{Int}`: A matrix where each row represents the weights of each item for a different constraint.
+- `capacities::Vector{Int}`: A vector representing the capacity constraints.
+
+# Returns
+- `BinaryProblem`: A problem instance for the multi-objective knapsack problem.
+"""
+
+function multiObjectiveKnapsack(profits::Matrix{Int}, weights::Matrix{Int}, capacities::Vector{Int}) 
   numberOfBits = size(profits,2)
 
   problem = BinaryProblem(numberOfBits, "MultiObjectiveKnapsack")
 
+  # Add objectives to the problem
   for i in 1:size(profits, 1)
     f = x -> begin
       totalProfit = 0;
@@ -16,6 +31,7 @@ function multiObjectiveKnapsak(profits::Matrix{Int}, weights::Matrix{Int}, capac
     addObjective(problem, f)
   end
 
+  # Add constraints to the problem
   for i in 1:size(weights, 1)
     c = x -> begin
       totalWeight = 0;
