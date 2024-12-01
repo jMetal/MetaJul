@@ -8,7 +8,7 @@ function aSingleObjectiveKnapsackProblemIsCorrectlyCreated()
 
     capacities = [12]
 
-    knapsack = multiObjectiveKnapsak(profits, weights, capacities)
+    knapsack = multiObjectiveKnapsack(profits, weights, capacities)
 
     return numberOfObjectives(knapsack) == 1 && numberOfVariables(knapsack) == 4 && numberOfConstraints(knapsack) == 1
 end
@@ -18,7 +18,7 @@ function aMultiObjectiveKnapsackProblemIsCorrectlyCreated()
     weights = [2 3 5 7 ; 1 5 6 3 ; 3 1 2 4]
     capacities = [12, 9, 5]
 
-    knapsack = multiObjectiveKnapsak(profits, weights, capacities)
+    knapsack = multiObjectiveKnapsack(profits, weights, capacities)
 
     return numberOfObjectives(knapsack) == 2 && numberOfVariables(knapsack) == 4 && numberOfConstraints(knapsack) == 3
 end
@@ -31,7 +31,7 @@ function whenEvaluatingAFeasibleSolutionThenTheObjectiveValueIsCorrect()
     weights = [2 3 5 7 ; 1 5 6 3 ; 3 1 2 4]
     capacities = [12, 9, 5]
 
-    knapsack = multiObjectiveKnapsak(profits, weights, capacities)
+    knapsack = multiObjectiveKnapsack(profits, weights, capacities)
 
     solution = createSolution(knapsack)
     solution.variables = initBitVector("1010")
@@ -42,12 +42,11 @@ function whenEvaluatingAFeasibleSolutionThenTheObjectiveValueIsCorrect()
 end
 
 function whenEvaluatingAnUFeasibleSolutionForViolatingTwoConstraintsThenTheConstraintValueIsCorrect()
-    profits = Matrix{Int}(undef, 1, 4)
     profits = [10 5 15 7 ; 2 6 3 4]
     weights = [2 3 5 7 ; 1 5 6 3 ; 3 1 2 4]
     capacities = [12, 9, 5]
 
-    knapsack = multiObjectiveKnapsak(profits, weights, capacities)
+    knapsack = multiObjectiveKnapsack(profits, weights, capacities)
 
     solution = createSolution(knapsack)
     solution.variables = initBitVector("1110")
@@ -58,12 +57,11 @@ function whenEvaluatingAnUFeasibleSolutionForViolatingTwoConstraintsThenTheConst
 end
 
 function whenEvaluatingAnUFeasibleSolutionForViolatingAllTheConstraintsThenTheConstraintValueIsCorrect()
-    profits = Matrix{Int}(undef, 1, 4)
     profits = [10 5 15 7 ; 2 6 3 4]
     weights = [2 3 5 7 ; 1 5 6 3 ; 3 1 2 4]
     capacities = [12, 9, 5]
 
-    knapsack = multiObjectiveKnapsak(profits, weights, capacities)
+    knapsack = multiObjectiveKnapsack(profits, weights, capacities)
 
     solution = createSolution(knapsack)
     solution.variables = initBitVector("1111")
