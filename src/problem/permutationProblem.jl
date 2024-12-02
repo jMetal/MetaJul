@@ -8,7 +8,7 @@ mutable struct PermutationProblem <: AbstractPermutationProblem
 end
 
 function PermutationProblem(problemName::String) 
-  return PermutationProblem([], [], [], problemName)
+  return PermutationProblem(0, [], [], problemName)
 end
 
 function numberOfVariables(problem::PermutationProblem) 

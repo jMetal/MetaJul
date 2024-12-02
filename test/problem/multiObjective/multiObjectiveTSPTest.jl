@@ -1,7 +1,7 @@
+paths = [joinpath(tsp_data_dir, "kroA100.tsp"), joinpath(tsp_data_dir, "kroB100.tsp")]
+distanceMatrices = [readTSPLibFile(paths[1]), readTSPLibFile(paths[2])]
 
-println(joinpath(tsp_data_dir, "kroA100.tsp"))
-
-problem100Cities = multiObjectiveTSP("kroAB100", [joinpath(tsp_data_dir, "kroA100.tsp"), joinpath(tsp_data_dir, "kroB100.tsp")])
+problem100Cities = multiObjectiveTSP("kroAB100", distanceMatrices)
 
 function createSolutionReturnsAValidSolutionForKroAB100Problem() 
     solution = createSolution(problem100Cities)
