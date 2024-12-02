@@ -1,8 +1,3 @@
-struct MultiObjectiveTSP <: AbstractPermutationProblem
-  name::String
-  tourLength::Int
-  distanceMatrices::Vector{Matrix{Float64}}
-end
 
 function multiObjectiveTSP(name, distanceMatrices::Vector{Matrix{Float64}})
   problem = PermutationProblem(name)
