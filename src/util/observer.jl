@@ -53,12 +53,12 @@ using Plots
 struct FrontPlotObserver <: Observer
   frequency::Int
   problemName
-  front::Matrix
+  referenceFront::Matrix
 
-  function FrontPlotObserver(frequency, problemName, front::Matrix)
+  function FrontPlotObserver(frequency, problemName, referenceFront::Matrix)
     gr()
         
-    return new(frequency, problemName, front)
+    return new(frequency, problemName, referenceFront)
   end
 end
 
@@ -66,9 +66,9 @@ function update(observer::FrontPlotObserver, data::Dict)
   evaluations = data["EVALUATIONS"]
   population = data["POPULATION"]
   if mod(evaluations, observer.frequency) == 0
-    front = observer.front
-    x = front[:, 1]
-    y = front[:, 2]
+    referenceFront = observer.referenceFront
+    x = referenceFront[:, 1]
+    y = referenceFront[:, 2]
 
     plot(x, y,  title = string(observer.problemName), label = "Reference front", show = true, reuse=true)
 
