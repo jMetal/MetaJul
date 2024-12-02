@@ -21,9 +21,9 @@ function multiObjectiveKnapsack(profits::Matrix{Int}, weights::Matrix{Int}, capa
   for i in 1:size(profits, 1)
     f = x -> begin
       totalProfit = 0;
-      for bit in 1:numberOfBits
-        if x.bits[bit]
-          totalProfit += profits[i, bit]
+      for bitIndex in 1:numberOfBits
+        if x.bits[bitIndex]
+          totalProfit += profits[i, bitIndex]
         end
       end 
       return -totalProfit
@@ -35,9 +35,9 @@ function multiObjectiveKnapsack(profits::Matrix{Int}, weights::Matrix{Int}, capa
   for i in 1:size(weights, 1)
     c = x -> begin
       totalWeight = 0;
-      for bit in 1:numberOfBits
-        if x.bits[bit]
-          totalWeight += weights[i, bit]
+      for bitIndex in 1:numberOfBits
+        if x.bits[bitIndex]
+          totalWeight += weights[i, bitIndex]
         end
       end 
       constraintValue = capacities[i] - totalWeight
