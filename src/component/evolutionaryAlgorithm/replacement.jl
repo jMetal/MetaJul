@@ -70,7 +70,7 @@ mutable struct MOEADReplacement <: Replacement
     )
 end
 
-function replace_!(replacement::MOEADReplacement, population::Vector{T}, offspring::Vector{T}) where {T <: Solution}
+function replace_(replacement::MOEADReplacement, population::Vector{T}, offspring::Vector{T}) where {T <: Solution}
     new_solution = offspring[1]
 
     update_ideal_point!(replacement, population, new_solution)
