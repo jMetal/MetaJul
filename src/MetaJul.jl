@@ -179,6 +179,10 @@ export NSGAII
 export optimize!, foundSolutions, observable
 include("algorithm/NSGAII.jl")
 
+export MOEAD
+export optimize!, foundSolutions, observable
+include("algorithm/MOEAD.jl")
+
 export toString
 include("util/toString.jl")
 
