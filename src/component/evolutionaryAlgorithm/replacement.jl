@@ -77,25 +77,25 @@ function replace_(replacement::MOEADReplacement, population::Vector{T}, offsprin
 
     neighborType = replacement.matingPoolSelection.neighborhood.neighborType
     # NeighborType Neighbor = true
-    random_permutation = if neighborType == true
+    randomPermutation = if neighborType == true
         IntegerPermutationGenerator(size(replacement.weightVectorNeighborhood.neighborhood.neighborhoodSize, 1))
     else
         IntegerPermutationGenerator(length(population))
     end
 
     replacements = 0
-    while replacements < replacement.maximumNumberOfReplacedSolutions && hasNext(random_permutation)
-        # NeighborType Neighbor = true
-        k = if neighborType == true
-            replacement.weightVectorNeighborhood.neighborhood[replacement.sequenceGenerator.currentValue][generateNext!(random_permutation)]
+    while replacements < replacement.maximumNumberOfReplacedSolutions && hasNext(randomPermutation)
+        k = 1
+        if neighborType
+            k = replacement.weightVectorNeighborhood.neighborhood[replacement.sequenceGenerator.currentValue][getValue(randomPermutation)]
         else
-            generateNext!(random_permutation)
+            k = getValue(randomPermutation)
         end
 
-        println(population[k])
+        generateNext!(randomPermutation)
 
-        f1 = compute(replacement.aggregationFunction, population[k].objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
-        f2 = compute(replacement.aggregationFunction, new_solution.objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
+        f1 = compute(replacement.aggregationFunction, population[k].objectives, replacement.weightVectorNeighborhood.weightVector[k, :], replacement.idealPoint, replacement.nadirPoint)
+        f2 = compute(replacement.aggregationFunction, new_solution.objectives, replacement.weightVectorNeighborhood.weightVector[k, :], replacement.idealPoint, replacement.nadirPoint)
 
         if f2 < f1
             population[k] = copySolution(new_solution)
@@ -110,6 +110,10 @@ end
 function update_ideal_point!(replacement::MOEADReplacement, population::Vector{S}, new_solution::S) where {S <: Solution}
     if replacement.firstReplacement
         replacement.idealPoint = IdealPoint(length(new_solution.objectives))
+        for solution in population
+            update!(replacement.idealPoint, solution.objectives)
+        end
+
         if replacement.normalize
             add_all!(replacement.nonDominatedArchive, population)
             add!(replacement.nonDominatedArchive, new_solution)
@@ -134,3 +138,4 @@ function add_all!(archive::NonDominatedArchive, solutions::Vector{S}) where {S <
         add!(archive, solution)
     end
 end
+
