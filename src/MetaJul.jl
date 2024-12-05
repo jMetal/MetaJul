@@ -81,11 +81,11 @@ export Point, ArrayPoint, IdealPoint, NadirPoint
 export dimension, values, value, value!, update!, set!
 include("util/point.jl")
 
-export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection
+export AggregationFunction, WeightedSum, PenaltyBoundaryIntersection, Tschebyscheff
 export compute
 include("util/aggregationFunction.jl")
 
-export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement, MOEADReplacement
+export MuCommaLambdaReplacement, MuPlusLambdaReplacement, RankingAndDensityEstimatorReplacement, MOEADReplacement, MOEADReplacement2
 export replace_, replace_!, update_ideal_point!, update_nadir_point!
 include("component/evolutionaryAlgorithm/replacement.jl")
 
