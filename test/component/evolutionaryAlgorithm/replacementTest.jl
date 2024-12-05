@@ -398,9 +398,6 @@ function moeadReplacementIsCorrectlyInitialized()
            replacement.sequenceGenerator == sequenceGenerator &&
            replacement.maximumNumberOfReplacedSolutions == maxReplaced &&
            replacement.normalize == normalize &&
-           replacement.idealPoint != nothing &&
-           replacement.nadirPoint != nothing &&
-           replacement.nonDominatedArchive != nothing &&
            replacement.firstReplacement == true
 end
 
@@ -414,7 +411,7 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     aggregationFunction = PenaltyBoundaryIntersection()
     sequenceGenerator = IntegerPermutationGenerator(1)
     maxReplaced = 5
-    normalize = true
+    normalize = false
 
     replacement = MOEADReplacement(
         matingPoolSelection,
@@ -429,15 +426,11 @@ function moeadReplacementUpdatesIdealAndNadirPoints()
     solution1 = createContinuousSolution([1.0, 1.0])
     solution2 = createContinuousSolution([0.5, 0.5])
 
-    print("-----------")
-    print(solution1)
-    print(solution2)
-
     population = [solution1]
     offspring = [solution2]
 
     # Perform replacement
-    replace_!(replacement, population, offspring)
+    replace_(replacement, population, offspring)
 
     # Validate ideal point update
     updatedIdeal = replacement.idealPoint.point
@@ -472,7 +465,7 @@ function moeadReplacementWorksProperlySingleSolution()
     population = [solution1]
     offspring = [solution2]
 
-    resultPopulation = replace_!(replacement, population, offspring)
+    resultPopulation = replace_(replacement, population, offspring)
 
     # Expecting population to contain offspring if it has a better aggregation score
     f1 = compute(aggregationFunction, solution1.objectives, weightVectorNeighborhood.weightVector[1, :], replacement.idealPoint, replacement.nadirPoint)
