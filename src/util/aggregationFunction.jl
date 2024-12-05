@@ -1,22 +1,49 @@
 abstract type AggregationFunction end
 
-# Define the WeightedSum struct
+"""
+    struct WeightedSum <: AggregationFunction
+
+Represents the weighted sum aggregation function for multi-objective optimization.
+
+# Fields
+- `normalizeObjectives::Bool`: Whether to normalize the objectives.
+- `epsilon::Float64`: A small constant to avoid division by zero in normalization.
+
+# Constructors
+- `WeightedSum()`: Creates a `WeightedSum` object with default settings (no normalization and epsilon of 0).
+- `WeightedSum(normalizeObjectives::Bool, epsilon::Float64)`: Creates a `WeightedSum` object with the specified normalization setting and epsilon value.
+"""
 struct WeightedSum <: AggregationFunction
     normalizeObjectives::Bool
     epsilon::Float64
 
-    WeightedSum() = new(true,  1e-15)
-    WeightedSum(normalize, epsilonValue) = new(normalize, epsilonValue)
+    WeightedSum() = new(false, 0.0)
+    WeightedSum(normalizeObjectives::Bool, epsilon::Float64) = new(normalizeObjectives, epsilon)
 end
 
-# Compute function
+"""
+    compute(aggFunction::WeightedSum, vector::Vector{Float64}, weightVector::Vector{Float64}, 
+            idealPoint::IdealPoint, nadirPoint::NadirPoint) -> Float64
+
+Computes the weighted sum aggregation function using the formula:
+`sum(weightVector[n] * value)`, where `value` is optionally normalized.
+
+# Arguments
+- `aggFunction::WeightedSum`: The weighted sum aggregation function object.
+- `vector::Vector{Float64}`: The input vector to be aggregated.
+- `weightVector::Vector{Float64}`: The weight vector to be used in the aggregation.
+- `idealPoint::IdealPoint`: The ideal point for normalization.
+- `nadirPoint::NadirPoint`: The nadir point for normalization.
+
+# Returns
+- `Float64`: The result of the weighted sum aggregation function.
+"""
 function compute(
-    aggFunction::WeightedSum, vector::Vector{Float64}, weightVector::Vector{Float64}, idealPoint::IdealPoint, nadirPoint::NadirPoint)
+    aggFunction::WeightedSum, vector::Vector{Float64}, weightVector::Vector{Float64}, idealPoint::IdealPoint, nadirPoint::NadirPoint) :: Float64
     sum = 0.0
     for n in 1:length(vector)
         tmpValue = if aggFunction.normalizeObjectives
-            (vector[n] - value(idealPoint, n)) /
-            (value(nadirPoint, n) - value(idealPoint, n) + aggFunction.epsilon)
+            (vector[n] - value(idealPoint, n)) / (value(nadirPoint, n) - value(idealPoint, n) + aggFunction.epsilon)
         else
             vector[n]
         end
@@ -72,4 +99,67 @@ function compute(
     d2 = sqrt(d2)
 
     return d1 + aggFunction.theta * d2
+end
+
+
+"""
+    struct Tschebyscheff <: AggregationFunction
+
+Represents the Tschebyscheff aggregation function for multi-objective optimization.
+
+# Fields
+- `normalizeObjectives::Bool`: Whether to normalize the objectives.
+- `epsilon::Float64`: A small constant to avoid division by zero in normalization.
+
+# Constructors
+- `Tschebyscheff(normalizeObjectives::Bool)`: Creates a `Tschebyscheff` object with the specified normalization setting and a default `epsilon` of 1e-6.
+"""
+struct Tschebyscheff <: AggregationFunction
+    normalizeObjectives::Bool
+    epsilon::Float64
+
+    Tschebyscheff() = new(false, 0.0)
+    Tschebyscheff(normalizeObjectives::Bool, epsilon::Float64) = new(normalizeObjectives, epsilon)
+
+end
+
+"""
+    compute(aggFunction::Tschebyscheff, vector::Vector{Float64}, weightVector::Vector{Float64}, 
+            idealPoint::IdealPoint, nadirPoint::NadirPoint) -> Float64
+
+Computes the Tschebyscheff aggregation function using the formula:
+`max(|vector[n] - idealPoint.value(n)| * weightVector[n])`.
+If `weightVector[n]` is equal to 0, `feval` is set to `0.0001 * diff`.
+
+# Arguments
+- `aggFunction::Tschebyscheff`: The Tschebyscheff aggregation function object.
+- `vector::Vector{Float64}`: The input vector to be aggregated.
+- `weightVector::Vector{Float64}`: The weight vector to be used in the aggregation.
+- `idealPoint::IdealPoint`: The ideal point for normalization.
+- `nadirPoint::NadirPoint`: The nadir point for normalization.
+
+# Returns
+- `Float64`: The result of the Tschebyscheff aggregation function.
+"""
+function compute(
+    aggFunction::Tschebyscheff, vector::Vector{Float64}, weightVector::Vector{Float64}, idealPoint::IdealPoint, nadirPoint::NadirPoint) :: Float64
+    maxFun = -1.0e30
+    for n in 1:length(vector)
+        diff = if aggFunction.normalizeObjectives
+            abs((vector[n] - value(idealPoint, n)) / (value(nadirPoint, n) - value(idealPoint, n) + aggFunction.epsilon))
+        else
+            abs(vector[n] - value(idealPoint, n))
+        end
+
+        feval = if weightVector[n] == 0
+            0.0001 * diff
+        else
+            diff * weightVector[n]
+        end
+
+        if feval > maxFun
+            maxFun = feval
+        end
+    end
+    return maxFun
 end
