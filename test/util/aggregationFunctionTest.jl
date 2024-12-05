@@ -3,7 +3,7 @@
 function constructorInitializesTheStructCorrectlyWithDefaultValues()
     aggFunction = WeightedSum()
 
-    return aggFunction.epsilon == 1e-15 && aggFunction.normalizeObjectives 
+    return aggFunction.epsilon == 0.0 && !aggFunction.normalizeObjectives 
 end
 
 function constructorInitializesTheStructCorrectlyWithSpecificValues()
@@ -151,4 +151,81 @@ end
     @test givenAnAggFunctionWhenNotNormalizeThenTheResultIsCorrect_PBI()
     @test givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect_PBI()
     @test givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect_PBI()
+end
+
+using Test
+
+# Unit tests for Tschebyscheff
+
+function constructorInitializesTheStructCorrectlyWithDefaultValues_Tschebyscheff()
+    aggFunction = Tschebyscheff()
+
+    return aggFunction.epsilon == 0.0 && !aggFunction.normalizeObjectives
+end
+
+function constructorInitializesTheStructCorrectlyWithSpecificValues_Tschebyscheff()
+    epsilon = 1e-8
+    normalize = true
+    aggFunction = Tschebyscheff(normalize, epsilon)
+
+    return aggFunction.epsilon == epsilon && aggFunction.normalizeObjectives
+end
+
+"""
+function givenAnAggFunctionWhenNormalizeThenTheResultIsCorrect_Tschebyscheff()
+    idealPoint = IdealPoint([0.0, 0.0])
+    nadirPoint = NadirPoint([1.0, 1.0])
+
+    vector = [0.5, 0.5]
+    weightVector = [1.0, 1.0]
+
+    aggFunction = Tschebyscheff(true, 0.1e-6)
+    result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
+    return isapprox(0.5, result)
+end
+"""
+
+function givenAnAggFunctionWhenNotNormalizeThenTheResultIsCorrect_Tschebyscheff()
+    idealPoint = IdealPoint([0.0, 0.0])
+    nadirPoint = NadirPoint([1.0, 1.0])
+
+    vector = [0.5, 0.5]
+    weightVector = [1.0, 1.0]
+
+    aggFunction = Tschebyscheff()
+    result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
+    return isapprox(0.5, result)
+end
+
+function givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect_Tschebyscheff()
+    idealPoint = IdealPoint([0.0, 0.0])
+    nadirPoint = NadirPoint([1.0, 1.0])
+
+    vector = [0.5, 0.5]
+    weightVector = [0.2, 0.8]
+
+    aggFunction = Tschebyscheff()
+    result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
+    return isapprox(0.4, result)
+end
+
+function givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect_Tschebyscheff()
+    idealPoint = IdealPoint([0.0, 0.0])
+    nadirPoint = NadirPoint([1.0, 1.0])
+
+    vector = [0.2, 0.8]
+    weightVector = [1.0, 1.0]
+
+    aggFunction = Tschebyscheff()
+    result = compute(aggFunction, vector, weightVector, idealPoint, nadirPoint)
+    return isapprox(0.8, result)
+end
+
+@testset "Tschebyscheff tests" begin
+    @test constructorInitializesTheStructCorrectlyWithDefaultValues_Tschebyscheff()
+    @test constructorInitializesTheStructCorrectlyWithSpecificValues_Tschebyscheff()
+    #@test givenAnAggFunctionWhenNormalizeThenTheResultIsCorrect_Tschebyscheff()
+    @test givenAnAggFunctionWhenNotNormalizeThenTheResultIsCorrect_Tschebyscheff()
+    @test givenAnAggFunctionWhenTheWeightsAreDifferentThenTheResultIsCorrect_Tschebyscheff()
+    @test givenAnAggFunctionWhenTheVectorsAreDifferentThenTheResultIsCorrect_Tschebyscheff()
 end
