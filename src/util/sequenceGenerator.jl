@@ -5,8 +5,7 @@ abstract type SequenceGenerator end
 ###########################################
 
 """
-This struct generates a bounded sequence of consecutive integer numbers. When the last number is generated,
-the sequence starts again.
+This struct generates a bounded sequence of consecutive integer numbers. When the last number is generated, the sequence starts again.
 """
 struct IntegerBoundedSequenceGenerator <: SequenceGenerator
     index::Int
@@ -14,7 +13,7 @@ struct IntegerBoundedSequenceGenerator <: SequenceGenerator
 
     function IntegerBoundedSequenceGenerator(size::Int)
         @assert size > 0 "Size $size is not a positive number greater than zero"
-        new(0, size)
+        new(1, size)
     end
 end
 
@@ -22,8 +21,7 @@ end
 Returns the current value in the sequence.
 """
 function getValue(generator::IntegerBoundedSequenceGenerator)::Int
-    # Julia starting index is 1, not 0
-    return generator.index + 1
+    return generator.index
 end
 
 """
@@ -32,7 +30,7 @@ Generates the next value in the sequence. Wraps around to 0 when reaching the sp
 function generateNext!(generator::IntegerBoundedSequenceGenerator)
     generator.index += 1
     if generator.index == generator.size
-        generator.index = 0
+        generator.index = 1
     end
 end
 
@@ -59,7 +57,7 @@ mutable struct IntegerPermutationGenerator <: SequenceGenerator
 
     function IntegerPermutationGenerator(size::Int)
         @assert size > 0 "Size $size is not a positive number greater than zero"
-        new(randomPermutation(size), 0, size)
+        new(randomPermutation(size), 1, size)
     end
 end
 
@@ -67,8 +65,7 @@ end
 Returns the current value in the sequence.
 """
 function getValue(generator::IntegerPermutationGenerator)::Int
-    # Julia starting index is 1, not 0
-    return generator.sequence[generator.index + 1]
+    return generator.sequence[generator.index]
 end
 
 """
@@ -78,15 +75,15 @@ function generateNext!(generator::IntegerPermutationGenerator)
     generator.index += 1
     if generator.index == length(generator.sequence)
         generator.sequence = randomPermutation(generator.size)
-        generator.index = 0
+        generator.index = 1
     end
 end
 
 """
-Generates a random permutation of integers from 0 to size-1.
+Generates a random permutation of integers from 1 to size.
 """
 function randomPermutation(size::Int)::Vector{Int}
-    permutation = collect(0:(size-1))
+    permutation = collect(1:size)
     flag = fill(true, size)
     result = Vector{Int}(undef, size)
 
