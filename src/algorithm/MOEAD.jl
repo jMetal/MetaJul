@@ -17,16 +17,16 @@ mutable struct MOEAD <: Algorithm
 
     function MOEAD(
         problem::ContinuousProblem;
-        populationSize = 100,
-        neighborhoodSize = 20,
-        maxReplacedSolutions = 2,
-        neighborhoodSelectionProbability = 0.9,
-        aggregationFunction = PenaltyBoundaryIntersection(5.0, true),
-        crossover = SBXCrossover(probability = 1.0, distributionIndex = 20.0, bounds = problem.bounds),
-        mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds),
-        sequenceGenerator = IntegerPermutationGenerator(populationSize),
-        termination = TerminationByEvaluations(25000),
-        normalize = true
+        populationSize=100,
+        neighborhoodSize=20,
+        maxReplacedSolutions=2,
+        neighborhoodSelectionProbability=0.9,
+        aggregationFunction=PenaltyBoundaryIntersection(5.0, false),
+        crossover=SBXCrossover(probability=1.0, distributionIndex=20.0, bounds=problem.bounds),
+        mutation=PolynomialMutation(probability=1.0 / numberOfVariables(problem), distributionIndex=20.0, bounds=problem.bounds),
+        sequenceGenerator=IntegerPermutationGenerator(populationSize),
+        termination=TerminationByEvaluations(25000),
+        normalize=false
     )
         algorithm = new()
         algorithm.solver = EvolutionaryAlgorithm()
@@ -63,8 +63,6 @@ mutable struct MOEAD <: Algorithm
             throw(DomainError("Number of objectives > 2 is not currently supported."))
             # neighborhood = WeightVectorNeighborhood(moead.populationSize, problem.numberOfObjectives, moead.neighborhoodSize, "path/to/weight-vectors.dat")
         end
-
-        
 
         selection = PopulationAndNeighborhoodSelection(
             variation.matingPoolSize,
