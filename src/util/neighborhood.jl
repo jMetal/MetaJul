@@ -70,3 +70,4 @@ function getNeighbors(weightVectorNeighborhood::WeightVectorNeighborhood, soluti
     end
     return neighbourSolutions
 end
+
