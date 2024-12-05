@@ -9,11 +9,11 @@ function main()
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "MOEA/D"
 
-    populationSize = 91
+    populationSize = 100
     neighborhoodSize = 20
     offspringPopulationSize = 1
     maximumNumberOfReplacedSolutions = 2
-    normalizeObjectives = false
+    normalizeObjectives = true
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
     solver.evaluation = SequentialEvaluation(problem)
@@ -32,10 +32,12 @@ function main()
     neighborhood = WeightVectorNeighborhood(populationSize, neighborhoodSize)
 
     sequenceGenerator = IntegerPermutationGenerator(populationSize)
-    
-    solver.selection = PopulationAndNeighborhoodSelection(solver.variation.matingPoolSize, sequenceGenerator, neighborhood, 0.9, true)
 
-    aggregationFunction = PenaltyBoundaryIntersection(5.0, false)
+    selectCurrentSolution = true
+    solver.selection = PopulationAndNeighborhoodSelection(solver.variation.matingPoolSize, sequenceGenerator, neighborhood, 0.9, selectCurrentSolution)
+
+    aggregationFunction = PenaltyBoundaryIntersection(5.0, normalizeObjectives)
+    #aggregationFunction = Tschebyscheff()
     
     solver.replacement = MOEADReplacement(solver.selection, neighborhood, aggregationFunction, sequenceGenerator, maximumNumberOfReplacedSolutions, normalizeObjectives)
     
