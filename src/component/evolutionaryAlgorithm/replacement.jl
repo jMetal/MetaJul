@@ -92,6 +92,8 @@ function replace_(replacement::MOEADReplacement, population::Vector{T}, offsprin
             generateNext!(random_permutation)
         end
 
+        println(population[k])
+
         f1 = compute(replacement.aggregationFunction, population[k].objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
         f2 = compute(replacement.aggregationFunction, new_solution.objectives, replacement.weightVectorNeighborhood.weightVector[k], replacement.idealPoint, replacement.nadirPoint)
 

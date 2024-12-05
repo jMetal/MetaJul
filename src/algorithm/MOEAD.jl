@@ -64,6 +64,8 @@ mutable struct MOEAD <: Algorithm
             # neighborhood = WeightVectorNeighborhood(moead.populationSize, problem.numberOfObjectives, moead.neighborhoodSize, "path/to/weight-vectors.dat")
         end
 
+        
+
         selection = PopulationAndNeighborhoodSelection(
             variation.matingPoolSize,
             moead.sequenceGenerator,
