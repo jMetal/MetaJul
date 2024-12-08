@@ -145,7 +145,7 @@ function zdt4()
   function g(x)
       sum = 0.0
       for i in 2:length(x)
-          sum += x[i]^2 - 10 * cos(4 * π * x[i])
+          sum += x[i]^2 - 10 * cos(4.0 * π * x[i])
       end
       return 1 + 10 * (length(x) - 1) + sum
   end

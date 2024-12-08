@@ -4,7 +4,7 @@ using Random
 
 # MOEA/D algorithm configured from the evolutionary algorithm template
 function main()
-    problem = ZDT1()
+    problem = ZDT4()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "MOEA/D"
@@ -13,7 +13,7 @@ function main()
     neighborhoodSize = 20
     offspringPopulationSize = 1
     maximumNumberOfReplacedSolutions = 2
-    normalizeObjectives = true
+    normalizeObjectives = false
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
     solver.evaluation = SequentialEvaluation(problem)
