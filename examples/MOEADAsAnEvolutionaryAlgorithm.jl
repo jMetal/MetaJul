@@ -4,7 +4,7 @@ using Random
 
 # MOEA/D algorithm configured from the evolutionary algorithm template
 function main()
-    problem = ZDT4()
+    problem = ZDT1()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "MOEA/D"
