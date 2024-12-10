@@ -129,7 +129,7 @@ export DefaultVelocityUpdate, ConstrainedVelocityUpdate
 export update
 include("component/particleSwarmOptimization/velocityUpdate.jl")
 
-export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile, readFrontFromCSVFile
+export normalizeObjectives, distanceBasedSubsetSelection, printObjectivesToCSVFile, printVariablesToCSVFile, readFrontFromCSVFile, readWeightVectors
 include("util/utils.jl")
 
 export Observable, EvaluationObserver, FitnessObserver, getObservable, FrontPlotObserver, register!
@@ -149,11 +149,12 @@ export oneMax, sphere
 include("problem/singleObjective/oneMax.jl")
 include("problem/singleObjective/sphere.jl")
 
-export fonseca, kursawe, ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, oneZeroMax, schaffer
+export fonseca, kursawe, ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, oneZeroMax, schaffer, DTLZ1
 include("problem/multiObjective/schaffer.jl")
 include("problem/multiObjective/fonseca.jl")
 include("problem/multiObjective/kursawe.jl")
 include("problem/multiObjective/ZDT.jl")
+include("problem/multiObjective/DTLZ.jl")
 include("problem/multiObjective/oneZeroMax.jl")
 
 export subasi2016

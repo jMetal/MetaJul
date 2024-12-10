@@ -90,7 +90,8 @@ problemTests = [
     "problem/singleObjective/oneMaxTest.jl",
     "problem/multiObjective/oneZeroMaxTest.jl",
     "problem/multiObjective/schafferTest.jl",
-    "problem/multiObjective/ZDTTest.jl"
+    "problem/multiObjective/ZDTTest.jl",
+    "problem/multiObjective/DTLZTest.jl"
 ]
 
 for testProgram in problemTests
