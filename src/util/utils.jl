@@ -32,6 +32,19 @@ function printVariablesToCSVFile(fileName::String, solutions::Vector{BinarySolut
     end
 end
 
+# Function to read a text file into a matrix
+function readWeightVectors(file_path::String)::Matrix
+    # Open the file and read all lines
+    lines = open(file_path) do file
+        readlines(file)
+    end
+    
+    # Convert lines to an array of numeric vectors
+    matrix = [parse.(Float64, split(line)) for line in lines]
+    
+    # Convert the array of vectors into a matrix
+    return hcat(matrix...)
+end
 
 """
     normalizeObjectives(solutions::Vector{T})::Vector{T} where {T <: Solution}
