@@ -60,8 +60,8 @@ mutable struct MOEAD <: Algorithm
         if problem.numberOfObjectives == 2
             neighborhood = WeightVectorNeighborhood(moead.populationSize, moead.neighborhoodSize)
         else
-            throw(DomainError("Number of objectives > 2 is not currently supported."))
-            # neighborhood = WeightVectorNeighborhood(moead.populationSize, problem.numberOfObjectives, moead.neighborhoodSize, "path/to/weight-vectors.dat")
+            #throw(DomainError("Number of objectives > 2 is not currently supported."))
+            neighborhood = WeightVectorNeighborhood(moead.populationSize, problem.numberOfObjectives, moead.neighborhoodSize, "path/to/weight-vectors.dat")
         end
 
         selection = PopulationAndNeighborhoodSelection(

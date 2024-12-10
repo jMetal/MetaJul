@@ -38,7 +38,24 @@ struct WeightVectorNeighborhood <: Neighborhood
 
         return weightVectorNeighborhood
     end
+
+    function WeightVectorNeighborhood(numberOfWeightVectors::Int, weightVectorSize::Int, neighborhoodSize::Int, vectorDirectoryName::String)
+
+        neighborhood = Array{Int}(undef, numberOfWeightVectors, neighborhoodSize)
+        #weightVector = Array{Float64}(undef, numberOfWeightVectors, weightVectorSize)
+
+        weightVectorFileName = joinpath(vectorDirectoryName, "W$(weightVectorSize)D_$(numberOfWeightVectors).dat")
+        weightVector = readWeightVectors(weightVectorFileName)
+
+        weightVectorNeighborhood = new(numberOfWeightVectors, weightVectorSize, neighborhoodSize, neighborhood, weightVector, false)
+
+        initializeNeighborhood(weightVectorNeighborhood)
+
+        return weightVectorNeighborhood
+    end
+    
 end
+
 
 function initializeNeighborhood(weightVectorNeighborhood::WeightVectorNeighborhood)
     numberOfWeightVectors = weightVectorNeighborhood.numberOfWeightVectors
