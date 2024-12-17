@@ -33,7 +33,7 @@ mutable struct ParticleSwarmOptimization <: Algorithm
   end
 end
 
-function getObservable(algorithm::ParticleSwarmOptimization)
+function observable(algorithm::ParticleSwarmOptimization)
   return algorithm.observable
 end
 

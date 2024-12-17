@@ -6,7 +6,7 @@ function main()
     solver = ParticleSwarmOptimization()
     solver.name = "SMPSO"
 
-    problem = ZDT6()
+    problem = ZDT2()
     swarmSize = 100
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, swarmSize)
@@ -40,7 +40,7 @@ function main()
     solver.velocityUpdate = ConstrainedVelocityUpdate(c1Min, c1Max, c2Min, c2Max, problem)
     #solver.velocityUpdate = DefaultVelocityUpdate(c1Min, c1Max, c2Min, c2Max)
 
-    observer = FrontPlotObserver(5000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT6.csv"))
+    observer = FrontPlotObserver(1000, name(problem), readFrontFromCSVFile("data/referenceFronts/ZDT2.csv"))
     register!(observable(solver), observer)
 
     optimize!(solver)
