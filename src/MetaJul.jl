@@ -32,7 +32,7 @@ include("util/ranking.jl")
 export CrowdingDistanceDensityEstimator
 include("util/densityEstimator.jl")
 
-export ElementAtComparator, DefaultDominanceComparator, IthObjectiveComparator, IthObjectiveComparator, RankingAndCrowdingDistanceComparator
+export Comparator, ElementAtComparator, DefaultDominanceComparator, IthObjectiveComparator, IthObjectiveComparator, RankingAndCrowdingDistanceComparator
 export OverallConstraintViolationDegreeComparator, ConstraintsAndDominanceComparator
 export CrowdingDistanceComparator
 export compare
