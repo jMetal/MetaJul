@@ -4,7 +4,7 @@ using Random
 
 # MOEA/D algorithm configured from the evolutionary algorithm template
 function main()
-    problem = ZDT1()
+    problem = ZDT1(numberOfVariables=2000)
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "MOEA/D"
@@ -17,7 +17,7 @@ function main()
 
     solver.solutionsCreation = DefaultSolutionsCreation(problem, populationSize)
     solver.evaluation = SequentialEvaluation(problem)
-    solver.termination = TerminationByEvaluations(25000)
+    solver.termination = TerminationByEvaluations(100000)
 
     mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
     crossover = SBXCrossover(probability = 0.9, distributionIndex = 20.0, bounds = problem.bounds)
