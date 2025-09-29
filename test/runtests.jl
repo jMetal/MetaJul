@@ -13,7 +13,7 @@ function createContinuousSolution(numberOfObjectives::Int)::ContinuousSolution{F
     objectives = [_ for _ in range(1, numberOfObjectives)]
     return ContinuousSolution{Float64}([1.0], objectives, [], Dict(), [Bounds{Float64}(1.0, 10.0), Bounds{Float64}(1.0, 10.0)])
 end
-"""
+
 coreTests = [
     "core/constraintHandlingTest.jl"
     ]
@@ -109,7 +109,6 @@ include("util/pointTest.jl")
 include("util/aggregationFunctionTest.jl")
 
 include("util/neighborhoodTest.jl")
-"""
 
 
 include("util/qualityIndicatorTest.jl")
