@@ -106,4 +106,27 @@ end
     ref3obj_shift = [0.1 0.2 0.3; 0.4 0.5 0.6]
     # Each reference point is at distance sqrt(0.1^2 + 0.1^2 + 0.1^2) = 0.17320508075688776 from its closest point
     @test isapprox(inverted_generational_distance(front3obj_shift, ref3obj_shift), 0.17320508075688776; atol=EPSILON_TEST_ATOL)
+
+    # Helper function for point construction
+    points(tuples) = hcat([collect(t) for t in tuples]...)
+
+    # Example 1: perfect match → IGD = 0
+    ref = points([(0.0,0.0), (0.5,0.5), (1.0,1.0)])
+    sol = points([(0.0,0.0), (0.5,0.5), (1.0,1.0)])
+    @test isapprox(inverted_generational_distance(sol, ref), 0.0; atol=EPSILON_TEST_ATOL)
+
+    # Example 2: uniformly shifted solutions
+    ref = points([(0.0,0.0), (0.5,0.5), (1.0,1.0)])
+    sol = points([(0.1,0.1), (0.6,0.6), (1.1,1.1)])
+    @test isapprox(inverted_generational_distance(sol, ref), 0.14142135623730956; atol=EPSILON_TEST_ATOL)
+
+    # Example 3: partial coverage of the front
+    ref = points([(0.0,0.0), (0.0,1.0), (1.0,0.0), (1.0,1.0)])
+    sol = points([(0.0,0.0), (1.0,0.0)])
+    @test isapprox(inverted_generational_distance(sol, ref), 0.7071067811865476; atol=EPSILON_TEST_ATOL)
+
+    # Example 4: sparse approximation of continuous front
+    ref = points([(0.0,1.0), (0.25,0.75), (0.5,0.5), (0.75,0.25), (1.0,0.0)])
+    sol = points([(0.0,1.0), (0.5,0.5), (1.0,0.0)])
+    @test isapprox(inverted_generational_distance(sol, ref), 0.223606797749979; atol=EPSILON_TEST_ATOL)
 end
