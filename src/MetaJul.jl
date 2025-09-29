@@ -200,6 +200,7 @@ export integerProblem
 include("problem/multiObjective/integerProblem.jl")
 
 export name, description, is_minimization, compute
+export InvertedGenerationalDistanceIndicator, inverted_generational_distance
 export additive_epsilon, AdditiveEpsilonIndicator
 include("util/qualityIndicator.jl")
 

@@ -95,4 +95,15 @@ end
     @test isapprox(compute(indicator, front1, ref1), 0.0; atol=EPSILON_TEST_ATOL)
     @test isapprox(compute(indicator, front2, ref2), 0.14142135623730953; atol=EPSILON_TEST_ATOL)
     @test isapprox(compute(indicator, zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
+    
+    # Three-objective fronts
+    front3obj = [0.1 0.2 0.3; 0.4 0.5 0.6]
+    ref3obj = [0.1 0.2 0.3; 0.4 0.5 0.6]
+    @test isapprox(inverted_generational_distance(front3obj, ref3obj), 0.0; atol=EPSILON_TEST_ATOL)
+
+    # Shifted three-objective fronts
+    front3obj_shift = [0.2 0.3 0.4; 0.5 0.6 0.7]
+    ref3obj_shift = [0.1 0.2 0.3; 0.4 0.5 0.6]
+    # Each reference point is at distance sqrt(0.1^2 + 0.1^2 + 0.1^2) = 0.17320508075688776 from its closest point
+    @test isapprox(inverted_generational_distance(front3obj_shift, ref3obj_shift), 0.17320508075688776; atol=EPSILON_TEST_ATOL)
 end

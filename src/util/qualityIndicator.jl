@@ -83,8 +83,8 @@ function inverted_generational_distance(front::AbstractMatrix, reference_front::
         distance = distance_to_closest_vector(ref_row, front)
         sum_of_distances += distance^pow
     end
-    sum_of_distances = sum_of_distances^(1/pow)
-    return sum_of_distances / size(reference_front, 1)
+    mean_of_distances = sum_of_distances / size(reference_front, 1)
+    return mean_of_distances^(1/pow)
 end
 
 struct InvertedGenerationalDistanceIndicator <: QualityIndicator
