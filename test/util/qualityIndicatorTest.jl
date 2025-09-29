@@ -1,6 +1,8 @@
 const EPSILON_TEST_ATOL = 1e-12
 
 using DelimitedFiles
+using MetaJul
+using Test
 
 @testset "Additive Epsilon Indicator" begin
     # Simple case: fronts are identical, epsilon should be 0
@@ -42,7 +44,7 @@ using DelimitedFiles
     # Case: front = [1.5 4.0; 1.5 2.0; 2.0 1.5], referenceFront = [1.0 3.0; 1.5 2.0; 2.0 1.5]
     front8 = [1.5 4.0; 1.5 2.0; 2.0 1.5]
     ref8 = [1.0 3.0; 1.5 2.0; 2.0 1.5]
-    # The expected epsilon is 1.0 (the minimal shift needed for all reference points to be weakly dominated)
+    # The expected epsilon is 0.5 (the minimal shift needed for all reference points to be weakly dominated)
     @test isapprox(additive_epsilon(front8, ref8), 0.5; atol=EPSILON_TEST_ATOL)
 
     # Test with ZDT1.csv as both front and reference front
@@ -50,4 +52,15 @@ using DelimitedFiles
     zdt1_front = readdlm(zdt1_path, ',')
 
     @test isapprox(additive_epsilon(zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
+
+    # --- QualityIndicator interface tests ---
+    indicator = AdditiveEpsilonIndicator()
+    @test name(indicator) == "EP"
+    @test "Additive epsilon quality indicator" == description(indicator)
+    @test is_minimization(indicator) == true
+
+    # Use the interface for a simple case
+    @test isapprox(compute(indicator, front1, ref1), 0.0; atol=EPSILON_TEST_ATOL)
+    @test isapprox(compute(indicator, front2, ref2), 0.1; atol=EPSILON_TEST_ATOL)
+    @test isapprox(compute(indicator, zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
 end

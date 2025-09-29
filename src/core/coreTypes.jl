@@ -35,3 +35,4 @@ abstract type DensityEstimator end
 abstract type Comparator end
 abstract type Archive end
 
+abstract type QualityIndicator end

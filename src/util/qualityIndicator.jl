@@ -25,3 +25,19 @@ function additive_epsilon(front::AbstractMatrix, reference_front::AbstractMatrix
     end
     return max_eps
 end
+
+struct AdditiveEpsilonIndicator <: QualityIndicator
+end
+
+# Properties
+name(::AdditiveEpsilonIndicator) = "EP"
+description(::AdditiveEpsilonIndicator) = "Additive epsilon quality indicator"
+is_minimization(::AdditiveEpsilonIndicator) = true
+
+# Usage: indicator = AdditiveEpsilonIndicator()
+#        value = compute(indicator, front, reference_front)
+function compute(::AdditiveEpsilonIndicator, front::AbstractMatrix, reference_front::AbstractMatrix)
+    # Your existing additive_epsilon implementation here
+    # For example:
+    return additive_epsilon(front, reference_front)
+end

@@ -4,7 +4,7 @@ export Bounds
 export restrict, createBounds, valueIsWithinBounds
 include("util/bounds.jl")
 
-export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive, Selection
+export Solution, Problem, Algorithm, ContinuousSolution, Component, Archive, Selection, QualityIndicator
 include("core/coreTypes.jl")
 
 export numberOfViolatedConstraints, overallConstraintViolationDegree, isFeasible
@@ -199,11 +199,8 @@ include("util/tspUtils.jl")
 export integerProblem
 include("problem/multiObjective/integerProblem.jl")
 
-export distance_to_closest_vector, distance_to_closest_vector_dominance, dominance_distance, weakly_dominates, dominates
-export inverted_generational_distance
-export inverted_generational_distance_plus
-export additive_epsilon
-export multiplicative_epsilon
+export name, description, is_minimization, compute
+export additive_epsilon, AdditiveEpsilonIndicator
 include("util/qualityIndicator.jl")
 
 end 
