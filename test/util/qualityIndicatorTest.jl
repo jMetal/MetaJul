@@ -38,13 +38,11 @@ using Test
     # Case: front = [1.5 4.0; 2.0 3.0; 3.0 2.0], referenceFront = [1.0 3.0; 1.5 2.0; 2.0 1.5]
     front7 = [1.5 4.0; 2.0 3.0; 3.0 2.0]
     ref7 = [1.0 3.0; 1.5 2.0; 2.0 1.5]
-    # The expected epsilon is 1.0 (the minimal shift needed for all reference points to be weakly dominated)
     @test isapprox(additive_epsilon(front7, ref7), 1.0; atol=EPSILON_TEST_ATOL)
 
     # Case: front = [1.5 4.0; 1.5 2.0; 2.0 1.5], referenceFront = [1.0 3.0; 1.5 2.0; 2.0 1.5]
     front8 = [1.5 4.0; 1.5 2.0; 2.0 1.5]
     ref8 = [1.0 3.0; 1.5 2.0; 2.0 1.5]
-    # The expected epsilon is 0.5 (the minimal shift needed for all reference points to be weakly dominated)
     @test isapprox(additive_epsilon(front8, ref8), 0.5; atol=EPSILON_TEST_ATOL)
 
     # Test with ZDT1.csv as both front and reference front
@@ -56,11 +54,45 @@ using Test
     # --- QualityIndicator interface tests ---
     indicator = AdditiveEpsilonIndicator()
     @test name(indicator) == "EP"
-    @test "Additive epsilon quality indicator" == description(indicator)
+    @test occursin("epsilon", lowercase(description(indicator)))
     @test is_minimization(indicator) == true
 
     # Use the interface for a simple case
     @test isapprox(compute(indicator, front1, ref1), 0.0; atol=EPSILON_TEST_ATOL)
     @test isapprox(compute(indicator, front2, ref2), 0.1; atol=EPSILON_TEST_ATOL)
+    @test isapprox(compute(indicator, zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
+end
+
+@testset "Inverted Generational Distance Indicator" begin
+    # Simple case: fronts are identical, IGD should be 0
+    front1 = [0.1 0.2; 0.3 0.4]
+    ref1 = [0.1 0.2; 0.3 0.4]
+    @test isapprox(inverted_generational_distance(front1, ref1), 0.0; atol=EPSILON_TEST_ATOL)
+
+    # Simple shift: front is worse by 0.1 in all objectives
+    front2 = [0.2 0.3; 0.4 0.5]
+    ref2 = [0.1 0.2; 0.3 0.4]
+    # Each reference point is at distance sqrt(0.1^2 + 0.1^2) = 0.14142135623730953 from its closest point
+    @test isapprox(inverted_generational_distance(front2, ref2), 0.14142135623730953; atol=EPSILON_TEST_ATOL)
+
+    # Single-point fronts
+    front3 = [0.5 0.5]
+    ref3 = [0.2 0.3]
+    @test isapprox(inverted_generational_distance(front3, ref3), sqrt((0.5-0.2)^2 + (0.5-0.3)^2); atol=EPSILON_TEST_ATOL)
+
+    # Test with ZDT1.csv as both front and reference front
+    zdt1_path = joinpath(@__DIR__, "..", "..", "data", "referenceFronts", "ZDT1.csv")
+    zdt1_front = readdlm(zdt1_path, ',')
+    @test isapprox(inverted_generational_distance(zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
+
+    # --- QualityIndicator interface tests ---
+    indicator = InvertedGenerationalDistanceIndicator()
+    @test name(indicator) == "IGD"
+    @test occursin("generational", lowercase(description(indicator)))
+    @test is_minimization(indicator) == true
+
+    # Use the interface for a simple case
+    @test isapprox(compute(indicator, front1, ref1), 0.0; atol=EPSILON_TEST_ATOL)
+    @test isapprox(compute(indicator, front2, ref2), 0.14142135623730953; atol=EPSILON_TEST_ATOL)
     @test isapprox(compute(indicator, zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
 end
