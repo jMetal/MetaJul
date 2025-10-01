@@ -113,3 +113,4 @@ include("util/neighborhoodTest.jl")
 
 
 include("util/qualityIndicatorTest.jl")
+include("util/normalizationTest.jl")
