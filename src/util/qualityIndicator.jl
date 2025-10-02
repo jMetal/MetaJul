@@ -393,101 +393,148 @@ reference_point = [3.0, 3.0]
 hv_value = hypervolume(front, reference_point)
 ```
 """
-function hypervolume(front::AbstractMatrix, reference_point::AbstractVector)
-    @assert size(front, 2) == length(reference_point) "Dimension mismatch"
-    @assert size(front, 1) > 0 "Front cannot be empty"
-    # Check that all points dominate the reference point (are better)
-    for row in eachrow(front)
-        if any(row .>= reference_point)
-            throw(ArgumentError("All front points must dominate the reference point (be strictly better)"))
-        end
-    end
-    # Convert to maximization problem by negating objectives
-    negated_front = -front
-    negated_reference = -reference_point
-    return wfg_hypervolume(negated_front, negated_reference)
+
+# ====================== FIXED / REFACTORED HYPERVOLUME SECTION ======================
+# Issues in previous implementation:
+# 1. Sign error for single-point case in odd number of objectives (could yield negative volume).
+# 2. Slice accumulation logic (sorting + height computation) only added contribution of the first point.
+# 3. Recursive reduced volume used (reduced_reference .- current_point) (wrong order).
+# 4. Returned incorrect values (e.g. two points in 2D gave area of a single rectangle).
+#
+# New implementation:
+# - Works directly in minimization space (no negation).
+# - Filters non-dominated points first.
+# - Uses a recursive decomposition (Fonseca-style) over the first objective.
+# - Correct for any number of objectives; specialized fast path for 2D & 1D.
+#
+# Assumptions:
+# - All points strictly dominate (are better than) the reference point: point[i] < reference_point[i] for all i.
+#   (You may relax to ≤ if desired.)
+# - Objectives are to be minimized.
+
+"""
+    _is_dominated(a::AbstractVector, b::AbstractVector) -> Bool
+
+Returns true if point a is (weakly) dominated by point b (minimization) and strictly worse in at least one objective.
+"""
+function _is_dominated(a::AbstractVector, b::AbstractVector)
+    all(b .<= a) && any(b .< a)
 end
 
 """
-    wfg_hypervolume(front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+    _filter_nondominated(front::AbstractMatrix) -> Matrix
 
-Implements the WFG (While, Fieldsend, Garside) algorithm for hypervolume calculation.
-This is an efficient algorithm for computing hypervolume, especially for higher dimensions.
-
-# Arguments
-- `front`: Front matrix where each row is a point (assuming maximization)
-- `reference_point`: Reference point for hypervolume calculation
-
-# Returns
-- The hypervolume value
+Returns the non-dominated subset (minimization) of the given front.
+Order of surviving points is not guaranteed.
 """
-function wfg_hypervolume(front::AbstractMatrix, reference_point::AbstractVector)
-    n_points, n_objectives = size(front)
-    if n_objectives == 1
-        sorted_points = sort(front[:, 1], rev=true)
-        volume = 0.0
-        prev_point = reference_point[1]
-        for point in sorted_points
-            if point > prev_point
-                volume += point - prev_point
-                prev_point = point
-            end
-        end
-        return volume
-    end
-    if n_points == 0
-        return 0.0
-    end
-    if n_points == 1
-        return prod(reference_point .- front[1, :])
-    end
-    # Remove dominated points to improve efficiency
-    non_dominated_indices = Int[]
-    for i in 1:n_points
-        is_dominated = false
-        for j in 1:n_points
-            if i != j && all(front[j, :] .>= front[i, :]) && any(front[j, :] .> front[i, :])
-                is_dominated = true
+function _filter_nondominated(front::AbstractMatrix)
+    n = size(front, 1)
+    keep = trues(n)
+    for i in 1:n
+        keep[i] || continue
+        for j in 1:n
+            i == j && continue
+            if keep[j] && _is_dominated(front[i, :], front[j, :])
+                keep[i] = false
                 break
             end
         end
-        if !is_dominated
-            push!(non_dominated_indices, i)
-        end
     end
-    if length(non_dominated_indices) == 0
+    return front[keep, :]
+end
+
+"""
+    _hv_recursive(front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+
+Recursive hypervolume (minimization). Assumes:
+- front non-empty
+- all points strictly better than reference_point component-wise
+- front is already filtered to non-dominated
+"""
+function _hv_recursive(front::AbstractMatrix, reference_point::AbstractVector)
+    n_points, m = size(front)
+    if n_points == 0
         return 0.0
     end
-    non_dominated_front = front[non_dominated_indices, :]
-    n_points = size(non_dominated_front, 1)
-    sorted_indices = sortperm(non_dominated_front[:, end], rev=true)
-    sorted_front = non_dominated_front[sorted_indices, :]
-    volume = 0.0
-    prev_point_last_obj = reference_point[end]
-    for i in 1:n_points
-        current_point = sorted_front[i, :]
-        current_last_obj = current_point[end]
-        if current_last_obj <= prev_point_last_obj
-            continue
+    if m == 1
+        # 1D: dominated interval lengths summed -> reference_point[1] - min(value)
+        return reference_point[1] - minimum(front[:, 1])
+    elseif m == 2
+        # Optimized 2D algorithm:
+        # Sort by first objective descending so first slices use largest width
+        sorted = front[sortperm(front[:, 1], rev=true), :]
+        hv = 0.0
+        prev_f2 = reference_point[2]
+        for i in 1:size(sorted, 1)
+            f1, f2 = sorted[i, 1], sorted[i, 2]
+            if f2 < prev_f2
+                width = reference_point[1] - f1
+                height = prev_f2 - f2
+                if width > 0 && height > 0
+                    hv += width * height
+                end
+                prev_f2 = f2
+            end
         end
-        contribution_height = current_last_obj - prev_point_last_obj
-        reduced_front = Matrix{Float64}(undef, 0, n_objectives - 1)
-        for j in (i+1):n_points
-            candidate = sorted_front[j, :]
-            reduced_point = min.(candidate[1:end-1], current_point[1:end-1])
-            reduced_front = vcat(reduced_front, reduced_point')
+        return hv
+    else
+        # General m > 2 case (decomposition over first objective)
+        # Sort descending by first objective
+        sorted = front[sortperm(front[:, 1], rev=true), :]
+        hv = 0.0
+        current_limit = reference_point[1]
+        i = 1
+        while i <= size(sorted, 1)
+            f = sorted[i, :]
+            if f[1] < current_limit
+                width = current_limit - f[1]
+                if width > 0
+                    # Build sub-front: points with first obj <= f[1]
+                    sub_rows = view(sorted, i:size(sorted, 1), 2:m)
+                    # Filter non-dominated in projected space
+                    sub_front = _filter_nondominated(sub_rows)
+                    sub_ref = reference_point[2:m]
+                    slice_hv = _hv_recursive(sub_front, sub_ref)
+                    hv += width * slice_hv
+                end
+                current_limit = f[1]
+            end
+            i += 1
         end
-        reduced_reference = reference_point[1:end-1]
-        if size(reduced_front, 1) > 0
-            reduced_volume = wfg_hypervolume(reduced_front, reduced_reference)
-        else
-            reduced_volume = prod(reduced_reference .- current_point[1:end-1])
-        end
-        volume += contribution_height * reduced_volume
-        prev_point_last_obj = current_last_obj
+        return hv
     end
-    return volume
 end
+
+"""
+    hypervolume(front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+
+Computes the dominated hypervolume (minimization). Points must all be strictly better
+(component-wise) than the reference point. Returns 0.0 if front is empty.
+
+Steps:
+1. Validate dimensions and dominance vs reference point.
+2. Filter non-dominated points.
+3. Apply recursive HV computation.
+
+Note: Unlike the previous version, this implementation does NOT negate objectives.
+"""
+function hypervolume(front::AbstractMatrix, reference_point::AbstractVector)
+    @assert size(front, 2) == length(reference_point) "Dimension mismatch"
+    @assert size(front, 1) > 0 "Front cannot be empty"
+
+    # Validate all points strictly dominate reference (minimization)
+    for row in eachrow(front)
+        if any(row .>= reference_point)
+            throw(ArgumentError("Each point must be strictly better than the reference point in all objectives"))
+        end
+    end
+
+    # Filter non-dominated
+    nd_front = _filter_nondominated(front)
+    return _hv_recursive(nd_front, reference_point)
+end
+
+# (Keep HypervolumeIndicator and related API unchanged; they call hypervolume())
 
 """
     HypervolumeIndicator <: QualityIndicator

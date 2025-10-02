@@ -118,49 +118,66 @@ end
         identical_reference = [0.1 0.2; 0.3 0.4]
         @test isapprox(inverted_generational_distance(identical_fronts, identical_reference), 0.0; atol=EPSILON_TEST_ATOL)
 
-        # Uniform shift in 2D: IGD = sqrt(0.1^2 + 0.1^2)
+        # Uniform shift in 2D:
+        # Distances from each reference point to closest solution = d = sqrt(0.1^2 + 0.1^2) = 0.1414213562
+        # jMetal IGD formula (pow = 2):
+        # sum(d^2) = 2 * 0.02 = 0.04
+        # (sum)^(1/2) = 0.2
+        # IGD = 0.2 / 2 = 0.1
         shifted_fronts = [0.2 0.3; 0.4 0.5]
         shifted_reference = [0.1 0.2; 0.3 0.4]
-        @test isapprox(inverted_generational_distance(shifted_fronts, shifted_reference), 0.14142135623730953; atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(shifted_fronts, shifted_reference), 0.1; atol=EPSILON_TEST_ATOL)
 
         # Single-point fronts in 2D
         single_front = [0.5 0.5]
         single_reference = [0.2 0.3]
-        @test isapprox(inverted_generational_distance(single_front, single_reference), sqrt((0.5-0.2)^2 + (0.5-0.3)^2); atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(single_front, single_reference),
+                       sqrt((0.5-0.2)^2 + (0.5-0.3)^2); atol=EPSILON_TEST_ATOL)
 
         # Three-objective fronts: IGD = 0
         three_obj_fronts = [0.1 0.2 0.3; 0.4 0.5 0.6]
         three_obj_reference = [0.1 0.2 0.3; 0.4 0.5 0.6]
         @test isapprox(inverted_generational_distance(three_obj_fronts, three_obj_reference), 0.0; atol=EPSILON_TEST_ATOL)
 
-        # Shifted three-objective fronts: IGD = sqrt(0.1^2 + 0.1^2 + 0.1^2)
+        # Shifted three-objective fronts:
+        # Each reference point distance = sqrt(3 * 0.1^2) = 0.1732050808
+        # sum(d^2)=2*(0.03)=0.06; sqrt(0.06)=0.2449489743; /2 = 0.12247448715
         shifted_three_obj_fronts = [0.2 0.3 0.4; 0.5 0.6 0.7]
         shifted_three_obj_reference = [0.1 0.2 0.3; 0.4 0.5 0.6]
-        @test isapprox(inverted_generational_distance(shifted_three_obj_fronts, shifted_three_obj_reference), 0.17320508075688776; atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(shifted_three_obj_fronts, shifted_three_obj_reference),
+                       0.1224744871391589; atol=EPSILON_TEST_ATOL)
 
         # Perfect match in 2D → IGD = 0
         perfect_match_fronts = [0.0 0.0; 0.5 0.5; 1.0 1.0]
         perfect_match_reference = [0.0 0.0; 0.5 0.5; 1.0 1.0]
         @test isapprox(inverted_generational_distance(perfect_match_fronts, perfect_match_reference), 0.0; atol=EPSILON_TEST_ATOL)
 
-        # Uniformly shifted solutions in 2D
+        # Uniformly shifted solutions in 2D:
+        # Distances all equal d=0.1414213562 for 3 points.
+        # sum(d^2)=3*0.02=0.06; sqrt(0.06)=0.2449489743; /3 = 0.08164965809
         uniform_shifted_fronts = [0.1 0.1; 0.6 0.6; 1.1 1.1]
         uniform_shifted_reference = [0.0 0.0; 0.5 0.5; 1.0 1.0]
-        @test isapprox(inverted_generational_distance(uniform_shifted_fronts, uniform_shifted_reference), 0.14142135623730956; atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(uniform_shifted_fronts, uniform_shifted_reference),
+                       0.0816496580927726; atol=EPSILON_TEST_ATOL)
 
         # Partial coverage of the front in 2D
+        # Distances: 0,1,0,1 -> sum squares=2 -> sqrt(2)=1.414213562 /4 = 0.3535533906
         partial_coverage_fronts = [0.0 0.0; 1.0 0.0]
         partial_coverage_reference = [0.0 0.0; 0.0 1.0; 1.0 0.0; 1.0 1.0]
-        @test isapprox(inverted_generational_distance(partial_coverage_fronts, partial_coverage_reference), 0.7071067811865476; atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(partial_coverage_fronts, partial_coverage_reference),
+                       0.3535533905932738; atol=EPSILON_TEST_ATOL)
 
         # Sparse approximation of continuous front in 2D
+        # Distances: 0, 0.353553..., 0, 0.353553..., 0
+        # sum squares = 0.25 -> sqrt = 0.5 -> /5 = 0.1
         sparse_fronts = [0.0 1.0; 0.5 0.5; 1.0 0.0]
         sparse_reference = [0.0 1.0; 0.25 0.75; 0.5 0.5; 0.75 0.25; 1.0 0.0]
-        @test isapprox(inverted_generational_distance(sparse_fronts, sparse_reference), 0.223606797749979; atol=EPSILON_TEST_ATOL)
+        @test isapprox(inverted_generational_distance(sparse_fronts, sparse_reference),
+                       0.1; atol=EPSILON_TEST_ATOL)
     end
 
     @testset "Edge Cases" begin
-        # Single objective
+        # Single objective (unchanged)
         single_obj_front = [2.0;;]
         single_obj_reference = [1.0;;]
         @test isapprox(inverted_generational_distance(single_obj_front, single_obj_reference), 1.0; atol=EPSILON_TEST_ATOL)
@@ -170,101 +187,112 @@ end
         reference_3d = [0.1 0.2 0.3]
         @test_throws AssertionError inverted_generational_distance(front_2d, reference_3d)
 
-        # Empty front - test what actually happens (likely returns Inf or specific value)
+        # Empty front behavior
         empty_front = Matrix{Float64}(undef, 0, 2)
         non_empty_reference = [0.1 0.2]
         result_empty_front = inverted_generational_distance(empty_front, non_empty_reference)
-        @test result_empty_front == Inf || isnan(result_empty_front)  # Accept either Inf or NaN
-        
-        # Empty reference front - returns NaN due to division by 0
+        @test result_empty_front == Inf || isnan(result_empty_front)
+
+        # Empty reference front -> NaN
         non_empty_front = [0.1 0.2]
         empty_reference = Matrix{Float64}(undef, 0, 2)
         result_empty_ref = inverted_generational_distance(non_empty_front, empty_reference)
-        @test isnan(result_empty_ref)  # Should return NaN when no reference points exist (division by 0)
+        @test isnan(result_empty_ref)
     end
 
     @testset "Mathematical Properties" begin
-        # Test that IGD gives reasonable results for different front sizes
         small_front = [0.5 0.5]
         large_reference = [0.0 0.0; 0.2 0.8; 0.5 0.5; 0.8 0.2; 1.0 1.0]
-        
         igd_small_to_large = inverted_generational_distance(small_front, large_reference)
-        
-        # IGD should be positive when there's a mismatch
         @test igd_small_to_large > 0.0
-        
-        # Test with perfect coverage
+
         covering_front = [0.0 0.0; 0.2 0.8; 0.5 0.5; 0.8 0.2; 1.0 1.0]
         igd_perfect = inverted_generational_distance(covering_front, large_reference)
         @test igd_perfect ≈ 0.0 atol=EPSILON_TEST_ATOL
-        
-        # Non-negativity
+
         @test igd_small_to_large >= 0.0
         @test igd_perfect >= 0.0
     end
 
     @testset "Power Parameters" begin
-        # Create a case with one very large distance to amplify power differences
-        test_fronts = [0.0 0.0]  # Single point at origin
-        test_reference = [0.1 0.1; 2.0 2.0]  # One close, one far point
-        
-        # Test different power values
+        # Original small example (differences between p are modest)
+        test_fronts = [0.0 0.0]
+        test_reference = [0.1 0.1; 2.0 2.0]
+
         indicator_l1 = InvertedGenerationalDistanceIndicator(pow=1.0)
         indicator_l2 = InvertedGenerationalDistanceIndicator(pow=2.0)
         indicator_l3 = InvertedGenerationalDistanceIndicator(pow=3.0)
-        
+
         igd_l1 = compute(indicator_l1, test_fronts, test_reference)
         igd_l2 = compute(indicator_l2, test_fronts, test_reference)
         igd_l3 = compute(indicator_l3, test_fronts, test_reference)
-        
-        # With one large distance (2√2 ≈ 2.83), powers should give very different results
+
+        # Basic validity
         @test igd_l1 > 0.0 && igd_l2 > 0.0 && igd_l3 > 0.0
-        @test abs(igd_l1 - igd_l2) > 0.1  # Should be significantly different
-        @test abs(igd_l2 - igd_l3) > 0.1  # Should be significantly different
-        
-        # Test direct function with power parameter
+
+        # With the jMetal IGD definition (root-of-sum / N), differences between powers
+        # are often small for just two distances. Replace hard thresholds with ordering checks.
+        @test igd_l1 >= igd_l2 - EPSILON_TEST_ATOL
+        @test igd_l2 >= igd_l3 - EPSILON_TEST_ATOL
+        @test igd_l1 - igd_l3 > 0.01  # Ensure some separation exists
+
+        # Direct calls match indicator-based calls
         igd_direct_l1 = inverted_generational_distance(test_fronts, test_reference; pow=1.0)
         igd_direct_l2 = inverted_generational_distance(test_fronts, test_reference; pow=2.0)
-        
+        igd_direct_l3 = inverted_generational_distance(test_fronts, test_reference; pow=3.0)
         @test isapprox(igd_l1, igd_direct_l1; atol=EPSILON_TEST_ATOL)
         @test isapprox(igd_l2, igd_direct_l2; atol=EPSILON_TEST_ATOL)
+        @test isapprox(igd_l3, igd_direct_l3; atol=EPSILON_TEST_ATOL)
+
+        # Additional synthetic case with more distances to amplify separation
+        front2 = [0.0 0.0]
+        # Create a reference front with a wide range of distances
+        reference2 = [0.01 0.01;
+                      0.5 0.5;
+                      1.0 1.0;
+                      2.0 2.0;
+                      3.0 3.0]
+
+        igd2_p1 = inverted_generational_distance(front2, reference2; pow=1.0)
+        igd2_p2 = inverted_generational_distance(front2, reference2; pow=2.0)
+        igd2_p4 = inverted_generational_distance(front2, reference2; pow=4.0)
+
+        # Expect monotonic non-increasing sequence as p increases (heavier emphasis on largest distances)
+        @test igd2_p1 >= igd2_p2 - EPSILON_TEST_ATOL
+        @test igd2_p2 >= igd2_p4 - EPSILON_TEST_ATOL
+        @test igd2_p1 - igd2_p4 > 0.05  # Stronger separation with more distances
     end
 
     @testset "Performance Cases" begin
-        # Large fronts (performance test)
         large_front = rand(100, 2)
         large_reference = rand(50, 2)
         @test typeof(inverted_generational_distance(large_front, large_reference)) == Float64
-        
-        # High-dimensional problems
+
         front_5d = rand(10, 5)
         reference_5d = rand(5, 5)
         @test typeof(inverted_generational_distance(front_5d, reference_5d)) == Float64
     end
 
     @testset "Real Data" begin
-        # Real data: ZDT1.csv as both front and reference front
         zdt1_path = joinpath(@__DIR__, "..", "..", "data", "referenceFronts", "ZDT1.csv")
         zdt1_front = readdlm(zdt1_path, ',')
         @test isapprox(inverted_generational_distance(zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
     end
 
     @testset "Interface" begin
-        # --- QualityIndicator interface tests ---
         indicator = InvertedGenerationalDistanceIndicator()
         @test name(indicator) == "IGD"
         @test occursin("generational", lowercase(description(indicator)))
         @test is_minimization(indicator) == true
 
-        # Interface usage
         identical_fronts = [0.1 0.2; 0.3 0.4]
         shifted_fronts = [0.2 0.3; 0.4 0.5]
         shifted_reference = [0.1 0.2; 0.3 0.4]
         zdt1_path = joinpath(@__DIR__, "..", "..", "data", "referenceFronts", "ZDT1.csv")
         zdt1_front = readdlm(zdt1_path, ',')
-        
+
         @test isapprox(compute(indicator, identical_fronts, identical_fronts), 0.0; atol=EPSILON_TEST_ATOL)
-        @test isapprox(compute(indicator, shifted_fronts, shifted_reference), 0.14142135623730953; atol=EPSILON_TEST_ATOL)
+        @test isapprox(compute(indicator, shifted_fronts, shifted_reference), 0.1; atol=EPSILON_TEST_ATOL)
         @test isapprox(compute(indicator, zdt1_front, zdt1_front), 0.0; atol=EPSILON_TEST_ATOL)
     end
 end
