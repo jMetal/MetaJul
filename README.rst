@@ -20,8 +20,8 @@ Current features:
 * Operators: mutation (uniform, polynomial, bit-flip, permutation swap), crossover (BLX-alpha, simulated binary crossover -SBX-, single-point, PMX), selection (random, binary tournament)
 * Algorithms: local search, evolutionary algorithm, genetic algorithm, NSGA-II, SMPSO (multi-objective PSO)
 * Archives: unbounded non-dominated archive, bounded crowding distance archive
-* Quality indicators: Inverted Generational Distance (IGD), Additive Epsilon Indicator (ε+)
-* Utilities: normalization, ranking, crowding distance, dominance comparator
+* Quality indicators: Inverted Generational Distance (IGD), Inverted Generational Distance Plus (IGD+), Additive Epsilon Indicator (ε+)
+* Utilities (directory bin): quality_indicator_cli.jl
 * Observers: ``EvaluationObserver``, ``FitnessObserver``, ``FrontPlotObserver``. Observers can be registered in observable entities, such as evolutionary algorithms, at configuration time.
 
 The ``examples`` folder contains Julia programs illustrating how the included algorithms (local search, single objective evolutionary algorithm, NSGA-II, SMPSO) can be configured and executed.
