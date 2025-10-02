@@ -355,3 +355,109 @@ end
         @test compute(indicator, shifted_fronts, shifted_reference) > 0.0
     end
 end
+
+@testset "Hypervolume (HV) Indicator" begin
+    @testset "Basic Cases" begin
+        # 2D: Simple case, one point
+        front = [1.0 2.0]
+        reference_point = [3.0, 3.0]
+        @test isapprox(hypervolume(front, reference_point), (3.0-1.0)*(3.0-2.0); atol=EPSILON_TEST_ATOL)
+
+        # 2D: Two points, non-overlapping rectangles
+        front = [1.0 2.0; 2.0 1.0]
+        reference_point = [3.0, 3.0]
+        expected_hv = 2.0  # El algoritmo WFG calcula la unión, no la suma directa
+        @test isapprox(hypervolume(front, reference_point), expected_hv; atol=EPSILON_TEST_ATOL)
+
+        # 2D: Identical points, should not double count
+        front = [1.0 2.0; 1.0 2.0]
+        reference_point = [3.0, 3.0]
+        @test isapprox(hypervolume(front, reference_point), (3.0-1.0)*(3.0-2.0); atol=EPSILON_TEST_ATOL)
+
+        # 1D: Single objective
+        front = [2.0]
+        front_matrix = reshape(front, :, 1)
+        reference_point = [3.0]
+        @test isapprox(hypervolume(front_matrix, reference_point), 1.0; atol=EPSILON_TEST_ATOL)
+
+        # 1D: Multiple points
+        front = [1.0, 2.0]
+        front_matrix = reshape(front, :, 1)
+        reference_point = [3.0]
+        @test isapprox(hypervolume(front_matrix, reference_point), 2.0; atol=EPSILON_TEST_ATOL)
+    end
+
+    @testset "Edge Cases" begin
+        # Dimension mismatch should throw error
+        front_2d = [1.0 2.0]
+        reference_3d = [3.0, 3.0, 3.0]
+        @test_throws AssertionError hypervolume(front_2d, reference_3d)
+
+        # Empty front should throw error
+        empty_front = Matrix{Float64}(undef, 0, 2)
+        reference_point = [3.0, 3.0]
+        @test_throws AssertionError hypervolume(empty_front, reference_point)
+
+        # Reference point not dominated should throw error
+        front = [3.0 2.0]
+        reference_point = [3.0, 3.0]
+        @test_throws ArgumentError hypervolume(front, reference_point)
+    end
+
+    @testset "Mathematical Properties" begin
+        # HV is non-negative
+        front = [1.0 2.0; 2.0 1.0]
+        reference_point = [3.0, 3.0]
+        @test hypervolume(front, reference_point) >= 0.0
+
+        # Adding a point that does not improve HV
+        front = [1.0 2.0; 2.0 1.0]
+        reference_point = [3.0, 3.0]
+        hv_before = hypervolume(front, reference_point)
+        front_with_extra = [1.0 2.0; 2.0 1.0; 1.0 2.0]
+        hv_after = hypervolume(front_with_extra, reference_point)
+        @test isapprox(hv_before, hv_after; atol=EPSILON_TEST_ATOL)
+    end
+
+    @testset "Interface" begin
+        indicator = HypervolumeIndicator([3.0, 3.0])
+        @test name(indicator) == "HV"
+        @test occursin("hypervolume", lowercase(description(indicator)))
+        @test is_minimization(indicator) == false
+
+        # Interface usage
+        front = [1.0 2.0; 2.0 1.0]
+        @test isapprox(compute(indicator, front), hypervolume(front, [3.0, 3.0]); atol=EPSILON_TEST_ATOL)
+        # compute with reference_front argument (should ignore it)
+        dummy_ref = [0.0 0.0]
+        @test isapprox(compute(indicator, front, dummy_ref), hypervolume(front, [3.0, 3.0]); atol=EPSILON_TEST_ATOL)
+    end
+
+    @testset "Contribution" begin
+        # Contribution of a new point
+        front = Matrix{Float64}(undef, 0, 2)
+        reference_point = [3.0, 3.0]
+        new_point = [2.0, 1.0]
+        contrib = hypervolume_contribution(new_point, front, reference_point)
+        expected_contrib = (3.0-2.0)*(3.0-1.0)
+        @test isapprox(contrib, expected_contrib; atol=EPSILON_TEST_ATOL)
+
+        front = Matrix{Float64}(undef, 0, 2)  # Frente vacío
+        reference_point = [3.0, 3.0]
+        new_point = [2.0, 1.0]
+        contrib = hypervolume_contribution(new_point, front, reference_point)
+        expected_contrib = (3.0-2.0)*(3.0-1.0)
+        @test isapprox(contrib, expected_contrib; atol=EPSILON_TEST_ATOL)
+    end
+
+    @testset "Real Data" begin
+        # Real data: ZDT1.csv
+        zdt1_path = joinpath(@__DIR__, "..", "..", "data", "referenceFronts", "ZDT1.csv")
+        zdt1_front = readdlm(zdt1_path, ',')
+        # Reference point slightly worse than all solutions
+        ref_point = [maximum(zdt1_front[:, 1]) + 0.1, maximum(zdt1_front[:, 2]) + 0.1]
+        indicator = HypervolumeIndicator(ref_point)
+        hv_value = compute(indicator, zdt1_front)
+        @test hv_value > 0.0
+    end
+end

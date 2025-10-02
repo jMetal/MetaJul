@@ -202,7 +202,9 @@ include("problem/multiObjective/integerProblem.jl")
 export name, description, is_minimization, compute
 export InvertedGenerationalDistanceIndicator, inverted_generational_distance
 export AdditiveEpsilonIndicator, additive_epsilon
-export InvertedGenerationalDistancePlusIndicator, inverted_generational_distance_plus
+export InvertedGenerationalDistancePlusIndicator, 
+inverted_generational_distance_plus
+export HypervolumeIndicator, hypervolume, hypervolume_contribution
 include("util/qualityIndicator.jl")
 
 export normalize_front, normalize_fronts

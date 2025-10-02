@@ -371,3 +371,221 @@ Computes the IGD+ indicator value using the provided indicator configuration.
 function compute(indicator::InvertedGenerationalDistancePlusIndicator, front::AbstractMatrix, reference_front::AbstractMatrix)
     return inverted_generational_distance_plus(front, reference_front)
 end
+
+"""
+    hypervolume(front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+
+Computes the hypervolume (HV) indicator for a given front and reference point.
+The hypervolume is the volume of the objective space dominated by the front and bounded
+by the reference point. This implementation uses the WFG algorithm for efficient computation.
+
+# Arguments
+- `front`: Solution front matrix (each row is a solution)
+- `reference_point`: Reference point that bounds the hypervolume calculation
+
+# Returns
+- The hypervolume indicator value
+
+# Examples
+```julia
+front = [1.0 2.0; 2.0 1.0; 1.5 1.5]
+reference_point = [3.0, 3.0]
+hv_value = hypervolume(front, reference_point)
+```
+"""
+function hypervolume(front::AbstractMatrix, reference_point::AbstractVector)
+    @assert size(front, 2) == length(reference_point) "Dimension mismatch"
+    @assert size(front, 1) > 0 "Front cannot be empty"
+    # Check that all points dominate the reference point (are better)
+    for row in eachrow(front)
+        if any(row .>= reference_point)
+            throw(ArgumentError("All front points must dominate the reference point (be strictly better)"))
+        end
+    end
+    # Convert to maximization problem by negating objectives
+    negated_front = -front
+    negated_reference = -reference_point
+    return wfg_hypervolume(negated_front, negated_reference)
+end
+
+"""
+    wfg_hypervolume(front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+
+Implements the WFG (While, Fieldsend, Garside) algorithm for hypervolume calculation.
+This is an efficient algorithm for computing hypervolume, especially for higher dimensions.
+
+# Arguments
+- `front`: Front matrix where each row is a point (assuming maximization)
+- `reference_point`: Reference point for hypervolume calculation
+
+# Returns
+- The hypervolume value
+"""
+function wfg_hypervolume(front::AbstractMatrix, reference_point::AbstractVector)
+    n_points, n_objectives = size(front)
+    if n_objectives == 1
+        sorted_points = sort(front[:, 1], rev=true)
+        volume = 0.0
+        prev_point = reference_point[1]
+        for point in sorted_points
+            if point > prev_point
+                volume += point - prev_point
+                prev_point = point
+            end
+        end
+        return volume
+    end
+    if n_points == 0
+        return 0.0
+    end
+    if n_points == 1
+        return prod(reference_point .- front[1, :])
+    end
+    # Remove dominated points to improve efficiency
+    non_dominated_indices = Int[]
+    for i in 1:n_points
+        is_dominated = false
+        for j in 1:n_points
+            if i != j && all(front[j, :] .>= front[i, :]) && any(front[j, :] .> front[i, :])
+                is_dominated = true
+                break
+            end
+        end
+        if !is_dominated
+            push!(non_dominated_indices, i)
+        end
+    end
+    if length(non_dominated_indices) == 0
+        return 0.0
+    end
+    non_dominated_front = front[non_dominated_indices, :]
+    n_points = size(non_dominated_front, 1)
+    sorted_indices = sortperm(non_dominated_front[:, end], rev=true)
+    sorted_front = non_dominated_front[sorted_indices, :]
+    volume = 0.0
+    prev_point_last_obj = reference_point[end]
+    for i in 1:n_points
+        current_point = sorted_front[i, :]
+        current_last_obj = current_point[end]
+        if current_last_obj <= prev_point_last_obj
+            continue
+        end
+        contribution_height = current_last_obj - prev_point_last_obj
+        reduced_front = Matrix{Float64}(undef, 0, n_objectives - 1)
+        for j in (i+1):n_points
+            candidate = sorted_front[j, :]
+            reduced_point = min.(candidate[1:end-1], current_point[1:end-1])
+            reduced_front = vcat(reduced_front, reduced_point')
+        end
+        reduced_reference = reference_point[1:end-1]
+        if size(reduced_front, 1) > 0
+            reduced_volume = wfg_hypervolume(reduced_front, reduced_reference)
+        else
+            reduced_volume = prod(reduced_reference .- current_point[1:end-1])
+        end
+        volume += contribution_height * reduced_volume
+        prev_point_last_obj = current_last_obj
+    end
+    return volume
+end
+
+"""
+    HypervolumeIndicator <: QualityIndicator
+
+A quality indicator that computes the hypervolume (HV) between a Pareto front and a reference point.
+The hypervolume measures the volume of the objective space that is dominated by the front and
+bounded by the reference point. Higher values indicate better performance.
+
+# Fields
+- `reference_point::Vector{Float64}`: The reference point for hypervolume calculation
+
+# Properties
+- Returns "HV" as name
+- Is a maximization indicator (higher values are better)
+- Requires a reference point that is dominated by all solutions
+
+# Usage
+```julia
+reference_point = [10.0, 10.0]  # Should be worse than all solutions
+indicator = HypervolumeIndicator(reference_point)
+value = compute(indicator, solution_front)
+```
+"""
+struct HypervolumeIndicator <: QualityIndicator
+    reference_point::Vector{Float64}
+    function HypervolumeIndicator(reference_point::AbstractVector)
+        new(collect(Float64, reference_point))
+    end
+end
+
+name(::HypervolumeIndicator) = "HV"
+description(::HypervolumeIndicator) = "Hypervolume quality indicator"
+is_minimization(::HypervolumeIndicator) = false  # Higher values are better
+
+"""
+    compute(indicator::HypervolumeIndicator, front::AbstractMatrix) -> Float64
+
+Computes the hypervolume indicator value for a single front using the configured reference point.
+
+# Arguments
+- `indicator`: The HypervolumeIndicator instance with reference point
+- `front`: Solution front matrix (each row is a solution)
+
+# Returns
+- The hypervolume indicator value
+"""
+function compute(indicator::HypervolumeIndicator, front::AbstractMatrix)
+    return hypervolume(front, indicator.reference_point)
+end
+
+"""
+    compute(indicator::HypervolumeIndicator, front::AbstractMatrix, reference_front::AbstractMatrix) -> Float64
+
+Computes the hypervolume indicator value for a solution front. The reference front is ignored
+since hypervolume only requires a reference point, not a reference front.
+
+# Arguments
+- `indicator`: The HypervolumeIndicator instance with reference point
+- `front`: Solution front matrix (each row is a solution)
+- `reference_front`: Ignored (hypervolume doesn't use reference fronts)
+
+# Returns
+- The hypervolume indicator value
+
+# Note
+This method ignores the reference_front parameter since hypervolume calculation
+only requires a reference point, which is stored in the indicator itself.
+"""
+function compute(indicator::HypervolumeIndicator, front::AbstractMatrix, reference_front::AbstractMatrix)
+    @warn "Hypervolume indicator ignores the reference front. Using stored reference point instead."
+    return compute(indicator, front)
+end
+
+"""
+    hypervolume_contribution(point::AbstractVector, front::AbstractMatrix, reference_point::AbstractVector) -> Float64
+
+Computes the hypervolume contribution of a specific point to a front.
+This is the additional hypervolume that would be gained by adding this point to the front.
+
+# Arguments
+- `point`: The point whose contribution is to be calculated
+- `front`: The existing front matrix (each row is a solution)
+- `reference_point`: Reference point for hypervolume calculation
+
+# Returns
+- The hypervolume contribution of the point
+
+# Examples
+```julia
+point = [1.2, 1.8]
+front = [1.0 2.0; 2.0 1.0]
+reference_point = [3.0, 3.0]
+contribution = hypervolume_contribution(point, front, reference_point)
+```
+"""
+function hypervolume_contribution(point::AbstractVector, front::AbstractMatrix, reference_point::AbstractVector)
+    extended_front = vcat(front, point')
+    hv_with_point = hypervolume(extended_front, reference_point)
+    hv_without_point = size(front, 1) > 0 ? hypervolume(front, reference_point) : 0.0
+    return hv_with_point - hv_without_point
+end
