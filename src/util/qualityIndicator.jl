@@ -172,8 +172,8 @@ function inverted_generational_distance(front::AbstractMatrix, reference_front::
         distance = distance_to_closest_vector(reference_row, front)
         sum_of_distances += distance^pow
     end
-    mean_of_distances = sum_of_distances / size(reference_front, 1)
-    return mean_of_distances^(1/pow)
+    sum_root = sum_of_distances^(1/pow)
+    return sum_root / size(reference_front, 1)
 end
 
 """
@@ -588,4 +588,59 @@ function hypervolume_contribution(point::AbstractVector, front::AbstractMatrix, 
     hv_with_point = hypervolume(extended_front, reference_point)
     hv_without_point = size(front, 1) > 0 ? hypervolume(front, reference_point) : 0.0
     return hv_with_point - hv_without_point
+end
+
+"""
+    NormalizedHypervolumeIndicator <: QualityIndicator
+
+A quality indicator that computes the normalized hypervolume between a Pareto front and a reference front.
+It returns 1 - HV(front)/HV(referenceFront), so lower values are better and 0 means the front matches the reference front.
+
+# Fields
+- `reference_point::Vector{Float64}`: The reference point for hypervolume calculation
+
+# Properties
+- Returns "NormHV" as name
+- Is a minimization indicator (lower values are better)
+- Requires a reference point that is dominated by all solutions
+
+# Usage
+```julia
+reference_point = [1.1, 1.1]  # Should be worse than all solutions
+indicator = NormalizedHypervolumeIndicator(reference_point)
+value = compute(indicator, solution_front, reference_front)
+```
+"""
+struct NormalizedHypervolumeIndicator <: QualityIndicator
+    reference_point::Vector{Float64}
+    function NormalizedHypervolumeIndicator(reference_point::AbstractVector)
+        new(collect(Float64, reference_point))
+    end
+end
+
+name(::NormalizedHypervolumeIndicator) = "NormHV"
+description(::NormalizedHypervolumeIndicator) = "Normalized hypervolume quality indicator (1 - HV(front)/HV(referenceFront))"
+is_minimization(::NormalizedHypervolumeIndicator) = true
+
+"""
+    compute(indicator::NormalizedHypervolumeIndicator, front::AbstractMatrix, reference_front::AbstractMatrix) -> Float64
+
+Computes the normalized hypervolume indicator value for a solution front and a reference front.
+
+# Arguments
+- `indicator`: The NormalizedHypervolumeIndicator instance with reference point
+- `front`: Solution front matrix (each row is a solution)
+- `reference_front`: Reference front matrix (each row is a solution)
+
+# Returns
+- The normalized hypervolume indicator value
+"""
+function compute(indicator::NormalizedHypervolumeIndicator, front::AbstractMatrix, reference_front::AbstractMatrix)
+    hv_front = hypervolume(front, indicator.reference_point)
+    hv_reference = hypervolume(reference_front, indicator.reference_point)
+    if hv_reference == 0.0
+        @warn "Reference front hypervolume is zero. Returning 1.0."
+        return 1.0
+    end
+    return 1.0 - hv_front / hv_reference
 end

@@ -205,6 +205,7 @@ export AdditiveEpsilonIndicator, additive_epsilon
 export InvertedGenerationalDistancePlusIndicator, 
 inverted_generational_distance_plus
 export HypervolumeIndicator, hypervolume, hypervolume_contribution
+export NormalizedHypervolumeIndicator, normalized_hypervolume
 include("util/qualityIndicator.jl")
 
 export normalize_front, normalize_fronts
