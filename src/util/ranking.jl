@@ -28,8 +28,8 @@ function appendRank!(ranking::DominanceRanking, newRank::Vector{T}) where {T<:So
     return Nothing
 end
 
-function getRank(solution::Solution)
-    return get(solution.attributes, "RANKING_ATTRIBUTE", 0)
+@inline function getRank(solution::Solution)::Int
+    return get(solution.attributes, "RANKING_ATTRIBUTE", 0)::Int
 end
 
 function setRank(solution::Solution, rank::Int)

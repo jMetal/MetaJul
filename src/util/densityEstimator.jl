@@ -2,8 +2,8 @@ function maxCrowdingDistanceValue()
     return typemax(Float64)
 end
 
-@inline function getCrowdingDistance(solution::T) where {T<:Solution}
-    return get(solution.attributes, "CROWDING_DISTANCE_ATTRIBUTE", 0.0)
+@inline function getCrowdingDistance(solution::T)::Float64 where {T<:Solution}
+    return get(solution.attributes, "CROWDING_DISTANCE_ATTRIBUTE", 0.0)::Float64
 end
 
 @inline function setCrowdingDistance(solution::T, crowdingDistance::Float64) where {T<:Solution}
