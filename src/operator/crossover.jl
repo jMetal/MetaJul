@@ -122,7 +122,7 @@ function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T
           else
             betaq = ^(1.0 / (2.0 - random * alpha), 1.0 / (distributionIndex + 1.0))
           end
-          c2 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
+          c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
 
           c1 = restrict(c1, bounds[i])
           c2 = restrict(c2, bounds[i])
@@ -194,7 +194,7 @@ function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T
           else
             betaq = ^(1.0 / (2.0 - random * alpha), 1.0 / (distributionIndex + 1.0))
           end
-          c2 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
+          c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
 
           c1 = restrict(round(Int, c1), bounds[i])
           c2 = restrict(round(Int, c2), bounds[i])

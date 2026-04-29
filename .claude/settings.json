@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/ajnebro/.claude/projects/**)",
+      "Bash(awk '{print $2}')",
+      "Bash(xargs -I{} sh -c 'jq -r \"select\\(.type==\\\\\"assistant\\\\\"\\) | .message.content[]? | select\\(.type==\\\\\"tool_use\\\\\"\\) | [.name, \\(.input.command // \\\\\"\\\\\"\\)] | @tsv\" \"{}\" 2>/dev/null')",
+      "Bash(julia --project=. -e 'using Pkg; Pkg.test()')",
+      "Bash(julia --project=. -e 'using Pkg; Pkg.instantiate()')",
+      "Bash(julia --project=. -e 'using Pkg; Pkg.status()')"
+    ]
+  }
+}
