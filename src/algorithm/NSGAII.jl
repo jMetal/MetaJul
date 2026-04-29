@@ -91,7 +91,7 @@ function optimize!(nsgaII::NSGAII)
 
   solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(nsgaII.dominanceComparator), CrowdingDistanceDensityEstimator())
 
-  solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, nsgaII.dominanceComparator)
+  solver.selection = BinaryTournamentSelection(solver.variation.matingPoolSize, RankingAndCrowdingDistanceComparator())
 
   return evolutionaryAlgorithm(solver)
 end
