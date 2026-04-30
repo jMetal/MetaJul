@@ -43,7 +43,7 @@ function main()
     println("Objectives stored in file ", objectivesFileName)
     printObjectivesToCSVFile(objectivesFileName, foundSolutions)
 
-    println("Variavbles stored in file ", variablesFileName)
+    println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
     println("Computing time: ", computingTime(solver))
 end
