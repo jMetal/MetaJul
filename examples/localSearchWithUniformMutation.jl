@@ -25,3 +25,4 @@ function main()
     println("Computing time: ", computingTime(solver))
 
 end
+main()

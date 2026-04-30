@@ -23,3 +23,4 @@ function main()
     printVariablesToCSVFile(variablesFileName, front)
     println("Computing time: ", computingTime(solver))
 end
+main()

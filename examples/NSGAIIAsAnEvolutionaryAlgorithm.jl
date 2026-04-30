@@ -46,3 +46,4 @@ function main()
     println("Variables stored in file ", variablesFileName)
     printVariablesToCSVFile(variablesFileName, foundSolutions)
 end
+main()

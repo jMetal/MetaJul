@@ -37,3 +37,4 @@ function main()
     println("Best solution found: ", foundSolutions[1].objectives[1])
     println("Computing time: ", computingTime(solver))
 end
+main()

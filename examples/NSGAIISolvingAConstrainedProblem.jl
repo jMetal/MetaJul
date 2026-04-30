@@ -29,3 +29,4 @@ function main()
     printVariablesToCSVFile(variablesFileName, foundSolutions(solver))
     println("Computing time: ", computingTime(solver))
 end
+main()

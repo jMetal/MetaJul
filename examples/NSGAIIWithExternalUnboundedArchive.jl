@@ -3,7 +3,7 @@ using MetaJul
 # NSGA-II algorithm configured from the evolutionary algorithm template. It incorporates an external archive to store the non-dominated solution found. This archive will be the algorithm output.
 
 function main()
-    problem = ZDT1()
+    problem = DTLZ1()
 
     solver::EvolutionaryAlgorithm = EvolutionaryAlgorithm()
     solver.name = "NSGA-II"
@@ -15,7 +15,7 @@ function main()
     externalArchive = NonDominatedArchive(ContinuousSolution{Float64})
     solver.evaluation = SequentialEvaluationWithArchive(problem, externalArchive)
 
-    solver.termination = TerminationByEvaluations(25000)
+    solver.termination = TerminationByEvaluations(30000)
 
     mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
 
@@ -44,3 +44,4 @@ function main()
     printVariablesToCSVFile(variablesFileName, foundSolutions)
     println("Computing time: ", computingTime(solver))
 end
+main()

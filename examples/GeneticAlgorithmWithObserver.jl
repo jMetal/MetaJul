@@ -39,3 +39,4 @@ function main()
     println("Solution: ", foundSolutions[1].variables)
     println("Computing time: ", computingTime(solver))
 end
+main()

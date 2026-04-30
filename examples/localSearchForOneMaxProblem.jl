@@ -24,3 +24,5 @@ function main()
     println("Fitness of the found solution: ", -1.0 * foundSolution.objectives[1])
     println("Computing time: ", computingTime(solver))
 end
+
+main()

@@ -47,3 +47,4 @@ function main()
     printVariablesToCSVFile(variablesFileName, foundSolutions)
     println("Computing time: ", computingTime(solver))
 end
+main()
