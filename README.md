@@ -1,7 +1,8 @@
 # MetaJul
 
 [![Test Status](https://github.com/jMetal/MetaJul/actions/workflows/unitTest.yml/badge.svg)](https://github.com/jMetal/MetaJul/actions/workflows/unitTest.yml)
-[![Julia 1.10](https://img.shields.io/badge/Julia-1.10-blue.svg)](https://julialang.org)
+[![Version](https://img.shields.io/badge/version-v0.3.0-orange)](https://github.com/jMetal/MetaJul/releases)
+[![Julia ≥ 1.10](https://img.shields.io/badge/Julia-%E2%89%A5%201.10-blue.svg)](https://julialang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 MetaJul is a component-based metaheuristics framework written in Julia. Algorithms are built by composing interchangeable components (selection, variation, replacement, …), making it straightforward to configure, extend, and experiment with new designs without subclassing.
