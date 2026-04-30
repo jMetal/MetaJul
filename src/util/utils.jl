@@ -36,22 +36,34 @@ end
 """
     normalizeObjectives(solutions::Vector{T})::Vector{T} where {T <: Solution}
 
-Return a list of solutions having the objective values normalized
+Return a list of solutions with objectives normalized to [0, 1] using min-max
+normalization per objective. When all solutions share the same value for an
+objective (range = 0), that objective is set to 0.0.
 """
 function normalizeObjectives(solutions::Vector{T})::Vector{T} where {T<:Solution}
     normalizedSolutions = deepcopy(solutions)
     numberOfObjectives = length(solutions[1].objectives)
 
     for i in 1:numberOfObjectives
-        ithObjectiveValues = [normalizedSolutions[j].objectives[i] for j in 1:length(normalizedSolutions)]
-        normalizedObjectives = normalize(ithObjectiveValues, 1)
+        minVal = minimum(s.objectives[i] for s in normalizedSolutions)
+        maxVal = maximum(s.objectives[i] for s in normalizedSolutions)
+        range  = maxVal - minVal
 
-        for j in 1:length(normalizedSolutions)
-            normalizedSolutions[j].objectives[i] = normalizedObjectives[j]
+        for s in normalizedSolutions
+            s.objectives[i] = range > 0.0 ? (s.objectives[i] - minVal) / range : 0.0
         end
     end
 
     return normalizedSolutions
+end
+
+@inline function euclidean_distance(a::Vector{Float64}, b::Vector{Float64})::Float64
+    d = 0.0
+    @inbounds for i in eachindex(a)
+        Δ = a[i] - b[i]
+        d += Δ * Δ
+    end
+    return sqrt(d)
 end
 
 function distanceBasedSubsetSelection(solutions::Vector{T}, numberOfSolutionsToSelect::Int)::Vector{T} where {T<:Solution}
@@ -70,33 +82,34 @@ function distanceBasedSubsetSelection(solutions::Vector{T}, numberOfSolutionsToS
 
         return getSolutions(crowdingDistanceArchive)
     else
-        # Step 1: normalize objectives
+        # Step 1: normalize objectives to [0, 1] per objective (min-max)
         normalizedSolutions = normalizeObjectives(solutions)
 
         for i in eachindex(normalizedSolutions)
             normalizedSolutions[i].attributes["INDEX"] = i
         end
 
-        # Step 2. Find the solution having the lowest objective value, being the objective selected randomly
+        # Step 2: seed with the solution having the lowest value on a random objective
         randomObjective = rand(1:numberOfObjectives)
-        _, solutionIndex = findmin([normalizedSolutions[i].objectives[randomObjective] for i in 1:length(normalizedSolutions)])
+        solutionIndex = argmin(i -> normalizedSolutions[i].objectives[randomObjective], eachindex(normalizedSolutions))
 
-        # Step 3. Add the solution to the current list of selected solutions and remove it from the original list
+        # Step 3: move seed to the selected list
         selectedSolutions = [normalizedSolutions[solutionIndex]]
         deleteat!(normalizedSolutions, solutionIndex)
 
-        # Step 4. Find the solution having the largest distance to the selected solutions
+        # Step 4: greedily add the solution maximising min-distance to the selected set
         while length(selectedSolutions) < numberOfSolutionsToSelect
             for solution in normalizedSolutions
-                solution.attributes["SUBSET_SELECTION_DISTANCE"] = minimum(norm(solution.objectives - selectedSolutions[i].objectives) for i in 1:length(selectedSolutions))
+                solution.attributes["SUBSET_SELECTION_DISTANCE"] =
+                    minimum(euclidean_distance(solution.objectives, sel.objectives) for sel in selectedSolutions)
             end
 
-            _, indexOfTheSolutionHavingTheLargestDistance = findmax([solution.attributes["SUBSET_SELECTION_DISTANCE"] for solution in normalizedSolutions])
-            push!(selectedSolutions, normalizedSolutions[indexOfTheSolutionHavingTheLargestDistance])
-            deleteat!(normalizedSolutions, indexOfTheSolutionHavingTheLargestDistance)
+            idx = argmax(i -> normalizedSolutions[i].attributes["SUBSET_SELECTION_DISTANCE"]::Float64, eachindex(normalizedSolutions))
+            push!(selectedSolutions, normalizedSolutions[idx])
+            deleteat!(normalizedSolutions, idx)
         end
 
-        # Step 5. Return the selected solutions
-        return [solutions[solution.attributes["INDEX"]] for solution in selectedSolutions]
+        # Step 5: return the original (non-normalised) solutions
+        return [solutions[s.attributes["INDEX"]] for s in selectedSolutions]
     end
 end

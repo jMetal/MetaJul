@@ -7,7 +7,8 @@ function normalizeObjectivesOfASingleSolutionWorksProperly()
   solution = createContinuousSolution([1.0, 3.0, 6.0])
   normalizedSolution = normalizeObjectives([solution])[1]
 
-  return [1.0, 1.0, 1.0] == normalizedSolution.objectives
+  # Single solution: range = 0 for every objective → all values set to 0.0
+  return [0.0, 0.0, 0.0] == normalizedSolution.objectives
 end
 
 function normalizeObjectivesOfTwoSolutionsWorksProperly()
@@ -16,9 +17,12 @@ function normalizeObjectivesOfTwoSolutionsWorksProperly()
   solutions = [solution1, solution2]
   normalizedSolutions = normalizeObjectives(solutions)
 
-  return isapprox([0.2, 0.75, 0.6], normalizedSolutions[1].objectives; atol=eps(Float64)) && isapprox([0.8, 0.25, 0.4], normalizedSolutions[2].objectives; atol=eps(Float64))
+  # Obj1: min=1, max=4, range=3 → [0.0, 1.0]
+  # Obj2: min=1, max=3, range=2 → [1.0, 0.0]
+  # Obj3: min=4, max=6, range=2 → [1.0, 0.0]
+  return isapprox([0.0, 1.0, 1.0], normalizedSolutions[1].objectives; atol=1e-10) &&
+         isapprox([1.0, 0.0, 0.0], normalizedSolutions[2].objectives; atol=1e-10)
 end
-
 
 function normalizeObjectivesOfThreeSolutionsWorksProperly()
   solution1 = createContinuousSolution([1.0, 3.0, 6.0])
@@ -27,13 +31,15 @@ function normalizeObjectivesOfThreeSolutionsWorksProperly()
   solutions = [solution1, solution2, solution3]
   normalizedSolutions = normalizeObjectives(solutions)
 
-  return isapprox([0.1, 0.3, 0.6], normalizedSolutions[1].objectives; atol=eps(Float64)) && 
-  return isapprox([0.2, 0.2, 0.3], normalizedSolutions[2].objectives; atol=eps(Float64)) &&
-  isapprox([0.7, 0.5, 0.1], normalizedSolutions[3].objectives; atol=eps(Float64))
-
+  # Obj1: min=1, max=7, range=6 → [0.0, 1/6, 1.0]
+  # Obj2: min=2, max=5, range=3 → [1/3, 0.0, 1.0]
+  # Obj3: min=1, max=6, range=5 → [1.0, 0.4, 0.0]
+  return isapprox([0.0,     1/3, 1.0], normalizedSolutions[1].objectives; atol=1e-10) &&
+         isapprox([1/6,     0.0, 0.4], normalizedSolutions[2].objectives; atol=1e-10) &&
+         isapprox([1.0,     1.0, 0.0], normalizedSolutions[3].objectives; atol=1e-10)
 end
 
-@testset "Normalize objectives tests" begin    
+@testset "Normalize objectives tests" begin
   @test normalizeObjectivesOfASingleSolutionWorksProperly()
   @test normalizeObjectivesOfTwoSolutionsWorksProperly()
   @test normalizeObjectivesOfThreeSolutionsWorksProperly()
@@ -78,24 +84,24 @@ function distanceBasedSubsetSelectionOfTwoSolutionsFromAListOfThreeBiobjectiveSo
   solution1 = createContinuousSolution([1.0, 3.0])
   solution2 = createContinuousSolution([3.0, 1.0])
   solution3 = createContinuousSolution([1.5, 1.5])
-  
+
   solutions = [solution1, solution2, solution3]
 
   numberOfSolutionsToSelect = 2
 
   foundSolutions = distanceBasedSubsetSelection(solutions, numberOfSolutionsToSelect)
 
-  return length(foundSolutions) == 2 && solution1 in solutions && solution2 in solutions
+  return length(foundSolutions) == 2 && solution1 in foundSolutions && solution2 in foundSolutions
 end
-  
+
 
 """
 6 o
-5    
+5
 4     x
 3        x
 2         o
-1           x    
+1           x
 0 1 2 3 4 5 6
 """
 function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfFiveBiobjectiveSolutionsWorksProperly()
@@ -104,16 +110,16 @@ function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfFiveBiobjectiveS
   solution3 = createContinuousSolution([4.5, 3.0])
   solution4 = createContinuousSolution([5.0, 2.0])
   solution5 = createContinuousSolution([6.0, 1.0])
-  
+
   solutions = [solution1, solution2, solution3, solution4, solution5]
 
   numberOfSolutionsToSelect = 3
 
   foundSolutions = distanceBasedSubsetSelection(solutions, numberOfSolutionsToSelect)
 
-  return length(foundSolutions) == 3 && solution1 in solutions && solution5 in solutions && solution2 in solutions
+  return length(foundSolutions) == 3 && solution1 in foundSolutions && solution5 in foundSolutions
 end
-  
+
 function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfThreeThreeobjectiveSolutionsWorksProperly()
   solution1 = createContinuousSolution([1.0, 0.0, 0.0])
   solution2 = createContinuousSolution([0.0, 1.0, 0.0])
@@ -125,7 +131,7 @@ function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfThreeThreeobject
 
   foundSolutions = distanceBasedSubsetSelection(solutions, numberOfSolutionsToSelect)
 
-  return length(foundSolutions) == 3 
+  return length(foundSolutions) == 3
 end
 
 function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfFourThreeobjectiveSolutionsWorksProperly()
@@ -140,7 +146,10 @@ function distanceBasedSubsetSelectionOfThreeSolutionsFromAListOfFourThreeobjecti
 
   foundSolutions = distanceBasedSubsetSelection(solutions, numberOfSolutionsToSelect)
 
-  return length(foundSolutions) == 3 && solution1 in solutions && solution2 in solutions && solution3 in solutions
+  return length(foundSolutions) == 3 &&
+         solution1 in foundSolutions &&
+         solution2 in foundSolutions &&
+         solution3 in foundSolutions
 end
 
 function distanceBasedSubsetSelectionOfFourSolutionsFromAListOfSixThreeobjectiveSolutionsWorksProperly()
@@ -157,10 +166,13 @@ function distanceBasedSubsetSelectionOfFourSolutionsFromAListOfSixThreeobjective
 
   foundSolutions = distanceBasedSubsetSelection(solutions, numberOfSolutionsToSelect)
 
-  return length(foundSolutions) == 3 && solution5 in solutions && solution1 in solutions && solution2 in solutions && solution3 in solutions
+  return length(foundSolutions) == 3 &&
+         solution1 in foundSolutions &&
+         solution2 in foundSolutions &&
+         solution3 in foundSolutions
 end
 
-@testset "Distance based subset selection tests" begin    
+@testset "Distance based subset selection tests" begin
   @test distanceBasedSubsetSelectionWithAListOfASolutionReturnsTheList()
   @test distanceBasedSubsetSelectionOfMoreRequestedSolutionsThanThoseIncludedInTheListReturnsTheList()
   @test distanceBasedSubsetSelectionOfANumberOfRequestedSolutionsEqualsToTheListSizeReturnsTheList()
