@@ -31,6 +31,34 @@ solutions = foundSolutions(algorithm)
 
 More complete examples are in the [`examples/`](examples/) folder. Jupyter notebooks with step-by-step explanations are in [`notebooks/`](notebooks/).
 
+## Running NSGA-II from the REPL
+
+Julia compiles code on first use (JIT), so the initial run includes compilation overhead. To measure true execution time, run the algorithm twice and time the second call:
+
+```julia
+julia> using MetaJul
+
+julia> problem = ZDT1()
+
+# First call: triggers JIT compilation (~1–2 s overhead)
+julia> algorithm = NSGAII(problem); optimize!(algorithm)
+
+# Second call: compiled, reflects actual runtime
+julia> algorithm = NSGAII(problem); @time optimize!(algorithm)
+  0.384 seconds (3.04 M allocations: 289.114 MiB, 6.34% gc time)
+```
+
+For repeated benchmarking, [`BenchmarkTools.jl`](https://github.com/JuliaCI/BenchmarkTools.jl) handles warm-up automatically:
+
+```julia
+julia> using BenchmarkTools
+
+julia> @benchmark optimize!(NSGAII(ZDT1()))
+BenchmarkTools.Trial: 13 samples with 1 evaluation per sample.
+ Range (min … max):  373 ms … 410 ms
+ Median:             384 ms
+```
+
 ## Features
 
 ### Encodings
