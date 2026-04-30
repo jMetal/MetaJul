@@ -9,7 +9,7 @@ end
 @inline function setCrowdingDistance(solution::T, crowdingDistance::Float64) where {T<:Solution}
     solution.attributes["CROWDING_DISTANCE_ATTRIBUTE"] = crowdingDistance
 
-    return Nothing
+    return nothing
 end
 
 struct CrowdingDistanceComparator <: Comparator end
@@ -72,6 +72,6 @@ function compute!(densityEstimator::CrowdingDistanceDensityEstimator, solutions:
         end
     end
 
-    return Nothing
+    return nothing
 end
 

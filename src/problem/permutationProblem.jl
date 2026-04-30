@@ -30,19 +30,19 @@ end
 function addObjective(problem::PermutationProblem, objective::Function)
   push!(problem.objectives, objective)
 
-  return Nothing
+  return nothing
 end
 
 function addConstraint(problem::PermutationProblem, constraint::Function)
   push!(problem.constraints, constraint)
 
-  return Nothing
+  return nothing
 end
 
 function setName(problem::PermutationProblem, name::String) 
   problem.name = name
 
-  return Nothing
+  return nothing
 end
 
 """
@@ -70,7 +70,7 @@ function createSolution(problem::T)::PermutationSolution where {T <: Permutation
   solution = PermutationSolution(problem.permutationLength)
   solution.objectives = zeros(numberOfObjectives(problem))
   solution.constraints = zeros(numberOfConstraints(problem))
-  solution.attributes = Dict()
+  solution.attributes = Dict{String,Any}()
 
   return solution
 end

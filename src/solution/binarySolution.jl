@@ -37,7 +37,7 @@ end
 
 function initBitVector(length::Integer)::BitVector
     bits::Vector{Bool} = []
-    for i in range(1, length)
+    for i in 1:length
         if rand() < 0.5
             push!(bits, false)
         else
@@ -59,9 +59,9 @@ end
 
 mutable struct BinarySolution <: Solution
     variables::BitVector
-    objectives::Array{Real}
-    constraints::Array{Real}
-    attributes::Dict
+    objectives::Vector{Float64}
+    constraints::Vector{Float64}
+    attributes::Dict{String,Any}
 end
 
 function copySolution(solution::BinarySolution)::BinarySolution
@@ -69,7 +69,7 @@ function copySolution(solution::BinarySolution)::BinarySolution
         deepcopy(solution.variables),
         copy(solution.objectives),
         copy(solution.constraints),
-        Dict(),
+        Dict{String,Any}(),
     )
 end
 

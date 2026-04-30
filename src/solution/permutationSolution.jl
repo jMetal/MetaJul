@@ -3,27 +3,27 @@
 ###########################################################
 
 mutable struct PermutationSolution <: Solution
-    variables::Array{Int64}
-    objectives::Array{Real}
-    constraints::Array{Real}
-    attributes::Dict
+    variables::Vector{Int64}
+    objectives::Vector{Float64}
+    constraints::Vector{Float64}
+    attributes::Dict{String,Any}
 
     function PermutationSolution(length::Int)
         variables = shuffle(1:length)
-        new(variables, Real[], Real[], Dict{Any, Any}())
+        new(variables, Float64[], Float64[], Dict{String,Any}())
     end
 
-    function PermutationSolution(variables, objectives, constraints, attributes) 
+    function PermutationSolution(variables, objectives, constraints, attributes)
         new(variables, objectives, constraints, attributes)
     end
 end
 
 function copySolution(solution::PermutationSolution)::PermutationSolution
     return PermutationSolution(
-        deepcopy(solution.variables),
+        copy(solution.variables),
         copy(solution.objectives),
         copy(solution.constraints),
-        Dict()
+        Dict{String,Any}()
     )
 end
 

@@ -31,7 +31,7 @@ function recombine(parent1::ContinuousSolution, parent2::ContinuousSolution, cro
   child2 = copySolution(parent2)
 
   if rand() < probability
-    for i in range(1, length(parent1.variables))
+    for i in 1:length(parent1.variables)
       minValue = min(parent1.variables[i], parent2.variables[i])
       maxValue = max(parent1.variables[i], parent2.variables[i])
       range = maxValue - minValue
@@ -86,7 +86,7 @@ function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T
   child2 = copySolution(parent2)
 
   if rand() <= probability  
-    for i in range(1, length(parent1.variables))
+    for i in 1:length(parent1.variables)
       x1 = parent1.variables[i]
       x2 = parent2.variables[i]
 
@@ -158,7 +158,7 @@ function recombine(parent1::ContinuousSolution{T}, parent2::ContinuousSolution{T
   child2 = copySolution(parent2)
 
   if rand() <= probability  
-    for i in range(1, length(parent1.variables))
+    for i in 1:length(parent1.variables)
       x1 = parent1.variables[i]
       x2 = parent2.variables[i]
 

@@ -21,26 +21,38 @@ function replace_(replacement::MuCommaLambdaReplacement, x::Vector{S}, y::Vector
     return resultVector[1:length(x)]
 end
 
-struct RankingAndDensityEstimatorReplacement <: Replacement
-    ranking
-    densityEstimator
-    rankingAndDensityEstimatorComparator
+struct RankingAndDensityEstimatorReplacement{R<:Ranking, D<:DensityEstimator} <: Replacement
+    ranking::R
+    densityEstimator::D
+    rankingAndDensityEstimatorComparator::RankingAndCrowdingDistanceComparator
 
-    RankingAndDensityEstimatorReplacement(ranking, densityEstimator) = new(ranking, densityEstimator, RankingAndCrowdingDistanceComparator())
+    RankingAndDensityEstimatorReplacement(ranking::R, densityEstimator::D) where {R<:Ranking, D<:DensityEstimator} =
+        new{R,D}(ranking, densityEstimator, RankingAndCrowdingDistanceComparator())
 end
 
-
 function replace_(replacement::RankingAndDensityEstimatorReplacement, x::Vector{T}, y::Vector{T})::Vector{T} where {T<:Solution}
-    jointVector = vcat(x, y)
+    joint = vcat(x, y)
+    compute!(replacement.ranking, joint)
 
-    compute!(replacement.ranking, jointVector)
-
-    for rank in replacement.ranking.ranks
-        compute!(replacement.densityEstimator, rank)
+    for rank_front in replacement.ranking.ranks
+        compute!(replacement.densityEstimator, rank_front)
     end
 
-    sort!(jointVector, lt=((x, y) -> compare(replacement.rankingAndDensityEstimatorComparator, x, y) < 0))
-    return jointVector[1:length(x)]
+    new_population = T[]
+    sizehint!(new_population, length(x))
+
+    for rank_front in replacement.ranking.ranks
+        remaining = length(x) - length(new_population)
+        if length(rank_front) <= remaining
+            append!(new_population, rank_front)
+        else
+            sort!(rank_front, lt=(a, b) -> getCrowdingDistance(a) > getCrowdingDistance(b))
+            append!(new_population, rank_front[1:remaining])
+            break
+        end
+    end
+
+    return new_population
 end
 
 mutable struct MOEADReplacement <: Replacement

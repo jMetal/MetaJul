@@ -25,7 +25,7 @@ end
 
 function appendRank!(ranking::DominanceRanking, newRank::Vector{T}) where {T<:Solution}
     push!(ranking.ranks, newRank)
-    return Nothing
+    return nothing
 end
 
 @inline function getRank(solution::Solution)::Int

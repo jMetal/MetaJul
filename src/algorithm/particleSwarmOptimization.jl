@@ -77,7 +77,7 @@ end
 function optimize!(algorithm::ParticleSwarmOptimization)
   particleSwarmOptimization(algorithm)
   
-  return Nothing
+  return nothing
 end
 
 function name(algorithm::ParticleSwarmOptimization)

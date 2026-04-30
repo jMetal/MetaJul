@@ -170,7 +170,7 @@ struct ProblemZDT6 <: AbstractContinuousProblem{Float64}
 end
 
 function ZDT6(;numberOfVariables::Int=10)
-  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
+  bounds = [Bounds{Float64}(0.0, 1.0) for _ in 1:numberOfVariables]
 
   return ProblemZDT6(bounds)
 end

@@ -18,7 +18,7 @@ function compare(comparator::ElementAtComparator, x::Vector, y::Vector)
   index = comparator.index
 
   @assert length(x) == length(y) "The vectors have a different length"
-  @assert index in range(1, length(x)) "The index is out of range"
+  @assert index in 1:length(x) "The index is out of range"
 
   result = 0
   if x[index] < y[index]

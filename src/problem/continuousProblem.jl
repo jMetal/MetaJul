@@ -34,24 +34,24 @@ end
 function addObjective(problem::ContinuousProblem{T}, objective::Function) where {T<:Number}
   push!(problem.objectives, objective)
 
-  return Nothing
+  return nothing
 end
 
 function addConstraint(problem::ContinuousProblem{T}, constraint::Function) where {T<:Number}
   push!(problem.constraints, constraint)
 
-  return Nothing
+  return nothing
 end
 
 function addVariable(problem::ContinuousProblem{T}, bounds::Bounds{T}) where {T<:Number}
   push!(problem.bounds, bounds)
-  return Nothing
+  return nothing
 end
 
 function setName(problem::ContinuousProblem{T}, name::String) where {T}
   problem.name = name
 
-  return Nothing
+  return nothing
 end
 
 function evaluate(solution::ContinuousSolution{T}, problem::ContinuousProblem{T})::ContinuousSolution{T} where {T<:Number}
@@ -69,13 +69,13 @@ end
 function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<:Real}
   x = [problem.bounds[i].lowerBound + rand() * (problem.bounds[i].upperBound - problem.bounds[i].lowerBound) for i in 1:length(problem.bounds)]
 
-  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
+  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict{String,Any}(), problem.bounds)
 end
 
 function createSolution(problem::AbstractContinuousProblem{T})::ContinuousSolution{T} where {T<: Int}
   x = [floor(Int, problem.bounds[i].lowerBound + rand() * (problem.bounds[i].upperBound - problem.bounds[i].lowerBound)) for i in 1:length(problem.bounds)]
 
-  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict(), problem.bounds)
+  return ContinuousSolution{T}(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict{String,Any}(), problem.bounds)
 end
 
 

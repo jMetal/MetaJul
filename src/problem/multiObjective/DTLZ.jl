@@ -5,7 +5,7 @@ struct DTLZ1 <: AbstractContinuousProblem{Float64}
 end
 
 function dtlz1Problem(numberOfVariables::Int=7, numberOfObjectives::Int=3)
-  bounds = [Bounds{Float64}(0.0, 1.0) for _ in range(1, numberOfVariables)]
+  bounds = [Bounds{Float64}(0.0, 1.0) for _ in 1:numberOfVariables]
 
   return DTLZ1(bounds,numberOfObjectives,"DTLZ1")
 end

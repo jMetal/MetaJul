@@ -8,7 +8,7 @@ function fonseca()
 
   f1 = x -> begin
     sum1 = 0.0
-    for i in range(1, numberOfVariables)
+    for i in 1:numberOfVariables
       sum1 += ^(x[i] - (1.0 / sqrt(1.0 * numberOfVariables)), 2.0)
     end
     return 1.0 - exp(-1.0 * sum1)
@@ -16,7 +16,7 @@ function fonseca()
 
   f2 = x -> begin
     sum2 = 0.0
-    for i in range(1, numberOfVariables)
+    for i in 1:numberOfVariables
       sum2 += ^(x[i] + (1.0 / sqrt(1.0 * numberOfVariables)), 2.0)
     end
 

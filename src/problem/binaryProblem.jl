@@ -31,13 +31,13 @@ end
 function addObjective(problem::BinaryProblem, objective::Function) 
   push!(problem.objectives, objective)
 
-  return Nothing ;
+  return nothing
 end
 
 function addConstraint(problem::BinaryProblem, constraint::Function)
   push!(problem.constraints, constraint)
 
-  return Nothing ;
+  return nothing
 end
 
 function evaluate(solution::BinarySolution, problem::BinaryProblem)::BinarySolution 
@@ -57,6 +57,6 @@ end
 function createSolution(problem::BinaryProblem) 
   x = initBitVector(problem.numberOfBits)
 
-  return BinarySolution(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict())
+  return BinarySolution(x, zeros(numberOfObjectives(problem)), zeros(numberOfConstraints(problem)), Dict{String,Any}())
 end
 

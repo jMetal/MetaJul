@@ -9,7 +9,7 @@ function kursawe(numberOfVariables::Int=3)
 
   f1 = x -> begin
     sum1 = 0.0
-    for i in range(1, numberOfVariables - 1)
+    for i in 1:(numberOfVariables - 1)
       xi = x[i] * x[i]
       xj = x[i+1] * x[i+1]
       aux = (-0.2) * sqrt(xi + xj)
@@ -21,7 +21,7 @@ function kursawe(numberOfVariables::Int=3)
 
   f2 = x -> begin
     sum2 = 0.0
-    for i in range(1, numberOfVariables)
+    for i in 1:numberOfVariables
       sum2 += ^(abs(x[i]), 0.8) + 5.0 * sin(^(x[i], 3.0))
     end
     return sum2
