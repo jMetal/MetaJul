@@ -28,14 +28,15 @@ function main()
     solver.replacement = RankingAndDensityEstimatorReplacement(DominanceRanking(DefaultDominanceComparator()), CrowdingDistanceDensityEstimator())
 
     optimize!(solver)
-    foundSolutions = solver.foundSolutions
-    
-    foundSolutions = getSolutions(externalArchive)
+
+    archiveSolutions = getSolutions(externalArchive)
+    foundSolutions = distanceBasedSubsetSelection(archiveSolutions, populationSize)
 
     objectivesFileName = "FUN.csv"
     variablesFileName = "VAR.csv"
 
     println("Algorithm: ", name(solver))
+    println("Archive size: ", length(archiveSolutions), " → selected: ", length(foundSolutions))
 
     println("Objectives stored in file ", objectivesFileName)
     printObjectivesToCSVFile(objectivesFileName, foundSolutions)
