@@ -19,4 +19,7 @@ UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 
 [compat]
 Plots = "1"
+DelimitedFiles = "1"
+BenchmarkTools = "1"
+PyCall = "1"
 julia = "1.10"
