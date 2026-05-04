@@ -1,7 +1,7 @@
 name = "MetaJul"
 uuid = "ca897826-12de-4e40-9dbf-1888d61ae1b2"
-authors = ["ajnebro <ajnebro@users.noreply.github.com>"]
 version = "0.3.0"
+authors = ["ajnebro <ajnebro@users.noreply.github.com>"]
 
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
@@ -18,4 +18,5 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 
 [compat]
+Plots = "1"
 julia = "1.10"
