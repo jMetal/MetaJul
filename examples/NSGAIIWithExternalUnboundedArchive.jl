@@ -15,7 +15,7 @@ function main()
     externalArchive = NonDominatedArchive(ContinuousSolution{Float64})
     solver.evaluation = SequentialEvaluationWithArchive(problem, externalArchive)
 
-    solver.termination = TerminationByEvaluations(30000)
+    solver.termination = TerminationByEvaluations(50000)
 
     mutation = PolynomialMutation(probability = 1.0 / numberOfVariables(problem), distributionIndex = 20.0, bounds = problem.bounds)
 

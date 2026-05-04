@@ -74,7 +74,7 @@ BenchmarkTools.Trial: 13 samples with 1 evaluation per sample.
 | Multi-objective binary | OneZeroMax |
 | Multi-objective permutation | TSP |
 | Constrained | Srinivas, ConstrEx, Binh2, Tanaka, Osyczka2, Golinski, multi-objective Knapsack |
-| Real-world approximations | Subasi 2016 (RWA) |
+| Real-world problems | Subasi 2016 (RWA) |
 
 ### Operators
 - **Mutation:** Uniform, Polynomial, Bit-flip, Permutation swap
