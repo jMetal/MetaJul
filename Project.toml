@@ -19,8 +19,7 @@ UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 
 [compat]
 
-
-
+Statistics = "1"
 CSV = "0.10"
 UnicodePlots = "3"
 Plots = "1"
