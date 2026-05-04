@@ -18,5 +18,11 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 
 [compat]
+<<<<<<< compathelper/new_version/2026-05-04-02-05-43-333-00367024285
 UnicodePlots = "3"
+=======
+DelimitedFiles = "1"
+BenchmarkTools = "1"
+PyCall = "1"
+>>>>>>> main
 julia = "1.10"
